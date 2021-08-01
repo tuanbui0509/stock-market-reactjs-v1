@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 // import { useHistory } from 'react-router';
 // import { useDispatch , useSelector} from 'react-redux';
 import * as Acction from '../../actions/User/index';
+import Footer from '../../components/Common/Footer';
 import Header from '../../components/Common/Header';
-import Footer from '../../components/HomePage/Footer';
-import LightningTable from '../../components/HomePage/LightningTable';
+import LightningTable from '../../components/HomePage/LightningTable/';
 
-function HomePage(props){
-    
+function HomePage(props) {
+
     //const history = useHistory();
     // const StockList = useSelector(state => state.StockList)
     const dispatch = useDispatch();
@@ -17,20 +17,20 @@ function HomePage(props){
     // });
     const user = useSelector(state => state.User);
     const token = JSON.parse(localStorage.getItem("token"));
-    if(user===null && token !== null){
+    if (user === null && token !== null) {
         dispatch(Acction.GetUserFromLocal(token));
     }
     const [, setTick] = useState(0);
-    useEffect(()=>{
+    useEffect(() => {
         setTick(tick => tick + 1);
         console.log(user);
-    },[user]);
+    }, [user]);
     return (
         <div className="App">
-                <Header></Header>
-                <LightningTable></LightningTable>
-                <Footer></Footer>
-              
+            <Header></Header>
+            <LightningTable></LightningTable>
+            <Footer></Footer>
+
         </div>
     );
 

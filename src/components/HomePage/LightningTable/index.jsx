@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as signalR from "@microsoft/signalr";
-import * as actionList from '../../actions/LightningTable/index'
-import * as actionState from '../../actions/LightningTableState/index'
-import * as Config from '../../constants/Config'
-import LightningTableItem from './LightningTableItem'
-import OrderForm from './FormItem/OrderForm';
-import ConfirmForm from './FormItem/ConfirmForm';
+import * as actionList from '../../../actions/LightningTable/index'
+import * as actionState from '../../../actions/LightningTableState/index'
+import * as Config from '../../../constants/Config'
+import LightningTableItem from '../LightningTableItem'
+import FormOrder from '../FormItem/FormOrder/';
+
 function LightningTable(props) {
     const LightningTableState = useSelector(state => state.LightningTableState);
     const LightningTableList = useSelector(state => state.LightningTableList);
-    const [isShow, setIsShow] = useState(false);
     const [count, setCount] = useState(-1);
     const [stocks, setStocks] = useState([]);
     const [keyWord, setKeyWord] = useState('');
@@ -19,40 +18,40 @@ function LightningTable(props) {
     //console.log(User);
     const dispatch = useDispatch();
 
-    useEffect(()=>{
-        const hubConnection = new signalR.HubConnectionBuilder()
-        .withUrl(Config.BASE_URL + "/signalr")
-        .configureLogging(signalR.LogLevel.Information)  
-        .build();
-        hubConnection.on("message", message => {
-            let json = JSON.parse(message);
-            json = json[0];
-            let e = {
-                macp : json.MACP,
-                giaTC : json.GiaTC,
-                giaTran : json.GiaTran,
-                giaSan : json.GiaSan,
-                ktTong : json.KTTong,
-                giaMua3 : json.GiaMua3,
-                klMua3 : json.KLMua3,
-                giaMua2 : json.GiaMua2,
-                klMua2 : json.KLMua2,
-                giaMua1 : json.GiaMua1,
-                klMua1 : json.KLMua1,
-                gia : json.Gia,
-                kl : json.KL,
-                giaBan1 : json.GiaBan1,
-                klBan1 : json.KLBan1,
-                giaBan2 :json.GiaBan2,
-                klBan2  : json.KLBan2,
-                giaBan3 : json.GiaBan3,
-                klBan3 : json.KLBan3
-            }
-            console.log(e);
-            dispatch(actionList.FetchChangeListStocks(e));
-        });
-        hubConnection.start();
-    },[])
+    // useEffect(() => {
+    //     const hubConnection = new signalR.HubConnectionBuilder()
+    //         .withUrl(Config.BASE_URL + "/signalr")
+    //         .configureLogging(signalR.LogLevel.Information)
+    //         .build();
+    //     hubConnection.on("message", message => {
+    //         let json = JSON.parse(message);
+    //         json = json[0];
+    //         let e = {
+    //             macp: json.MACP,
+    //             giaTC: json.GiaTC,
+    //             giaTran: json.GiaTran,
+    //             giaSan: json.GiaSan,
+    //             ktTong: json.KTTong,
+    //             giaMua3: json.GiaMua3,
+    //             klMua3: json.KLMua3,
+    //             giaMua2: json.GiaMua2,
+    //             klMua2: json.KLMua2,
+    //             giaMua1: json.GiaMua1,
+    //             klMua1: json.KLMua1,
+    //             gia: json.Gia,
+    //             kl: json.KL,
+    //             giaBan1: json.GiaBan1,
+    //             klBan1: json.KLBan1,
+    //             giaBan2: json.GiaBan2,
+    //             klBan2: json.KLBan2,
+    //             giaBan3: json.GiaBan3,
+    //             klBan3: json.KLBan3
+    //         }
+    //         console.log(e);
+    //         dispatch(actionList.FetchChangeListStocks(e));
+    //     });
+    //     hubConnection.start();
+    // }, [])
     useEffect(() => {
         dispatch(actionState.FetchListStatesRequest(1))
         //setCount(1);
@@ -70,6 +69,10 @@ function LightningTable(props) {
             }
         }
     }, [LightningTableState.selected]);
+
+
+
+
 
     const ClickOnState = (index, value) => {
         return () => {
@@ -120,13 +123,6 @@ function LightningTable(props) {
         />
     })
 
-
-    let showModalMatching = () => {
-        let my_modal = document.getElementById('my-modal');
-        my_modal.style.visibility = 'visible';
-        my_modal.style.opacity = 1;
-    }
-
     let onSearchStock = (e) => {
         const target = e.target;
         const value = target.value;
@@ -144,7 +140,7 @@ function LightningTable(props) {
         // console.log(stocks);
     }
     return (
-        <div>
+        <>
             <main class="content-wp">
                 <section className="content">
                     <div className="content__search">
@@ -217,26 +213,18 @@ function LightningTable(props) {
                             </tr>
                         </thead>
                     </table>
-                    <div>
-                        <table className="table-light__content" id="HCM">
-                            <tbody className="line-stocks"> {/* 1 stock */}
-                                {element}
-                            </tbody>
-                        </table>
-                    </div>
-                </section>
-                <section 
-                class="order-matching" 
-                onClick={showModalMatching}
-                // showForm={showForm}
-                >
-                    <i class="fas fa-cart-plus"></i>
-                    <span>Đặt lệnh</span>
+                    <table className="table-light__content" id="HCM">
+                        <tbody className="line-stocks"> {/* 1 stock */}
+                            {element}
+                        </tbody>
+                    </table>
                 </section>
             </main>
-            <OrderForm />
+            <FormOrder />
 
-        </div>
+            {/* <FormOrder/> */}
+
+        </>
     );
 
 }

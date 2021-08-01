@@ -1,8 +1,8 @@
 html, body {
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
-    color: var(--text-color-primary);
-    background-color: var(--background-color-body);
+    color: var(--text-color-primary)!important;
+    background-color: var(--background-color-body)!important;
     scroll-behavior: smooth;
 }
 
@@ -336,7 +336,7 @@ table.table-price tr .symbol:hover {
 .modal-form {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     padding: 15px 30px;
     flex-wrap: wrap;
 }
@@ -351,7 +351,7 @@ table.table-price tr .symbol:hover {
 }
 
 .form-item {
-    width: 40%;
+    width: 50%;
     margin-bottom: 15px;
     margin-right: 35px;
     display: flex;
@@ -388,24 +388,24 @@ table.table-price tr .symbol:hover {
     color: #000;
 }
 
-.form-item:last-child {
+/* .form-item:last-child {
     margin: 0 auto;
-}
+} */
 
-.form-item label {
+/* .form-item label {
     font-size: 16px;
     color: black;
     font-weight: 500;
     min-width: 100px;
-}
+} */
 
-.form-item input {
-    padding: 5px;
+/* .form-item input {
     border-radius: 5px;
+    padding: 5px;
     border: 1px solid var(--text-color-primary);
     outline: none;
     min-width: 140px;
-}
+} */
 
 .form-item input:focus {
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
@@ -453,8 +453,8 @@ table.table-price tr .symbol:hover {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px;
-    margin: 30px;
+    padding: 10px;
+    /* margin: 30px; */
     border-radius: 5px;
     background: var(--background-color-body);
 }
