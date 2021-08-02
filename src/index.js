@@ -18,7 +18,6 @@ const store = createStore(
 
 ReactDOM.render(
   <Provider store={store}>
-    <DatePicker />
     <App />
   </Provider>,
   document.getElementById('root')

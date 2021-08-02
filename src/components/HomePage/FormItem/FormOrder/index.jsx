@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { Form, InputNumber, Modal, Button, Radio, Select } from 'antd'
 import './FormOrder.css'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import * as ActionOrder from '../../../../actions/Order';
+
 function FormOrder(props) {
     // handle event
     const user = useSelector(state => state.User)
+    const dispatch = useDispatch();
     const LightningTableList = useSelector(state => state.LightningTableList)
     const [order, setOrder] = useState({
         idAcc: "",
@@ -28,6 +31,8 @@ function FormOrder(props) {
     const onFinish = (values) => {
         console.log(values)
         setOrder(values)
+        console.log(order)
+
         setVisibleConfirm(true)
     }
     const handleConfirm = () => {
@@ -36,18 +41,26 @@ function FormOrder(props) {
             setVisibleConfirm(false); setVisibleOrder(false)
             setConfirmLoading(false);
         }, 2000);
+        // dispatch(ActionOrder.MakeOrderRequest(order.pin,{
+        //     stk : order.idAcc,
+        //     macp : order.stockId,
+        //     loaI_GIAODICH : order.selectedStatus,
+        //     // loaI_GIAODICH : order.selectedType,
+        //     giadat : parseFloat(order.price),
+        //     soluongdat : parseInt(order.weight)
+        // }));
     };
 
     // useEffect
     useEffect(() => {
-        if (user) {
-            let index = findIndex(order.idAcc, user.listTaiKhoan);
-            if (index !== -1)
-                setBank({
-                    nganhang: user.listTaiKhoan[index].nganhang,
-                    sodu: user.listTaiKhoan[index].sodu
-                });
-        }
+        // if (user) {
+        //     let index = findIndex(order.idAcc, user.listTaiKhoan);
+        //     if (index !== -1)
+        //         setBank({
+        //             nganhang: user.listTaiKhoan[index].nganhang,
+        //             sodu: user.listTaiKhoan[index].sodu
+        //         });
+        // }
     }, [order.idAcc]);
 
     useEffect(() => {
@@ -71,9 +84,9 @@ function FormOrder(props) {
                 return i;
         return -1;
     }
-    let listBank = user ? user.listTaiKhoan.map((val, index) => {
-        return <Select.Option value={val.stk}>{val.stk}</Select.Option>
-    }) : null;
+    // let listBank = user ? user.listTaiKhoan.map((val, index) => {
+    //     return <Select.Option value={val.stk}>{val.stk}</Select.Option>
+    // }) : null;
     let ListStock = LightningTableList.map((value, index) => {
         return <Select.Option value={value.macp}>{value.macp}</Select.Option>
     })
@@ -207,24 +220,24 @@ function FormOrder(props) {
                             confirmLoading={confirmLoading}
                         >
                             <div class="modal-info">
-                                <p class="modal-info-title">Quý khách có thật sự muốn đặt lệnh <span class="color-green">Mua</span>
+                                <p class="modal-info-title">Quý khách có thật sự muốn đặt lệnh <span className={order.selectedStatus?"color-green":"color-red"}>{order.selectedStatus?'Mua':'Bán'}</span>
                                 </p>
                                 <div className="modal-info-detail">
                                     <div className="modal-info-item">
                                         <p className="modal-info-label">Mã CK:</p>
-                                        <strong className="modal-info-value">BHD</strong>
+                                        <strong className="modal-info-value">{order.stockId}</strong>
                                     </div>
                                     <div className="modal-info-item">
                                         <p className="modal-info-label">Khối lượng:</p>
-                                        <strong className="modal-info-value">10</strong>
+                                        <strong className="modal-info-value">{order.weight}</strong>
                                     </div>
                                     <div className="modal-info-item">
                                         <p className="modal-info-label">Giá đặt:</p>
-                                        <strong className="modal-info-value">100.000</strong>
+                                        <strong className="modal-info-value">{order.price}</strong>
                                     </div>
                                     <div className="modal-info-item">
                                         <p className="modal-info-label">Tài khoản:</p>
-                                        <strong className="modal-info-value color-red">1000201</strong>
+                                        <strong className="modal-info-value color-red">{order.idAcc}</strong>
                                     </div>
                                 </div>
                             </div>

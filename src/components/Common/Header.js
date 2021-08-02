@@ -16,8 +16,8 @@ function Header(props) {
         <Link to="/" className="header__logo"><img src={ntnt} alt="" className="img-responsive" />iBoard</Link>
       </div>
       <div className="header__right">
-        <HeaderLangue/>
-        <HeaderTheme/>
+        {/* <HeaderLangue/> */}
+        {/* <HeaderTheme/> */}
         <HeaderTimes/>
         <HeaderDate />
         <HeaderUser/>

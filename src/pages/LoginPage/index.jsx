@@ -1,8 +1,8 @@
 import React from 'react';
-import './login.css'
-import HeaderLogin from '../../components/LoginPage/HeaderLogin'
-import FooterLogin from '../../components/LoginPage/FooterLogin'
-import MainLogin from '../../components/LoginPage/MainLogin'
+import '../CommonCss/login.css'
+import HeaderLogin from '../../components/LoginPage/HeaderLogin/'
+import FooterLogin from '../../components/LoginPage/FooterLogin/'
+import MainLogin from '../../components/LoginPage/MainLogin/'
 const LoginPage = () => {
     return (
         <div className="login">

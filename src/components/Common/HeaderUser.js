@@ -5,10 +5,8 @@ import user2logo from '../../assets/images/user2.png';
 import * as action from '../../actions/User/index';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
+import { Menu, Dropdown } from 'antd';
 function HeaderUser(props) {
-    let menuAccounts = document.querySelector('.header__right-account-list');
-    let menuLanguages = document.querySelector('.header__right-language-list');
-    let menuThemes = document.querySelector('.header__right-theme-list');
     //const token = JSON.parse(localStorage.getItem("token"));
     const user = useSelector(state => state.User);
     const dispatch = useDispatch();
@@ -18,47 +16,38 @@ function HeaderUser(props) {
             //localStorage.removeItem("token");
             dispatch(action.UserLogout(history));
             localStorage.removeItem("token");
-            menuAccounts.style.display = 'none';
         };
     }
-    const element = () => {
+    const menu = (
+        (user === null) ? <Menu>
+            <Menu.Item key="0">
+                <a className="header__right-account-item">Chào mừng đến với iBoard </a>
+            </Menu.Item>
+            <Menu.Item key="1">
+                <Link className="header__right-account-item" to="/login">
+                    {/* <span className="header__right-flag"><img src={user2logo} className="img-responsive" alt="" />
+                 </span> */}
+                    Đăng Nhập </Link>
+            </Menu.Item>
+        </Menu> : <Menu>
+            <Menu.Item key="0">
+                <a className="header__right-account-item">Chào mừng đến với iBoard </a>
+            </Menu.Item>
+            <Menu.Item key="1">
+                <Link className="header__right-account-item" to="/" onClick={logOut}>
+                    {/* <span className="header__right-flag"><img src={user2logo} className="img-responsive" alt="" />
+                    </span> */}
+                    Đăng xuất </Link>
+            </Menu.Item>
+        </Menu>
 
-        var element
-        if (user === null) {
-            element = <ul className="header__right-account-list" >
-                <li className="header__right-account-item">Chào mừng đến với iBoard </li>
-                <li className="header__right-account-item"><span className="header__right-flag"><img src={user2logo} className="img-responsive" alt="" /></span> <Link to="/login">Đăng Nhập</Link> </li>
-            </ul>;
-        } else {
-            element = <ul className="header__right-account-list" >
-                <li className="header__right-account-item"><span className="header__right-flag"><img src={user2logo} className="img-responsive" alt="" /></span> <Link to="/userinfor" >{user.ten}</Link> </li>
-                <li className="header__right-account-item"> <Link to="/" onClick={logOut}>Đăng Xuất</Link> </li>
-            </ul>;
-        }
-        return element;
-    }
-
-    const onClick = () => {
-
-        if (menuLanguages) {
-            menuLanguages.style.display = 'none';
-        }
-        if (menuThemes) {
-            menuThemes.style.display = 'none';
-        }
-        if (menuAccounts.style.display === 'block') {
-            menuAccounts.style.display = 'none';
-        }
-        else {
-            menuAccounts.style.display = 'block';
-        }
-    }
+    );
     return (
-        <div className="header__right-account">
-            <span className="header__right-account-label" onClick={onClick}><img src={userlogo} alt="" className="img-responsive" /></span>
-
-            {element()}
-        </div>
+        <Dropdown overlay={menu} placement="bottomRight" arrow>
+            <a className="ant-dropdown-link header__right-account-label" onClick={e => e.preventDefault()}>
+                <img src={userlogo} alt="" className="img-responsive" />
+            </a>
+        </Dropdown>
     );
 }
 export default HeaderUser;
