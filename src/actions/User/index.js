@@ -17,14 +17,17 @@ export const GetUserFromLocal = (user) => {
 
 export const UserLoginRequest = (username, password, history) => {
     return (dispatch) => {
-        console.log('login/' + username + '/' + password);
-        return callApi('login/' + username + '/' + password, 'GET', null).then(res => {
+        //console.log('login/' + username + '/' + password);
+        return callApi('dangnhap', 'POST', {userName:username,passWord:password}).then(res => {
             let rec = res.data;
             console.log(rec);
-            if (rec.result === 0) {
-                dispatch(UserLogin(rec.data));
-                localStorage.setItem("token", JSON.stringify(rec.data));
-                history.replace("/");
+            if (rec.status === 0) {
+                console.log(rec.data);
+                dispatch(UserLogin(rec.data.user));
+                localStorage.setItem("user", JSON.stringify(rec.data.user));
+                localStorage.setItem("token", JSON.stringify(rec.data.token));
+                if(rec.data.role === "ndt")
+                    history.replace("/");
             } else {
                 alert(rec.message);
             }
@@ -33,7 +36,6 @@ export const UserLoginRequest = (username, password, history) => {
 }
 
 export const UserLogout = (history) => {
-    history.replace("fhkljdshafkdsj");
     history.replace("/");
     return {
         type: types.USER_LOGOUT,

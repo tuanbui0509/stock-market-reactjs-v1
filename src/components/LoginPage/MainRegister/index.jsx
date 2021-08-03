@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import * as ActionLogin from '../../../actions/User/index';
 import { Form, Input, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete, DatePicker, Typography } from 'antd';
 import '../style.css';
+import callApi from '../../../utils/apiCaller';
 // import './MainRegister.css';
 const { Option } = Select;
 const { Title } = Typography;
@@ -41,30 +42,35 @@ const tailFormItemLayout = {
 const MainRegister = (props) => {
     const dispatch = useDispatch();
     const history = useHistory();
-    // const { register, setRegister } = useState({
-    //     CMND: "",
-    //     DiaChi: "",
-    //     Email: "@gmail.com",
-    //     Ho: "",
-    //     NgayCapCMND: '',
-    //     NgaySinh: '',
-    //     NoiCapCMMD: "",
-    //     NoiSinh: "",
-    //     Phai: "",
-    //     SDT: "",
-    //     Ten: "",
-    // })
-    // const onFinish = (values) => {
-    //     console.log('Success:', values);
-    //     dispatch(ActionLogin.UserLoginRequest(values.username, values.password, history));
-    // };
+    const { register, setRegister } = useState({
+        cmnd: "",
+        diaChi: "",
+        email: "@gmail.com",
+        ho: "",
+        ngayCapCMND: '',
+        ngaySinh: '',
+        noiCapCMMD: "",
+        noiSinh: "",
+        phai: "",
+        sdt: "",
+        ten: "",
+    })
+    const onFinish = (values) => {
+        console.log('Success:', values);
+        callApi("dangky", 'post', values).then(res => {
+            let rec = res.data;
+            console.log(rec);
+            alert(rec.message);
+            if (rec.status === 0) {
+                history.replace("/")
+            }
+        })
+        //dispatch(ActionLogin.UserLoginRequest(values.username, values.password, history));
+    };
 
 
     const [form] = Form.useForm();
 
-    const onFinish = (values) => {
-        console.log('Received values of form: ', values);
-    };
     return (
         <main className="main">
             <div className="container">
@@ -85,7 +91,7 @@ const MainRegister = (props) => {
                             <div className='form-register'>
                                 <div className="form-child">
                                     <Form.Item
-                                        name="Ho"
+                                        name="ho"
                                         label="Họ"
                                         rules={[
                                             {
@@ -98,7 +104,7 @@ const MainRegister = (props) => {
                                         <Input />
                                     </Form.Item>
                                     <Form.Item
-                                        name="Ten"
+                                        name="ten"
                                         label="Tên"
                                         rules={[
                                             {
@@ -112,7 +118,7 @@ const MainRegister = (props) => {
                                     </Form.Item>
 
                                     <Form.Item style={{ display: 'flex', justifyContent: 'flex-end' }}
-                                        name="NgaySinh"
+                                        name="ngaySinh"
                                         label="Ngày sinh"
                                         rules={[
                                             {
@@ -124,7 +130,7 @@ const MainRegister = (props) => {
                                         <DatePicker label="Ngày sinh" placeholder="Chọn ngày sinh" />
                                     </Form.Item>
                                     <Form.Item
-                                        name="SDT"
+                                        name="sdt"
                                         label="Số điện thoại"
                                         rules={[
                                             {
@@ -141,7 +147,7 @@ const MainRegister = (props) => {
                                         />
                                     </Form.Item>
                                     <Form.Item
-                                        name="Email"
+                                        name="email"
                                         label="E-mail"
                                         rules={[
                                             {
@@ -158,7 +164,7 @@ const MainRegister = (props) => {
                                     </Form.Item>
 
                                     <Form.Item
-                                        name="Phai"
+                                        name="phai"
                                         label="Giới tính"
                                         rules={[
                                             {
@@ -168,9 +174,8 @@ const MainRegister = (props) => {
                                         ]}
                                     >
                                         <Select placeholder="Chọn giới tính của bạn">
-                                            <Option value="Nam">Nam</Option>
-                                            <Option value="Nu">Nữ</Option>
-                                            <Option value="Khac">Khác</Option>
+                                            <Option value={true}>Nam</Option>
+                                            <Option value={false}>Nữ</Option>
                                         </Select>
                                     </Form.Item>
 
@@ -179,7 +184,7 @@ const MainRegister = (props) => {
                                 <div className="form-child">
 
                                     <Form.Item
-                                        name="NoiSinh"
+                                        name="noiSinh"
                                         label="Nơi sinh"
                                         tooltip="Quê quán nơi sinh ra của bạn"
                                         rules={[
@@ -193,7 +198,7 @@ const MainRegister = (props) => {
                                         <Input />
                                     </Form.Item>
                                     <Form.Item
-                                        name="DiaChi"
+                                        name="diaChi"
                                         label="Địa chỉ"
                                         tooltip="Nơi tạm trú của bạn hiện tại"
                                         rules={[
@@ -207,7 +212,7 @@ const MainRegister = (props) => {
                                         <Input />
                                     </Form.Item>
                                     <Form.Item
-                                        name="CMND"
+                                        name="cmnd"
                                         label="CMND"
                                         tooltip="CMND hoặc Căn cước công dân (nếu có)"
                                         rules={[
@@ -222,7 +227,7 @@ const MainRegister = (props) => {
                                     </Form.Item>
 
                                     <Form.Item
-                                        name="NoiCapCMMD"
+                                        name="noiCapCMMD"
                                         label="Nơi cấp CMND"
                                         // tooltip="Căn cước công dân hoặc CMND"
                                         rules={[
@@ -237,7 +242,7 @@ const MainRegister = (props) => {
                                     </Form.Item>
 
                                     <Form.Item style={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}
-                                        name="NgayCapCMND"
+                                        name="ngayCapCMND"
                                         label="Ngày cấp CMND"
                                         rules={[
                                             {

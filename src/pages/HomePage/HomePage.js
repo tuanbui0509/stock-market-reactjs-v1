@@ -16,7 +16,7 @@ function HomePage(props) {
     //     dispatch(Acction.fectchListAll());
     // });
     const user = useSelector(state => state.User);
-    const token = JSON.parse(localStorage.getItem("token"));
+    const token = JSON.parse(localStorage.getItem("user"));
     if (user === null && token !== null) {
         dispatch(Acction.GetUserFromLocal(token));
     }

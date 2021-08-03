@@ -5,14 +5,16 @@ const initialState = null;
 let myReducer = (state = initialState, action) => {
     switch (action.type) {
         case types.USER_LOGIN:
+            console.log(action)
             return action.user; 
         case types.USER_LOGOUT:
             return null
         case types.USER_GET:
-            return action.user;
+            return action.user; 
         case ordertypes.MAKE_ORDER:
             return state
-        default: return state;
+        default: 
+            return state;
     }
 
 }

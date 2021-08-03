@@ -8,9 +8,7 @@ import LightningTableItem from '../LightningTableItem'
 import FormOrder from '../FormItem/FormOrder/';
 
 function LightningTable(props) {
-    const LightningTableState = useSelector(state => state.LightningTableState);
     const LightningTableList = useSelector(state => state.LightningTableList);
-    const [count, setCount] = useState(-1);
     const [stocks, setStocks] = useState([]);
     const [keyWord, setKeyWord] = useState('');
     //let dumpList = LightningTableState.List;
@@ -18,85 +16,22 @@ function LightningTable(props) {
     //console.log(User);
     const dispatch = useDispatch();
 
-    // useEffect(() => {
-    //     const hubConnection = new signalR.HubConnectionBuilder()
-    //         .withUrl(Config.BASE_URL + "/signalr")
-    //         .configureLogging(signalR.LogLevel.Information)
-    //         .build();
-    //     hubConnection.on("message", message => {
-    //         let json = JSON.parse(message);
-    //         json = json[0];
-    //         let e = {
-    //             macp: json.MACP,
-    //             giaTC: json.GiaTC,
-    //             giaTran: json.GiaTran,
-    //             giaSan: json.GiaSan,
-    //             ktTong: json.KTTong,
-    //             giaMua3: json.GiaMua3,
-    //             klMua3: json.KLMua3,
-    //             giaMua2: json.GiaMua2,
-    //             klMua2: json.KLMua2,
-    //             giaMua1: json.GiaMua1,
-    //             klMua1: json.KLMua1,
-    //             gia: json.Gia,
-    //             kl: json.KL,
-    //             giaBan1: json.GiaBan1,
-    //             klBan1: json.KLBan1,
-    //             giaBan2: json.GiaBan2,
-    //             klBan2: json.KLBan2,
-    //             giaBan3: json.GiaBan3,
-    //             klBan3: json.KLBan3
-    //         }
-    //         console.log(e);
-    //         dispatch(actionList.FetchChangeListStocks(e));
-    //     });
-    //     hubConnection.start();
-    // }, [])
-    useEffect(() => {
-        dispatch(actionState.FetchListStatesRequest(1))
-        //setCount(1);
-        //dispatch(actionState.ChangeListStates(index));
-    }, [User]);
+    useEffect(()=>{
+        const hubConnection = new signalR.HubConnectionBuilder()
+        .withUrl(Config.BASE_URL + "/signalr")
+        .configureLogging(signalR.LogLevel.Information)  
+        .build();
+        hubConnection.on("message", message => {
+            let json = JSON.parse(message);
+            console.log(json);
+            dispatch(actionList.FetchChangeListStocks(json));
+        });
+        hubConnection.start();
+    },[])
 
     useEffect(() => {
-        //console.log(LightningTableState);
-        if (LightningTableState.selected !== -1) {
-            if (User !== null && LightningTableState.List[LightningTableState.selected].maSan.trim() === 'FAV') {
-                dispatch(actionList.FetchListStocksFaRequest(User.mandt));
-                console.log("firing");
-            } else {
-                dispatch(actionList.FetchListStocksRequest(LightningTableState.List[LightningTableState.selected].maSan));
-            }
-        }
-    }, [LightningTableState.selected]);
-
-
-
-
-
-    const ClickOnState = (index, value) => {
-        return () => {
-            dispatch(actionState.ChangeListStates(index));
-            setCount(index);
-            //console.log(count);
-            //LightningTableState.selected = index;
-        }
-    }
-    const selected = (index) => {
-        if (LightningTableState.selected === index)
-            return "content__tab-pill--active ";
-        else
-            return "";
-    }
-    let stateList = "";
-    if (LightningTableState.selected !== -1) {
-        stateList = LightningTableState.List.map((value, index) => {
-            let inside = <div key={index} className={selected(index) + "content__tab-pill"} onClick={ClickOnState(index, value.maSan)}>
-                <div className="content__tab-title">{value.maSan.trim()}</div>
-            </div>
-            return inside;
-        })
-    }
+        dispatch(actionList.FetchListStocksRequest());
+    }, []);
 
     let element = LightningTableList.map((value, index) => {
         return <LightningTableItem
@@ -135,9 +70,6 @@ function LightningTable(props) {
             });
         }
         setStocks(result)
-        // console.log(LightningTableList);
-        // console.log(result);
-        // console.log(stocks);
     }
     return (
         <>
@@ -164,7 +96,6 @@ function LightningTable(props) {
                             </ul>
                         </div>
                     </div>
-                    {stateList}
                 </section>
                 <section className="table-light-wp">
                     <table className="table-light__header">

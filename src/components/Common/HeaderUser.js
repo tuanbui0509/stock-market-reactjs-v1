@@ -9,13 +9,14 @@ import { Menu, Dropdown } from 'antd';
 function HeaderUser(props) {
     //const token = JSON.parse(localStorage.getItem("token"));
     const user = useSelector(state => state.User);
+    console.log(user);
     const dispatch = useDispatch();
     const history = useHistory();
     const logOut = () => {
         if (window.confirm("Bạn có chắc chắn muốn đăng xuất !")) {
-            //localStorage.removeItem("token");
-            dispatch(action.UserLogout(history));
             localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            dispatch(action.UserLogout(history));
         };
     }
     const menu = (
@@ -31,7 +32,7 @@ function HeaderUser(props) {
             </Menu.Item>
         </Menu> : <Menu>
             <Menu.Item key="0">
-                <a className="header__right-account-item">Chào mừng đến với iBoard </a>
+                <a className="header__right-account-item">{user.maNdt} </a>
             </Menu.Item>
             <Menu.Item key="1">
                 <Link className="header__right-account-item" to="/" onClick={logOut}>

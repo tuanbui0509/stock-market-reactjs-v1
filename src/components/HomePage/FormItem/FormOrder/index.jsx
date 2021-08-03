@@ -1,45 +1,68 @@
 import React, { useState, useEffect } from 'react'
-import { Form, InputNumber, Modal, Button, Radio, Select } from 'antd'
+import { Form, InputNumber, Modal, Button, Radio, Select,Input } from 'antd'
 import './FormOrder.css'
 import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router';
 import * as ActionOrder from '../../../../actions/Order';
+import callApi from '../../../../utils/apiCaller';
 
 function FormOrder(props) {
     // handle event
     const user = useSelector(state => state.User)
     const dispatch = useDispatch();
+    const history = useHistory();
     const LightningTableList = useSelector(state => state.LightningTableList)
     const [order, setOrder] = useState({
-        idAcc: "",
-        stockId: "",
-        price: "",
-        weight: "",
-        pin: "",
-        selectedStatus: true,// Trạng thái mua bán mua: true, bán: false
-        selectedType: 'ATO'// Trạng thái Loai: ATO, ATC, LO
+        stk: "",
+        maCp: "",
+        gia: "",
+        soLuong: "",
+        mkdatLenh: "",
+        loaiGiaoDich: true,// Trạng thái mua bán mua: true, bán: false
+        loaiLenh: 'ATO'// Trạng thái Loai: ATO, ATC, LO
     });
     const [bank, setBank] = useState({
         nganhang: "",
-        sodu: -1
+        soDu: 0
     });
-    const [stock, setStock] = useState({ kl: -1, gia: -1 });
+    const [bankList, setBankList] = useState(null);
+    const [stock, setStock] = useState({gia:null,giaTran:null,giaTC:null,giaSan:null,kl:null});
 
     // Handle modal
     const [visibleOrder, setVisibleOrder] = useState(false)
     const [visibleConfirm, setVisibleConfirm] = useState(false)
     const [confirmLoading, setConfirmLoading] = React.useState(false);
     const onFinish = (values) => {
+        if(values.gia*values.soLuong > bank.soDu){
+            alert("Số tiền không đủ");
+            return;
+        }
         console.log(values)
         setOrder(values)
         console.log(order)
-
+        console.log(bank);
         setVisibleConfirm(true)
+            
+        
     }
     const handleConfirm = () => {
+
+        console.log(order)
         setConfirmLoading(true);
-        setTimeout(() => {
-            setVisibleConfirm(false); setVisibleOrder(false)
-            setConfirmLoading(false);
+        callApi("lenhdat", 'post', order).then(res => {
+            let rec = res.data;
+            console.log(rec);
+            if (rec.status === 0) {
+                setVisibleOrder(false)
+                setConfirmLoading(false);
+                setVisibleConfirm(false); 
+            } else {
+                alert(rec.message);
+                setConfirmLoading(false);
+                setVisibleConfirm(false); 
+            }
+        })
+        setTimeout(() => {  
         }, 2000);
         // dispatch(ActionOrder.MakeOrderRequest(order.pin,{
         //     stk : order.idAcc,
@@ -51,48 +74,109 @@ function FormOrder(props) {
         // }));
     };
 
-    // useEffect
-    useEffect(() => {
-        // if (user) {
-        //     let index = findIndex(order.idAcc, user.listTaiKhoan);
-        //     if (index !== -1)
-        //         setBank({
-        //             nganhang: user.listTaiKhoan[index].nganhang,
-        //             sodu: user.listTaiKhoan[index].sodu
-        //         });
-        // }
-    }, [order.idAcc]);
+    const checkUser = ()=>{
+        if(user === null)
+            history.replace("/login");
+        else{
+            let bl = null;
+            callApi('taikhoannganhang?MaNDT='+user.maNdt, 'GET', null).then(res => {
+                let rec = res.data;
+                console.log(rec);
+                if (rec.status === 0) {
+                    console.log(rec.data);
+                    setBankList(rec.data);
+                } else {
+                    alert(rec.message);
+                }
+            })
+            setVisibleOrder(true)
+        }
+            
+    }
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        let index = findIndexStock(order.stockId, LightningTableList);
-        console.log(index);
-        console.log(order.stockId);
+    //     let index = findIndexStock(order.stockId, LightningTableList);
+    //     console.log(index);
+    //     console.log(order.stockId);
 
-        if (index !== -1)
-            setStock(LightningTableList[index]);
-    }, [order.stockId, stock.kl, stock.gia]);
+    //     if (index !== -1)
+    //         setStock(LightningTableList[index]);
+    // }, [order.stockId, stock.kl, stock.gia]);
     let findIndex = (id, list) => {
         for (let i = 0; i < list.length; i++)
-            if (list[i].stk.trim() === id)
+            if (list[i].stk.trim() === id.trim())
                 return i;
         return -1;
     }
     let findIndexStock = (id, list) => {
         for (let i = 0; i < list.length; i++)
-            if (list[i].macp.trim() === id)
+            if (list[i].macp.trim() === id.trim())
                 return i;
         return -1;
     }
     // let listBank = user ? user.listTaiKhoan.map((val, index) => {
     //     return <Select.Option value={val.stk}>{val.stk}</Select.Option>
     // }) : null;
+
+    let tempValueStock = (id)=>{
+        let index = findIndexStock(id,LightningTableList)
+        console.log(index);
+        if(index === -1)
+            return;
+        let res = LightningTableList[index];
+        setStock(res);
+        console.log(stock);
+    }
+    let tempValueBank = (id)=>{
+        let index = findIndex(id,bankList)
+        if(index === -1)
+            return;
+        let res = bankList[index];
+        console.log(id,index);
+        console.log(res);
+        setBank(res);
+    }
+    let stockInformation = ()=>{
+            return <React.Fragment><div className="modal-order-matching">
+            <p className="order-matching-title">Khớp lệnh</p>
+            <span className="order-matching-price">Giá: {stock.gia}</span>
+            <span>-</span>
+            <span className="order-matching-weight">Số lượng: {stock.kl}</span>
+            </div>
+            <div className="compare-stock">
+                <div className="info-stock info-ceil">
+                    <label>Trần: </label>
+                    <span className="ceil">{stock.giaTran}</span>
+                </div>
+                <div className="info-stock info-standard">
+                    <label>TC: </label>
+                    <span className="standard">{stock.giaTC}</span>
+                </div>
+                <div className="info-stock info-floor">
+                    <label>Sàn: </label>
+                    <span className="floor">{stock.giaSan}</span>
+                </div>
+            </div></React.Fragment>
+    }
+    let displayBankList = ()=>{
+        if(bankList!==null)
+            return bankList.map((value, index) => {
+                return <Select.Option value={value.stk}>{value.stk.trim()+" - "+value.nganHang.tenNganHang}</Select.Option>
+            })
+    }
+    let onChangeListStock = (event)=>{
+        tempValueStock(event);
+    }
+    let onChangeListBank = (event)=>{
+        tempValueBank(event);
+    }
     let ListStock = LightningTableList.map((value, index) => {
         return <Select.Option value={value.macp}>{value.macp}</Select.Option>
     })
     return (
         <>
-            <Button type="primary" className='btn-match' onClick={() => setVisibleOrder(true)}>
+            <Button type="primary" className='btn-match' onClick={() => checkUser()}>
                 Đặt lệnh
             </Button>
 
@@ -113,8 +197,8 @@ function FormOrder(props) {
                             <Form id='my_form'
                                 onFinish={onFinish}
                                 className="modal-form"
-                                initialValues={{ priceBank: '1000', selectedType: 'ATC', selectedStatus: false }}>
-                                <Form.Item className="form-item" name='idAcc' label="Số tài khoản"
+                                initialValues={{ priceBank: '1000', loaiLenh: 'LO', loaiGiaoDich: true }}>
+                                <Form.Item className="form-item" name='stk' label="Số tài khoản"
                                     rules={[{ required: true, message: "Không được bỏ trống !" }]}>
                                     <Select
                                         showSearch
@@ -127,17 +211,13 @@ function FormOrder(props) {
                                         filterSort={(optionA, optionB) =>
                                             optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                                         }
+                                        onChange={onChangeListBank}
                                     >
                                         {/* {listBank} */}
-                                        <Select.Option value="1">12222 </Select.Option>
-                                        <Select.Option value="2">5555</Select.Option>
-                                        <Select.Option value="3">5555</Select.Option>
-                                        <Select.Option value="4">6666</Select.Option>
-                                        <Select.Option value="5">55555</Select.Option>
-                                        <Select.Option value="6">778777</Select.Option>
+                                        {displayBankList()}
                                     </Select>
                                 </Form.Item>
-                                <Form.Item className="form-item" name="stockId" label="Mã chứng khoán"
+                                <Form.Item className="form-item" name="maCp" label="Mã chứng khoán"
                                     rules={[{ required: true, message: "Không được bỏ trống !" }]}>
                                     <Select
                                         showSearch
@@ -150,34 +230,35 @@ function FormOrder(props) {
                                         filterSort={(optionA, optionB) =>
                                             optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
                                         }
+                                        onChange={onChangeListStock}
                                     >
                                         {ListStock}
                                     </Select>
                                 </Form.Item>
-                                <Form.Item className="form-item" name='weight' label="Khối lượng"
+                                <Form.Item className="form-item" name='soLuong' label="Khối lượng"
                                     rules={[{ required: true, message: "Không được bỏ trống !" }]}>
                                     <InputNumber min={1} max={100000} />
                                 </Form.Item>
-                                <Form.Item className="form-item" name="price" label="Giá đặt"
+                                <Form.Item className="form-item" name="gia" label="Giá đặt"
                                     rules={[{ required: true, message: "Không được bỏ trống !" }]}>
                                     <InputNumber value='100' />
                                 </Form.Item>
-                                <Form.Item className="form-item" name='priceBank' label="Tiền trong tài khoản"
+                                {/* <Form.Item className="form-item" name='priceBank' label="Tiền trong tài khoản"
                                     rules={[{ required: true, message: "Không được bỏ trống !" }]}>
-                                    <InputNumber value={100} disabled value={100} />
-                                </Form.Item>
-                                <Form.Item className="form-item" name="pin" label="Mã pin"
+                                    <InputNumber value={bank.soDu} disabled value={bank.soDu} />
+                                </Form.Item> */}
+                                <Form.Item className="form-item" name="mkdatLenh" label="Mã pin"
                                     rules={[{ required: true, message: "Không được bỏ trống !" }]}>
-                                    <InputNumber min={1} max={999999} />
+                                    <Input />
                                 </Form.Item>
-                                <Form.Item className="form-item" name='selectedType' >
-                                    <Radio.Group defaultValue='ATC'>
+                                <Form.Item className="form-item" name='loaiLenh' >
+                                    <Radio.Group defaultValue='LO'>
                                         <Radio value='ATC'>ATC</Radio>
                                         <Radio value='ATO'>ATO</Radio>
                                         <Radio value='LO'>LO</Radio>
                                     </Radio.Group>
                                 </Form.Item>
-                                <Form.Item className="form-item" name='selectedStatus' >
+                                <Form.Item className="form-item" name='loaiGiaoDich' >
                                     <Radio.Group defaultValue={true} buttonStyle="solid">
                                         <Radio.Button className='radio-btn-type' value={true} >Mua</Radio.Button>
                                         <Radio.Button value={false}>Bán</Radio.Button>
@@ -186,26 +267,7 @@ function FormOrder(props) {
                             </Form>
                         </div>
                         <div className="modal-show-stock">
-                            <div className="modal-order-matching">
-                                <p className="order-matching-title">Khớp lệnh</p>
-                                <span className="order-matching-price">Giá: 13.4</span>
-                                <span>-</span>
-                                <span className="order-matching-weight">Số lượng: 1,340</span>
-                            </div>
-                            <div className="compare-stock">
-                                <div className="info-stock info-ceil">
-                                    <label>Trần: </label>
-                                    <span className="ceil">14.5</span>
-                                </div>
-                                <div className="info-stock info-standard">
-                                    <label>TC: </label>
-                                    <span className="standard">13.4</span>
-                                </div>
-                                <div className="info-stock info-floor">
-                                    <label>Sàn: </label>
-                                    <span className="floor">12.3</span>
-                                </div>
-                            </div>
+                            {stockInformation()}
                         </div>
                     </div>
                     {visibleConfirm
@@ -220,24 +282,24 @@ function FormOrder(props) {
                             confirmLoading={confirmLoading}
                         >
                             <div class="modal-info">
-                                <p class="modal-info-title">Quý khách có thật sự muốn đặt lệnh <span className={order.selectedStatus?"color-green":"color-red"}>{order.selectedStatus?'Mua':'Bán'}</span>
+                                <p class="modal-info-title">Quý khách có thật sự muốn đặt lệnh <span className={order.loaiGiaoDich?"color-green":"color-red"}>{order.loaiGiaoDich?'Mua':'Bán'}</span>
                                 </p>
                                 <div className="modal-info-detail">
                                     <div className="modal-info-item">
                                         <p className="modal-info-label">Mã CK:</p>
-                                        <strong className="modal-info-value">{order.stockId}</strong>
+                                        <strong className="modal-info-value">{order.maCp}</strong>
                                     </div>
                                     <div className="modal-info-item">
                                         <p className="modal-info-label">Khối lượng:</p>
-                                        <strong className="modal-info-value">{order.weight}</strong>
+                                        <strong className="modal-info-value">{order.soLuong}</strong>
                                     </div>
                                     <div className="modal-info-item">
                                         <p className="modal-info-label">Giá đặt:</p>
-                                        <strong className="modal-info-value">{order.price}</strong>
+                                        <strong className="modal-info-value">{order.gia}</strong>
                                     </div>
                                     <div className="modal-info-item">
                                         <p className="modal-info-label">Tài khoản:</p>
-                                        <strong className="modal-info-value color-red">{order.idAcc}</strong>
+                                        <strong className="modal-info-value color-red">{order.stk}</strong>
                                     </div>
                                 </div>
                             </div>
