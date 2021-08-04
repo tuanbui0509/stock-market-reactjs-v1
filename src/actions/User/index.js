@@ -18,7 +18,7 @@ export const GetUserFromLocal = (user) => {
 export const UserLoginRequest = (username, password, history) => {
     return (dispatch) => {
         //console.log('login/' + username + '/' + password);
-        return callApi('dangnhap', 'POST', {userName:username,passWord:password}).then(res => {
+        return callApi('dangnhap', 'POST', { userName: username, passWord: password }).then(res => {
             let rec = res.data;
             console.log(rec);
             if (rec.status === 0) {
@@ -26,8 +26,11 @@ export const UserLoginRequest = (username, password, history) => {
                 dispatch(UserLogin(rec.data.user));
                 localStorage.setItem("user", JSON.stringify(rec.data.user));
                 localStorage.setItem("token", JSON.stringify(rec.data.token));
-                if(rec.data.role === "ndt")
-                    history.replace("/");
+                if (rec.data.role === "ndt") { history.replace("/"); }
+                else if (rec.data.role === "admin") {
+                    localStorage.setItem("role", JSON.stringify(rec.data.role));
+                    history.replace("/admin")
+                }
             } else {
                 alert(rec.message);
             }

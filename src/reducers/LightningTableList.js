@@ -1,7 +1,7 @@
 import * as types from '../constants/LightningTable/ActionType';
 const initialState = [];
 
-let myReducer = (state = initialState, action) => {
+let LightningTableList = (state = initialState, action) => {
     switch (action.type) {
         case types.FETCH_STOCKS:
             state = action.stocks;
@@ -23,4 +23,4 @@ let findIndex = (stocks, element) => {
     }
     return result;
 }
-export default myReducer;
+export default LightningTableList;

@@ -1,11 +1,9 @@
+import { Button, DatePicker, Form, Input, Select, Typography } from 'antd';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
-import { Link } from 'react-router-dom';
-import * as ActionLogin from '../../../actions/User/index';
-import { Form, Input, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete, DatePicker, Typography } from 'antd';
-import '../style.css';
 import callApi from '../../../utils/apiCaller';
+import '../style.css';
 // import './MainRegister.css';
 const { Option } = Select;
 const { Title } = Typography;

@@ -11,9 +11,9 @@ export default function callApi(endpoint, method, body) {
         }).catch(err => console.log(err))
     else{
         token = JSON.parse(token);
-        console.log(token);
+        // console.log(token);
         let auToken = `Bearer ${token}`;
-        console.log(auToken);
+        // console.log(auToken);
         return axios({
             method: method,
             url: `${Config.API_URL}/${endpoint}`,

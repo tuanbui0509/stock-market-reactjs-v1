@@ -2,7 +2,7 @@ import * as types from '../constants/User/ActionType';
 import * as ordertypes from '../constants/Order/ActionType'
 const initialState = null;
 
-let myReducer = (state = initialState, action) => {
+let User = (state = initialState, action) => {
     switch (action.type) {
         case types.USER_LOGIN:
             console.log(action)
@@ -19,4 +19,4 @@ let myReducer = (state = initialState, action) => {
 
 }
 
-export default myReducer;
+export default User;

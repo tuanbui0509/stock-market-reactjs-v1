@@ -1,9 +1,10 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
-import HomePage from './pages/HomePage/HomePage'
-import LoginPage from './pages/LoginPage'
-import RegisterPage from './pages/RegisterPage'
-import NotFoundPage from './pages/NotFoundPage/NotFoundPage'
+import HomePage from '../pages/HomePage'
+import LoginPage from '../pages/LoginPage'
+import AdminPage from '../pages/AdminPage'
+import RegisterPage from '../pages/RegisterPage'
+import NotFoundPage from '../pages/NotFoundPage'
 const routers = [
     {
         path: '/',
@@ -14,6 +15,11 @@ const routers = [
         path: '/login',
         exact: false,
         main: () => <LoginPage />
+    },
+    {
+        path: '/admin',
+        exact: false,
+        main: () => <AdminPage />
     },
     {
         path: '/register',

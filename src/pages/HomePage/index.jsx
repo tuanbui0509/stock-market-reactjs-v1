@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as Acction from '../../actions/User/index';
 import Footer from '../../components/Common/Footer';
 import Header from '../../components/Common/Header';
-import LightningTable from '../../components/HomePage/LightningTable/';
+import LightningTable from '../../components/HomePage/LightningTable';
 
 function HomePage(props) {
 
