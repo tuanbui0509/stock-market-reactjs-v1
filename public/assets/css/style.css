@@ -2,7 +2,7 @@ html, body {
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
     color: var(--text-color-primary)!important;
-    background-color: var(--background-color-body)!important;
+    /* background-color: var(--background-color-body)!important; */
     scroll-behavior: smooth;
 }
 
@@ -31,7 +31,7 @@ main {
 }
 
 .table-light-wp {
-    position: fixed;
+    position: relative;
     margin-top: 40px;
     width: 100%;
     z-index: 10;
@@ -117,12 +117,27 @@ main {
     color: #fff;
 }
 
+.line-stocks tr:nth-child(2n+1) {
+    background-color: rgb(255, 255, 255);
+}
+
 table, th, td {
     border: var(--border-primary);
+    font-weight: 500;
+}
+
+.table-light__header {
+    position: fixed;
+    z-index: 9000;
 }
 
 .table-light__header, .table-light__content {
     width: 100%;
+}
+
+.table-light__content {
+    position: absolute;
+    top: 90px;
 }
 
 #HCM.table-light__content {
@@ -160,6 +175,7 @@ table, th, td {
 tr th {
     padding: 10px;
     background-color: var(--background-color-hue);
+    color: var(--text-color-primary);
 }
 
 .stock {
@@ -189,7 +205,7 @@ tr th {
 
 .stock:hover, .stock:hover .special {
     cursor: pointer;
-    background: rgb(53, 48, 69) !important;
+    background: var(--stock-hover) !important;
 }
 
 .stock td {
@@ -473,12 +489,9 @@ table.table-price tr .symbol:hover {
     color: rgb(207, 57, 57);
 }
 
-.order-matching-price {
+.order-matching-price, .order-matching-weight {
     margin-right: 15px;
-}
-
-.order-matching-weight {
-    margin-left: 15px;
+    color: var(--text-color-primary);
 }
 
 .compare-stock {

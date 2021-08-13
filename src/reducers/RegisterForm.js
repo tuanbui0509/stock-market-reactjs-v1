@@ -11,6 +11,7 @@ let RegisterForm = (state = initialState, action) => {
         case types.DELETE_REGISTER_FORM:
             return action.registerForm;
         case types.ADMIN_LOGOUT:
+            console.log(action);
             return null;
         default:
             return state;

@@ -32,7 +32,7 @@ function HeaderUser(props) {
             </Menu.Item>
         </Menu> : <Menu>
             <Menu.Item key="0">
-                <a className="header__right-account-item">{user.maNdt} </a>
+                <Link to='/history-order' className="header__right-account-item">Thông tin tài khoản </Link>
             </Menu.Item>
             <Menu.Item key="1">
                 <Link className="header__right-account-item" to="/" onClick={logOut}>

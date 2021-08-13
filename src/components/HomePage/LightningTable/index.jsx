@@ -16,18 +16,18 @@ function LightningTable(props) {
     //console.log(User);
     const dispatch = useDispatch();
 
-    useEffect(()=>{
+    useEffect(() => {
         const hubConnection = new signalR.HubConnectionBuilder()
-        .withUrl(Config.BASE_URL + "/signalr")
-        .configureLogging(signalR.LogLevel.Information)  
-        .build();
+            .withUrl(Config.BASE_URL + "/signalr")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
         hubConnection.on("message", message => {
             let json = JSON.parse(message);
             console.log(json);
             dispatch(actionList.FetchChangeListStocks(json));
         });
         hubConnection.start();
-    },[])
+    }, [])
 
     useEffect(() => {
         dispatch(actionList.FetchListStocksRequest());
@@ -145,9 +145,11 @@ function LightningTable(props) {
                         </thead>
                     </table>
                     <table className="table-light__content" id="HCM">
-                        <tbody className="line-stocks"> {/* 1 stock */}
-                            {element}
-                        </tbody>
+                            <tbody className="line-stocks"> {/* 1 stock */}
+                                {element}
+                            </tbody>
+                        {/* <div className="table-light__body">
+                        </div> */}
                     </table>
                 </section>
             </main>

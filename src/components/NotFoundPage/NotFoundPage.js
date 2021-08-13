@@ -22,8 +22,8 @@ const NotFoundPage = () => {
                     <div />
                 </div>
                 <h1>oops!</h1>
-                <h2>Error 404 : Page Not Found</h2>
-                <Link to="/">go home</Link>
+                <h2>Error 404 : Không tìn thấy trang</h2>
+                <Link className='btn-go-home' to="/">Về trang chủ</Link>
             </div>
             <div className="animation-right">
                 <svg width="380px" height="500px" viewBox="0 0 837 1045" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" xmlnsSketch="http://www.bohemiancoding.com/sketch/ns">

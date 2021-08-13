@@ -9,9 +9,9 @@ import apiCaller from '../../../utils/apiCaller'
 export default function ViewRegisterForm() {
     const listFormRegister = useSelector(state => state.RegisterForm);
     const dispatch = useDispatch();
-    dispatch(action.FetchListRegisterFormRequest);
+    // dispatch(action.FetchListRegisterFormRequest);
     useEffect(() => {
-        const fetchO = async () => {
+        const FetchListRegisterForm = async () => {
             try {
                 const res = await apiCaller('DonDangKy', 'GET', null);
                 console.log(res.data.data);
@@ -21,20 +21,19 @@ export default function ViewRegisterForm() {
             }
         }
 
-        fetchO()
+        FetchListRegisterForm()
     }, [])
-    console.log(listFormRegister);
     const showListFormRegister = () => {
         let result = null
-        if (listFormRegister.length > 0) {
+        if (listFormRegister) {
             result = listFormRegister.map((order, index) => {
-                return index < 5 ? (
+                return (
                     <RegisterFormItem
                         key={index}
                         formRegister={order}
                         index={index}
                     />
-                ) : null
+                ) 
             })
         }
         return result

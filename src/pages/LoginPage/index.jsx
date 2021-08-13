@@ -6,11 +6,8 @@ import MainLogin from '../../components/LoginPage/MainLogin/'
 const LoginPage = () => {
     return (
         <div className="login">
-            {/* Begin Header */}
             <HeaderLogin />
-            {/* Begin main */}
             <MainLogin />
-            {/* Begin Footer */}
             <FooterLogin />
 
         </div>

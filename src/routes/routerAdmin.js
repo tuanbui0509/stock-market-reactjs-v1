@@ -5,6 +5,7 @@ import LoginPage from '../pages/LoginPage'
 import AdminPage from '../pages/AdminPage'
 import RegisterPage from '../pages/RegisterPage'
 import NotFoundPage from '../pages/NotFoundPage'
+// import UserPage from '../pages/UserPage'
 const routers = [
     {
         path: '/',
@@ -12,15 +13,16 @@ const routers = [
         main: () => <HomePage />
     },
     {
-        path: '/login',
-        exact: false,
-        main: () => <LoginPage />
-    },
-    {
         path: '/admin',
         exact: false,
         main: () => <AdminPage />
     },
+    {
+        path: '/login',
+        exact: false,
+        main: () => <LoginPage />
+    },
+    
     {
         path: '/register',
         exact: false,
@@ -30,7 +32,8 @@ const routers = [
         path: '',
         exact: false,
         main: () => <NotFoundPage />
-    }
+    },
+
 
 ]
 

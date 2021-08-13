@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Form, InputNumber, Modal, Button, Radio, Select,Input } from 'antd'
+import { Form, InputNumber, Modal, Button, Radio, Select, Input } from 'antd'
 import './FormOrder.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router';
@@ -26,14 +26,14 @@ function FormOrder(props) {
         soDu: 0
     });
     const [bankList, setBankList] = useState(null);
-    const [stock, setStock] = useState({gia:null,giaTran:null,giaTC:null,giaSan:null,kl:null});
+    const [stock, setStock] = useState({ gia: null, giaTran: null, giaTC: null, giaSan: null, kl: null });
 
     // Handle modal
     const [visibleOrder, setVisibleOrder] = useState(false)
     const [visibleConfirm, setVisibleConfirm] = useState(false)
     const [confirmLoading, setConfirmLoading] = React.useState(false);
     const onFinish = (values) => {
-        if(values.gia*values.soLuong > bank.soDu){
+        if (values.gia * values.soLuong > bank.soDu) {
             alert("Số tiền không đủ");
             return;
         }
@@ -42,8 +42,8 @@ function FormOrder(props) {
         console.log(order)
         console.log(bank);
         setVisibleConfirm(true)
-            
-        
+
+
     }
     const handleConfirm = () => {
 
@@ -55,14 +55,14 @@ function FormOrder(props) {
             if (rec.status === 0) {
                 setVisibleOrder(false)
                 setConfirmLoading(false);
-                setVisibleConfirm(false); 
+                setVisibleConfirm(false);
             } else {
                 alert(rec.message);
                 setConfirmLoading(false);
-                setVisibleConfirm(false); 
+                setVisibleConfirm(false);
             }
         })
-        setTimeout(() => {  
+        setTimeout(() => {
         }, 2000);
         // dispatch(ActionOrder.MakeOrderRequest(order.pin,{
         //     stk : order.idAcc,
@@ -74,12 +74,12 @@ function FormOrder(props) {
         // }));
     };
 
-    const checkUser = ()=>{
-        if(user === null)
+    const checkUser = () => {
+        if (user === null)
             history.replace("/login");
-        else{
+        else {
             let bl = null;
-            callApi('taikhoannganhang?MaNDT='+user.maNdt, 'GET', null).then(res => {
+            callApi('taikhoannganhang?MaNDT=' + user.maNdt, 'GET', null).then(res => {
                 let rec = res.data;
                 console.log(rec);
                 if (rec.status === 0) {
@@ -91,7 +91,7 @@ function FormOrder(props) {
             })
             setVisibleOrder(true)
         }
-            
+
     }
 
     // useEffect(() => {
@@ -119,31 +119,31 @@ function FormOrder(props) {
     //     return <Select.Option value={val.stk}>{val.stk}</Select.Option>
     // }) : null;
 
-    let tempValueStock = (id)=>{
-        let index = findIndexStock(id,LightningTableList)
+    let tempValueStock = (id) => {
+        let index = findIndexStock(id, LightningTableList)
         console.log(index);
-        if(index === -1)
+        if (index === -1)
             return;
         let res = LightningTableList[index];
         setStock(res);
         console.log(stock);
     }
-    let tempValueBank = (id)=>{
-        let index = findIndex(id,bankList)
-        if(index === -1)
+    let tempValueBank = (id) => {
+        let index = findIndex(id, bankList)
+        if (index === -1)
             return;
         let res = bankList[index];
-        console.log(id,index);
+        console.log(id, index);
         console.log(res);
         setBank(res);
     }
-    let stockInformation = ()=>{
-            return <React.Fragment><div className="modal-order-matching">
+    let stockInformation = () => {
+        return <React.Fragment><div className="modal-order-matching">
             <p className="order-matching-title">Khớp lệnh</p>
             <span className="order-matching-price">Giá: {stock.gia}</span>
             <span>-</span>
             <span className="order-matching-weight">Số lượng: {stock.kl}</span>
-            </div>
+        </div>
             <div className="compare-stock">
                 <div className="info-stock info-ceil">
                     <label>Trần: </label>
@@ -159,16 +159,16 @@ function FormOrder(props) {
                 </div>
             </div></React.Fragment>
     }
-    let displayBankList = ()=>{
-        if(bankList!==null)
+    let displayBankList = () => {
+        if (bankList !== null)
             return bankList.map((value, index) => {
-                return <Select.Option value={value.stk}>{value.stk.trim()+" - "+value.nganHang.tenNganHang}</Select.Option>
+                return <Select.Option value={value.stk}>{value.stk.trim() + " - " + value.nganHang.tenNganHang}</Select.Option>
             })
     }
-    let onChangeListStock = (event)=>{
+    let onChangeListStock = (event) => {
         tempValueStock(event);
     }
-    let onChangeListBank = (event)=>{
+    let onChangeListBank = (event) => {
         tempValueBank(event);
     }
     let ListStock = LightningTableList.map((value, index) => {
@@ -282,7 +282,7 @@ function FormOrder(props) {
                             confirmLoading={confirmLoading}
                         >
                             <div class="modal-info">
-                                <p class="modal-info-title">Quý khách có thật sự muốn đặt lệnh <span className={order.loaiGiaoDich?"color-green":"color-red"}>{order.loaiGiaoDich?'Mua':'Bán'}</span>
+                                <p class="modal-info-title">Quý khách có thật sự muốn đặt lệnh <span className={order.loaiGiaoDich ? "color-green" : "color-red"}>{order.loaiGiaoDich ? 'Mua' : 'Bán'}</span>
                                 </p>
                                 <div className="modal-info-detail">
                                     <div className="modal-info-item">

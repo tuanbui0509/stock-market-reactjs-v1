@@ -29,7 +29,7 @@ export const UserLoginRequest = (username, password, history) => {
                 if (rec.data.role === "ndt") { history.replace("/"); }
                 else if (rec.data.role === "admin") {
                     localStorage.setItem("role", JSON.stringify(rec.data.role));
-                    history.replace("/admin")
+                    history.push("/admin")
                 }
             } else {
                 alert(rec.message);

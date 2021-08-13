@@ -11,7 +11,7 @@ const RegisterPage = () => {
             {/* Begin main */}
             <MainRegister />
             {/* Begin Footer */}
-            <FooterLogin />
+            {/* <FooterLogin /> */}
 
         </div>
     );

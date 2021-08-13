@@ -1,4 +1,3 @@
-
 /* ================================================== Begin style Header ============================================= */
 
 header {
@@ -14,7 +13,8 @@ header {
     justify-content: space-between;
     align-items: center;
     height: 40px;
-    border-bottom: var(--border-bottom);
+    margin-bottom: 1rem;
+    /* border-bottom: var(--border-bottom); */
 }
 
 .header__left {
@@ -34,6 +34,8 @@ header {
     align-items: center;
     width: 80px;
     height: auto;
+    color: var(--text-color-primary);
+    font-weight: bold;
 }
 
 .header__logo img {
@@ -165,7 +167,7 @@ header {
     background-color: var(--background-color-body);
 }
 
-.header__right-account-item:first-child{
+.header__right-account-item:first-child {
     background-color: unset;
     cursor: default;
 }
@@ -190,7 +192,7 @@ header {
 
 footer {
     text-align: center;
-    color: var(--color-white-active);
+    color: var(--text-color-primary);
     font-size: 13px;
     padding: 15px;
     background: var(--background-color-primary);
@@ -199,6 +201,7 @@ footer {
     width: 100%;
     z-index: 99;
 }
+
 .modal-footer {
     text-align: center;
     color: #000;

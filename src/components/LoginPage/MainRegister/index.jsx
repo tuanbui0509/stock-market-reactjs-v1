@@ -2,6 +2,7 @@ import { Button, DatePicker, Form, Input, Select, Typography } from 'antd';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 import callApi from '../../../utils/apiCaller';
 import '../style.css';
 // import './MainRegister.css';
@@ -252,26 +253,13 @@ const MainRegister = (props) => {
                                         <DatePicker placeholder="Ngày cấp CMND" />
                                     </Form.Item>
 
-                                    {/* <Form.Item
-                                        name="agreement"
-                                        valuePropName="checked"
-                                        rules={[
-                                            {
-                                                validator: (_, value) =>
-                                                    value ? Promise.resolve() : Promise.reject(new Error('Bạn nên chấp nhận điều khoản')),
-                                            },
-                                        ]}
-                                        {...tailFormItemLayout}
-                                    >
-                                        <Checkbox>
-                                            Tôi đã đọc <a href="">điều khoản đăng ký</a>
-                                        </Checkbox>
-                                    </Form.Item> */}
+
                                     <Form.Item {...tailFormItemLayout}>
                                         <Button type="primary" htmlType="submit">
                                             Tạo tài khoản
                                         </Button>
                                     </Form.Item>
+                                    <Link to="/login" className='title-login'>Đăng nhập?</Link>
 
                                 </div>
                             </div>
