@@ -1,24 +1,19 @@
+import 'antd/dist/antd.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-import { createStore, applyMiddleware, compose } from 'redux'
-import myReducers from './reducers/index';
-// import CssBaseline from '@material-ui/core/CssBaseline';
-import { DatePicker } from 'antd';
-import 'antd/dist/antd.css';
-// Middleware thunk
-import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(
-  myReducers,
-  composeEnhancers(
-    applyMiddleware(thunk)));
-
+import { PersistGate } from 'redux-persist/integration/react';
+import App from './App';
+import index from './reducers/index';
 
 ReactDOM.render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+  <Provider store={index.store}>
+    <PersistGate loading={null} persistor={index.persistor}>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </PersistGate>
+  </Provider>
+ ,
   document.getElementById('root')
 );

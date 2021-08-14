@@ -23,7 +23,7 @@ const columns = [
 
 
 
-function StatementPurchasedPage() {
+function HistoryPurchasedPage() {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
     const [pagination, setPagination] = useState({
@@ -84,9 +84,6 @@ function StatementPurchasedPage() {
                     <Column title="Giá trị khớp" dataIndex="gia-tri-khop" key="gia-tri-khop" />
                 </ColumnGroup>
                 <Column title="Trạng thái lệnh" dataIndex="trang-thai-lenh" key="trang-thai-lenh" />
-                <Column title="Mức phí" dataIndex="muc-phi" key="muc-phi" />
-                <Column title="Giá trị phí" dataIndex="gia-tri-phi" key="gia-tri-phi" />
-                <Column title="Thuế" dataIndex="thue" key="thue" />
 
             </Table>
 
@@ -95,4 +92,4 @@ function StatementPurchasedPage() {
     )
 }
 
-export default StatementPurchasedPage
+export default HistoryPurchasedPage

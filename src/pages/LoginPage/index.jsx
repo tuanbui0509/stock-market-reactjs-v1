@@ -8,7 +8,6 @@ const LoginPage = () => {
         <div className="login">
             <HeaderLogin />
             <MainLogin />
-            <FooterLogin />
 
         </div>
     );

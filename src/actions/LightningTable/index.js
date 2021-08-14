@@ -6,7 +6,6 @@ export const FetchListStocksRequest = () => {
     return (dispatch) => {
         return callApi('banggiatructuyen', 'GET', null).then(res => {
             dispatch(FetchListStocks(res.data));
-            console.log(res.data);
         })
     }
 }

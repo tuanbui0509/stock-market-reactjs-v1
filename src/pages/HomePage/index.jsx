@@ -6,10 +6,6 @@ import * as Action from '../../actions/User/index';
 import Footer from '../../components/Common/Footer';
 import Header from '../../components/Common/Header';
 import LightningTable from '../../components/HomePage/LightningTable';
-import { Switch, Route, BrowserRouter as Router } from "react-router-dom";
-import UserPage from '../UserPage'
-import LoginPage from '../LoginPage'
-import NotFoundPage from '../NotFoundPage'
 function HomePage(props) {
 
     const role = JSON.parse(localStorage.getItem("role"));
@@ -28,13 +24,10 @@ function HomePage(props) {
     const [, setTick] = useState(0);
     useEffect(() => {
         setTick(tick => tick + 1);
-        console.log(user);
     }, [user]);
     return (
         <>
-            <Header></Header>
-            <LightningTable/>
-            <Footer></Footer>
+            <LightningTable />
         </>
     );
 

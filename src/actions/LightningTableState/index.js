@@ -11,7 +11,7 @@ export const FetchListStates = (states) => {
 export const FetchListStatesRequest = (index) => {
     return (dispatch) => {
         return callApi('state', 'GET', null).then(res => {
-            //console.log(res)
+            console.log(res)
             dispatch(FetchListStates({
                 List : res.data,
                 selected : index

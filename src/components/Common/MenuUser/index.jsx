@@ -5,31 +5,32 @@ const style = { padding: '8px 0', marginBottom: '1rem', textAlign: 'center', fon
 
 const menus = [
     {
-        label: 'Lịch sử đặt lệnh',
-        to: '/history-order',
+        label: 'Chứng khoán hiện có',
+        to: '/chung-khoan-hien-co',
         exact: false
     },
     {
+        label: 'Lịch sử đặt lệnh',
+        to: '/lich-su-dat-lenh',
+        exact: true
+    },
+    {
         label: 'Lịch sử khớp lệnh',
-        to: '/history-purchase',
+        to: '/lich-su-khop-lenh',
         exact: false
     },
 
     {
         label: 'Sao kê giao dịch tiền',
-        to: '/statement-strafer-price',
+        to: '/sao-ke-giao-dich-tien',
         exact: false
     },
     {
         label: 'Sao kê giao dịch chứng khoán',
-        to: '/statement-strafer-stock',
+        to: '/sao-ke-giao-dich-ck',
         exact: false
     },
-    {
-        label: 'Chứng khoán hiện có',
-        to: '/stocks',
-        exact: false
-    }
+    
 ]
 // custom Link
 const MenuLink = ({ label, to, activeOnlyWhenExact }) => {
@@ -39,7 +40,6 @@ const MenuLink = ({ label, to, activeOnlyWhenExact }) => {
             exact={activeOnlyWhenExact}
             children={({ match }) => {
                 let active = match ? 'title-info-active' : '';
-                console.log(match)
                 return (
                     <Col className="gutter-row" span={6}>
                         <div className={`title-info ${active}`}>
@@ -55,7 +55,7 @@ const MenuLink = ({ label, to, activeOnlyWhenExact }) => {
     );
 }
 
-const showMenus = (menus) => {
+const showMenus = (menus, path) => {
     let result = null;
     if (menus.length > 0) {
         result = menus.map((menu, index) => {
@@ -63,7 +63,7 @@ const showMenus = (menus) => {
                 <MenuLink
                     key={index}
                     label={menu.label}
-                    to={menu.to}
+                    to={`${path + menu.to}`}
                     activeOnlyWhenExact={menu.exact}
                 />
             );
@@ -71,12 +71,12 @@ const showMenus = (menus) => {
     }
     return result;
 }
-export default function Menu() {
+export default function Menu(props) {
+    let { path } = props
     return (
         <>
-            {/* <Divider orientation="left">Horizontal</Divider> */}
             <Row gutter={16}>
-                {showMenus(menus)}
+                {showMenus(menus, path)}
             </Row>
         </>
     )

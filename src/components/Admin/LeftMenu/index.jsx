@@ -1,16 +1,22 @@
 import { HomeTwoTone, IdcardTwoTone, RightCircleTwoTone } from '@ant-design/icons'
+import { openNotificationSuccess } from 'components/Notification';
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom'
 import * as action from '../../../actions/Admin/RegisterForm/index';
+import Logout from '../../../components/Logout';
+import * as ActionIsAdmin from '../../../constants/Admin/ActionType';
+import * as ActionToken from '../../../constants/Token/ActionType';
 
 export default function LeftMenu() {
-   
+
     const dispatch = useDispatch();
     const history = useHistory();
     const logOut = () => {
         if (window.confirm("Bạn có chắc chắn muốn đăng xuất !")) {
-            localStorage.removeItem("token");
+            dispatch({ type: ActionToken.REMOVE_TOKEN });
+            dispatch({ type: ActionIsAdmin.IS_USER });
+            openNotificationSuccess('Thành công', 'Đăng xuất thành công ', 3);
             localStorage.removeItem("user");
             localStorage.removeItem("role");
             dispatch(action.AdminLogout(history));
@@ -26,10 +32,10 @@ export default function LeftMenu() {
                             <Link to="/admin" className="left__title"><HomeTwoTone />Dashboard</Link>
                         </li>
                         <li className="left__menuItem">
-                            <Link to="/" className="left__title"><IdcardTwoTone />Khách Hàng</Link>
+                            <Link to="/admin/duyet-don" className="left__title"><IdcardTwoTone />Khách Hàng</Link>
                         </li>
                         <li className="left__menuItem">
-                            <Link to="/" onClick={logOut} className="left__title"><RightCircleTwoTone />Đăng Xuất</Link>
+                            <Link to="/login" onClick={logOut} className="left__title"><RightCircleTwoTone />Đăng Xuất</Link>
                         </li>
                     </ul>
                 </div>

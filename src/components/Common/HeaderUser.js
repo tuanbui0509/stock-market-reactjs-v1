@@ -6,16 +6,19 @@ import * as action from '../../actions/User/index';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
 import { Menu, Dropdown } from 'antd';
+import * as ActionIsAdmin from '../../constants/Admin/ActionType';
+import * as ActionToken from '../../constants/Token/ActionType';
 function HeaderUser(props) {
     //const token = JSON.parse(localStorage.getItem("token"));
     const user = useSelector(state => state.User);
-    console.log(user);
     const dispatch = useDispatch();
     const history = useHistory();
     const logOut = () => {
         if (window.confirm("Bạn có chắc chắn muốn đăng xuất !")) {
             localStorage.removeItem("token");
             localStorage.removeItem("user");
+            dispatch({ type: ActionToken.REMOVE_TOKEN });
+            dispatch({ type: ActionIsAdmin.IS_USER });
             dispatch(action.UserLogout(history));
         };
     }
@@ -32,7 +35,7 @@ function HeaderUser(props) {
             </Menu.Item>
         </Menu> : <Menu>
             <Menu.Item key="0">
-                <Link to='/history-order' className="header__right-account-item">Thông tin tài khoản </Link>
+                <Link to='/khach-hang/chung-khoan-hien-co' className="header__right-account-item">Thông tin tài khoản </Link>
             </Menu.Item>
             <Menu.Item key="1">
                 <Link className="header__right-account-item" to="/" onClick={logOut}>

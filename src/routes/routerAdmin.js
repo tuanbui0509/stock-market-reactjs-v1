@@ -1,39 +1,16 @@
-import React from 'react'
-// import PropTypes from 'prop-types'
-import HomePage from '../pages/HomePage'
-import LoginPage from '../pages/LoginPage'
-import AdminPage from '../pages/AdminPage'
-import RegisterPage from '../pages/RegisterPage'
-import NotFoundPage from '../pages/NotFoundPage'
-// import UserPage from '../pages/UserPage'
+import React from 'react';
+import AdminPage from '../pages/AdminPage';
 const routers = [
     {
-        path: '/',
-        exact: true,
-        main: () => <HomePage />
-    },
-    {
         path: '/admin',
-        exact: false,
+        exact: true,
         main: () => <AdminPage />
     },
     {
-        path: '/login',
-        exact: false,
-        main: () => <LoginPage />
-    },
-    
-    {
-        path: '/register',
-        exact: false,
-        main: () => <RegisterPage />
-    },
-    {
-        path: '',
-        exact: false,
-        main: () => <NotFoundPage />
-    },
-
+        path: '/admin/duyet-don',
+        exact: true,
+        main: () => <AdminPage />
+    }
 
 ]
 
