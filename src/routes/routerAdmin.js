@@ -1,5 +1,7 @@
 import React from 'react';
 import AdminPage from '../pages/AdminPage';
+import ViewRegisterForm from '../components/Admin/ViewRegisterForm'
+
 const routers = [
     {
         path: '/admin',
@@ -9,7 +11,7 @@ const routers = [
     {
         path: '/admin/duyet-don',
         exact: true,
-        main: () => <AdminPage />
+        main: () => <ViewRegisterForm />
     }
 
 ]

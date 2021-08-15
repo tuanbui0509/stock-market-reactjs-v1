@@ -78,16 +78,9 @@ function FormOrder(props) {
         if (user === null)
             history.replace("/login");
         else {
-            let bl = null;
-            callApi('taikhoannganhang?MaNDT=' + user.maNdt, 'GET', null).then(res => {
-                let rec = res.data;
-                console.log(rec);
-                if (rec.status === 0) {
-                    console.log(rec.data);
-                    setBankList(rec.data);
-                } else {
-                    alert(rec.message);
-                }
+            callApi('TaiKhoanNganHang', 'GET', null).then(res => {
+                setBankList(res.data);
+
             })
             setVisibleOrder(true)
         }

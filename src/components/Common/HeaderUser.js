@@ -29,8 +29,6 @@ function HeaderUser(props) {
             </Menu.Item>
             <Menu.Item key="1">
                 <Link className="header__right-account-item" to="/login">
-                    {/* <span className="header__right-flag"><img src={user2logo} className="img-responsive" alt="" />
-                 </span> */}
                     Đăng Nhập </Link>
             </Menu.Item>
         </Menu> : <Menu>
@@ -38,9 +36,7 @@ function HeaderUser(props) {
                 <Link to='/khach-hang/chung-khoan-hien-co' className="header__right-account-item">Thông tin tài khoản </Link>
             </Menu.Item>
             <Menu.Item key="1">
-                <Link className="header__right-account-item" to="/" onClick={logOut}>
-                    {/* <span className="header__right-flag"><img src={user2logo} className="img-responsive" alt="" />
-                    </span> */}
+                <Link className="header__right-account-item" to="/" onClick={logOut} >
                     Đăng xuất </Link>
             </Menu.Item>
         </Menu>

@@ -29,7 +29,6 @@ function App() {
   console.log(token);
   console.log(isAdmin);
   return (
-
     <Router>
       <Switch>
         {(isAdmin) ?
@@ -54,10 +53,10 @@ function App() {
           </>
         }
         <Route path="/logout" exact component={Logout}></Route>
-        <Route path="" component={NotFoundPage}></Route>
+        <Route component={NotFoundPage}></Route>
       </Switch>
       <Footer />
-    </Router >
+    </Router>
   );
 }
 

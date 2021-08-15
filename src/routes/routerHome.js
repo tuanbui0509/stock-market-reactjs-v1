@@ -1,3 +1,4 @@
+import Logout from 'components/Logout'
 import React from 'react'
 // import PropTypes from 'prop-types'
 import HomePage from '../pages/HomePage'
@@ -20,7 +21,13 @@ const routers = [
     {
         path: '/register',
         exact: false,
-        main: () => <RegisterPage  />
+        main: () => <RegisterPage />
+    }
+    ,
+    {
+        path: '/logout',
+        exact: false,
+        main: () => <Logout />
     }
 
 ]

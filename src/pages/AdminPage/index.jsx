@@ -4,7 +4,7 @@ import './Admin.css'
 function AdminPage(props) {
   return (
     <>
-      <ViewRegisterForm />
+      Hello Admin!
     </>
   )
 }
