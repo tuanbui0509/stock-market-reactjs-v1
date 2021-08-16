@@ -8,6 +8,7 @@ import LightningTableState from './LightningTableState';
 import RegisterForm from './RegisterForm';
 import Token from './Token';
 import User from './User';
+import Report from './Report';
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const myReducer = combineReducers({
@@ -16,7 +17,8 @@ const myReducer = combineReducers({
     User,
     RegisterForm,
     Token,
-    isAdmin
+    isAdmin,
+    Report
 });
 
 
@@ -28,14 +30,6 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, myReducer)
 
-// export default () => {
-//     let store = createStore(
-//         persistedReducer,
-//         composeEnhancers(
-//         applyMiddleware(thunk)))
-//     let persistor = persistStore(store)
-//     return { store, persistor }
-// }
 let store = createStore(persistedReducer,
     composeEnhancers(applyMiddleware(thunk)))
 let persistor = persistStore(store)

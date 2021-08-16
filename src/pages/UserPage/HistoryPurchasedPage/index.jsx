@@ -1,18 +1,37 @@
-import { SearchOutlined } from '@ant-design/icons';
-import { Button, Input, Space, Table } from 'antd';
+import { Button, Col, DatePicker, Form, Input, Row, Select, Table } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
-import Highlighter from 'react-highlight-words';
+import { useSelector } from 'react-redux';
 import reqwest from 'reqwest';
-
-
-
+import callApi from '../../../utils/apiCaller';
+import queryString from 'query-string';
+import { useDispatch } from 'react-redux';
+import *as types from '../../../constants/Report/ActionType'
+const { Option } = Select;
 function HistoryPurchasedPage() {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
-    const [searchText, setSearchText] = useState('');
-    const [searchedColumn, setSearchedColumn] = useState('');
-    const searchInput = useRef(null);
+    const reports = useSelector(state => state.Report)
+    const dispatch = useDispatch()
+    function getDateCurrent() {
+        var date = new Date();
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+        return `${m + 1}/${d}/${y}`
+    }
+    function getDateBeforeWeek() {
+        var date = new Date();
+        date.setDate(date.getDate() - 7);
+        var d = date.getDate();
+        var m = date.getMonth();
+        var y = date.getFullYear();
+        return `${m + 1}/${d}/${y}`
+    }
     const [pagination, setPagination] = useState({
+        from: getDateBeforeWeek(),
+        to: getDateCurrent(),
+        MaTC: '',
+        MaTT: 'TC',
         current: 1,
         pageSize: 5,
     })
@@ -31,127 +50,57 @@ function HistoryPurchasedPage() {
         page: params.pagination.current,
         ...params,
     });
-    fetch = (params = {}) => {
+    fetch = async (params = {}) => {
         console.log(params);
         setLoading(true)
-        reqwest({
-            url: 'https://randomuser.me/api',
-            method: 'get',
-            type: 'json',
-            data: getRandomuserParams(params),
-        }).then(data => {
-            console.log(data);
+        
+        try {
+            const paramsString = queryString.stringify(pagination);
+            const requestUrl = `LichSuLenhDat?${paramsString}`;
+            const res = await callApi(requestUrl, 'GET', null)
+            console.log(res);
+            dispatch({ type: types.HISTORY_ORDER, payload: res.data })
             setLoading(false)
-            setData(data.results)
-            setPagination({ ...pagination, current: data.info.page, total: 50, pageSize: data.info.results })
-
-        });
+            setData(reports.list)
+            setPagination({ ...pagination, current: reports.currentPage, total: reports.totalItem })
+        } catch (error) {
+            console.log(error);
+        }
     };
-
-    let getColumnSearchProps = dataIndex => ({
-        filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-            <div style={{ padding: 8 }}>
-                <Input
-                    ref={searchInput}
-                    placeholder={`Search ${dataIndex}`}
-                    value={selectedKeys[0]}
-                    onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
-                    onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-                    style={{ marginBottom: 8, display: 'block' }}
-                />
-                <Space>
-                    <Button
-                        type="primary"
-                        onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-                        icon={<SearchOutlined />}
-                        size="small"
-                        style={{ width: 90 }}
-                    >
-                        Search
-                    </Button>
-                    <Button
-                        onClick={() => handleReset(clearFilters)}
-                        size="small"
-                        style={{ width: 90 }}>
-                        Reset
-                    </Button>
-
-                </Space>
-
-            </div>
-        ),
-        filterIcon: filtered => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
-        onFilter: (value, record) =>
-            record[dataIndex]
-                ? record[dataIndex]
-                    .toString()
-                    .toLowerCase()
-                    .includes(value.toLowerCase())
-                : '',
-        onFilterDropdownVisibleChange: visible => {
-            if (visible) {
-                setTimeout(
-                    () => searchInput && searchInput.current && searchInput.current.select(), 100
-                )
-            }
-        },
-        render: text =>
-            searchedColumn === dataIndex ? (
-                <Highlighter
-                    highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-                    searchWords={[searchText]}
-                    autoEscape
-                    textToHighlight={text ? text.toString() : ''}
-                />
-            ) : (
-                text
-            ),
-    });
-
-    const handleSearch = (selectedKeys, confirm, dataIndex) => {
-        confirm();
-        setSearchText(selectedKeys[0])
-        setSearchedColumn(dataIndex)
-    };
-
-    const handleReset = clearFilters => {
-        clearFilters()
-        setSearchText('')
-    };
+    console.log(reports);
     const columns = [
         {
             title: 'Mã lệnh',
-            dataIndex: 'nat',
-            key: 'nat',
+            dataIndex: 'maLD',
+            key: 'maLD',
             width: 120,
             fixed: 'center',
-            ...getColumnSearchProps('nat'),
         },
         {
             title: 'Mã CK',
-            dataIndex: 'id',
-            key: 'id',
+            dataIndex: 'maCP',
+            key: 'maCP',
             width: 200,
             fixed: 'center',
         },
         {
             title: 'Mua/Bán',
-            dataIndex: 'phone',
-            key: 'phone',
+            dataIndex: 'loaiGiaoDich',
+            key: 'loaiGiaoDich',
             width: 200,
             fixed: 'center',
         },
         {
             title: 'Đặt từ',
-            dataIndex: 'mack',
-            key: 'mack',
+            dataIndex: 'stk',
+            key: 'stk',
             width: 200,
             fixed: 'center',
         },
         {
             title: 'Ngày',
-            dataIndex: '',
-            key: '',
+            dataIndex: 'thoiGian',
+            key: 'thoiGian',
             width: 100,
             fixed: 'center',
         },
@@ -160,28 +109,28 @@ function HistoryPurchasedPage() {
             children: [
                 {
                     title: 'Khối lượng',
-                    dataIndex: '',
-                    key: '',
+                    dataIndex: 'soLuong',
+                    key: 'soLuong',
                     width: 150,
 
                 },
                 {
                     title: 'Giá',
-                    dataIndex: '',
-                    key: '',
+                    dataIndex: 'gia',
+                    key: 'gia',
                     width: 150,
                 },
                 {
                     title: 'Khối lượng khớp',
-                    dataIndex: '',
-                    key: '',
+                    dataIndex: 'slKhop',
+                    key: 'slKhop',
                     width: 150,
                 }
                 ,
                 {
                     title: 'Giá khớp',
-                    dataIndex: '',
-                    key: '',
+                    dataIndex: 'giaKhop',
+                    key: 'giaKhop',
                     width: 150,
                 },
                 {
@@ -194,15 +143,101 @@ function HistoryPurchasedPage() {
         },
         {
             title: 'Trạng thái lệnh',
-            dataIndex: 'mack',
-            key: 'mack',
+            dataIndex: 'tenTrangThai',
+            key: 'tenTrangThai',
             width: 200,
             fixed: 'center',
         }
     ]
 
+    const onFinish = (fieldsValue) => {
+        const values = {
+            ...fieldsValue,
+            'from': fieldsValue['from'].format('MM-DD-YYYY'),
+            'to': fieldsValue['to'].format('MM-DD-YYYY')
+        };
+        console.log('Received values of form: ', values);
+    };
     return (
         <>
+            <Row style={{ margin: '1rem' }}  >
+                <Col span={24}>
+                    <Form onFinish={onFinish}>
+                        <Row gutter={40}>
+                            <Col span={5}>
+                                <Form.Item name="from" label="Từ ngày"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Vui lòng chọn ngày',
+                                        },
+                                    ]}
+                                >
+                                    <DatePicker placeholder='Chọn ngày' />
+                                </Form.Item>
+                            </Col>
+                            <Col span={5}>
+                                <Form.Item name="to" label="Đến ngày"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Vui lòng chọn ngày',
+                                        },
+                                    ]}
+                                >
+                                    <DatePicker placeholder='Chọn ngày' />
+                                </Form.Item>
+                            </Col>
+                            <Col span={5}>
+
+                                <Form.Item
+                                    name="MaTT"
+                                    label="Trạng thái"
+                                    hasFeedback
+                                    rules={[
+                                        {
+                                            message: 'Chọn trạng thái!',
+                                        },
+                                    ]}
+                                >
+                                    <Select placeholder="Trạng thái">
+                                        <Option value="china">China</Option>
+                                        <Option value="usa">U.S.A</Option>
+                                    </Select>
+                                </Form.Item>
+                            </Col>
+                            <Col span={4}>
+                                <Form.Item
+                                    name='MaCT'
+                                    label='MaTC'
+
+                                >
+                                    <Input placeholder="Nhập MaTC" />
+                                </Form.Item>
+                            </Col>
+                            <Col span={1}>
+                                <Form.Item
+                                    wrapperCol={{
+                                        xs: {
+                                            span: 24,
+                                            offset: 0,
+                                        },
+                                        sm: {
+                                            span: 16,
+                                            offset: 8,
+                                        },
+                                    }}
+                                >
+                                    <Button type="primary" htmlType="submit">
+                                        Cập nhật
+                                    </Button>
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                    </Form>
+                </Col>
+
+            </Row>
             <Table
                 columns={columns}
                 dataSource={data}
