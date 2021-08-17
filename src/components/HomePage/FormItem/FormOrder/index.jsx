@@ -5,13 +5,33 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router';
 import * as ActionOrder from '../../../../actions/Order';
 import callApi from '../../../../utils/apiCaller';
-
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+const formItemLayout = {
+    labelCol: {
+        xs: {
+            span: 24,
+        },
+        sm: {
+            span: 10,
+        },
+    }
+};
 function FormOrder(props) {
     // handle event
     const user = useSelector(state => state.User)
     const dispatch = useDispatch();
     const history = useHistory();
     const LightningTableList = useSelector(state => state.LightningTableList)
+    const [bank, setBank] = useState({
+        nganhang: "",
+        soDu: 0
+    });
+    const [bankList, setBankList] = useState(null);
+    const [stocks, setStocks] = useState([]);
+    const [stock, setStock] = useState({ gia: null, giaTran: null, giaTC: null, giaSan: null, kl: null });
+    const [visibleOrder, setVisibleOrder] = useState(false)
+    const [visibleConfirm, setVisibleConfirm] = useState(false)
+    const [confirmLoading, setConfirmLoading] = React.useState(false);
     const [order, setOrder] = useState({
         stk: "",
         maCp: "",
@@ -21,29 +41,15 @@ function FormOrder(props) {
         loaiGiaoDich: true,// Trạng thái mua bán mua: true, bán: false
         loaiLenh: 'ATO'// Trạng thái Loai: ATO, ATC, LO
     });
-    const [bank, setBank] = useState({
-        nganhang: "",
-        soDu: 0
-    });
-    const [bankList, setBankList] = useState(null);
-    const [stock, setStock] = useState({ gia: null, giaTran: null, giaTC: null, giaSan: null, kl: null });
 
-    // Handle modal
-    const [visibleOrder, setVisibleOrder] = useState(false)
-    const [visibleConfirm, setVisibleConfirm] = useState(false)
-    const [confirmLoading, setConfirmLoading] = React.useState(false);
     const onFinish = (values) => {
         if (values.gia * values.soLuong > bank.soDu) {
             alert("Số tiền không đủ");
             return;
         }
-        console.log(values)
+        console.log(values);
         setOrder(values)
-        console.log(order)
-        console.log(bank);
         setVisibleConfirm(true)
-
-
     }
     const handleConfirm = () => {
 
@@ -66,7 +72,7 @@ function FormOrder(props) {
         }, 2000);
         // dispatch(ActionOrder.MakeOrderRequest(order.pin,{
         //     stk : order.idAcc,
-        //     macp : order.stockId,
+        //     maCp : order.stockId,
         //     loaI_GIAODICH : order.selectedStatus,
         //     // loaI_GIAODICH : order.selectedType,
         //     giadat : parseFloat(order.price),
@@ -87,15 +93,6 @@ function FormOrder(props) {
 
     }
 
-    // useEffect(() => {
-
-    //     let index = findIndexStock(order.stockId, LightningTableList);
-    //     console.log(index);
-    //     console.log(order.stockId);
-
-    //     if (index !== -1)
-    //         setStock(LightningTableList[index]);
-    // }, [order.stockId, stock.kl, stock.gia]);
     let findIndex = (id, list) => {
         for (let i = 0; i < list.length; i++)
             if (list[i].stk.trim() === id.trim())
@@ -108,10 +105,6 @@ function FormOrder(props) {
                 return i;
         return -1;
     }
-    // let listBank = user ? user.listTaiKhoan.map((val, index) => {
-    //     return <Select.Option value={val.stk}>{val.stk}</Select.Option>
-    // }) : null;
-
     let tempValueStock = (id) => {
         let index = findIndexStock(id, LightningTableList)
         console.log(index);
@@ -128,7 +121,8 @@ function FormOrder(props) {
         let res = bankList[index];
         console.log(id, index);
         console.log(res);
-        setBank(res);
+        setBank({ nganhang: res.nganHang.tenNganHang, soDu: res.soDu });
+        console.log(bank);
     }
     let stockInformation = () => {
         return <React.Fragment><div className="modal-order-matching">
@@ -164,9 +158,38 @@ function FormOrder(props) {
     let onChangeListBank = (event) => {
         tempValueBank(event);
     }
-    let ListStock = LightningTableList.map((value, index) => {
-        return <Select.Option value={value.macp}>{value.macp}</Select.Option>
-    })
+    let ListStock = []
+    if (stocks) {
+        ListStock = stocks.map((value, index) => {
+            return <Select.Option value={value.maCp} key={index}>{value.maCp}</Select.Option>
+        })
+    }
+    let handleChangeTypeTransfer = async (e) => {
+        let value = e.target.value
+        fetchStocks(value)
+    }
+    useEffect(() => {
+        fetchStocks(true)
+    }, [])
+
+    async function fetchStocks(value) {
+        try {
+            if (value) {
+                let res = await callApi('CoPhieu', 'GET', null);
+                console.log(res.data);
+                setStocks(res.data)
+            } else {
+                let res = await callApi('ChungKhoanHienCo?current=1&pageSize=1000', 'GET', null);
+                console.log(res.data.list);
+                setStocks(res.data.list)
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    console.log(stocks);
+
+
     return (
         <>
             <Button type="primary" className='btn-match' onClick={() => checkUser()}>
@@ -188,75 +211,86 @@ function FormOrder(props) {
                     <div className="modal-content">
                         <div className="modal-body">
                             <Form id='my_form'
+                                {...formItemLayout}
                                 onFinish={onFinish}
                                 className="modal-form"
-                                initialValues={{ priceBank: '1000', loaiLenh: 'LO', loaiGiaoDich: true }}>
-                                <Form.Item className="form-item" name='stk' label="Số tài khoản"
-                                    rules={[{ required: true, message: "Không được bỏ trống !" }]}>
-                                    <Select
-                                        showSearch
-                                        style={{ width: 200 }}
-                                        placeholder="Chọn số tài khoản"
-                                        optionFilterProp="children"
-                                        filterOption={(input, option) =>
-                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                        }
-                                        filterSort={(optionA, optionB) =>
-                                            optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                                        }
-                                        onChange={onChangeListBank}
-                                    >
-                                        {/* {listBank} */}
-                                        {displayBankList()}
-                                    </Select>
-                                </Form.Item>
-                                <Form.Item className="form-item" name="maCp" label="Mã chứng khoán"
-                                    rules={[{ required: true, message: "Không được bỏ trống !" }]}>
-                                    <Select
-                                        showSearch
-                                        style={{ width: 200 }}
-                                        placeholder="Chọn mã chứng khoán"
-                                        optionFilterProp="children"
-                                        filterOption={(input, option) =>
-                                            option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                                        }
-                                        filterSort={(optionA, optionB) =>
-                                            optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
-                                        }
-                                        onChange={onChangeListStock}
-                                    >
-                                        {ListStock}
-                                    </Select>
-                                </Form.Item>
-                                <Form.Item className="form-item" name='soLuong' label="Khối lượng"
-                                    rules={[{ required: true, message: "Không được bỏ trống !" }]}>
-                                    <InputNumber min={1} max={100000} />
-                                </Form.Item>
-                                <Form.Item className="form-item" name="gia" label="Giá đặt"
-                                    rules={[{ required: true, message: "Không được bỏ trống !" }]}>
-                                    <InputNumber value='100' />
-                                </Form.Item>
-                                {/* <Form.Item className="form-item" name='priceBank' label="Tiền trong tài khoản"
-                                    rules={[{ required: true, message: "Không được bỏ trống !" }]}>
-                                    <InputNumber value={bank.soDu} disabled value={bank.soDu} />
-                                </Form.Item> */}
-                                <Form.Item className="form-item" name="mkdatLenh" label="Mã pin"
-                                    rules={[{ required: true, message: "Không được bỏ trống !" }]}>
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item className="form-item" name='loaiLenh' >
-                                    <Radio.Group defaultValue='LO'>
-                                        <Radio value='ATC'>ATC</Radio>
-                                        <Radio value='ATO'>ATO</Radio>
-                                        <Radio value='LO'>LO</Radio>
-                                    </Radio.Group>
-                                </Form.Item>
-                                <Form.Item className="form-item" name='loaiGiaoDich' >
-                                    <Radio.Group defaultValue={true} buttonStyle="solid">
-                                        <Radio.Button className='radio-btn-type' value={true} >Mua</Radio.Button>
-                                        <Radio.Button value={false}>Bán</Radio.Button>
-                                    </Radio.Group>
-                                </Form.Item>
+                                initialValues={{ priceBank: bank.soDu, loaiLenh: 'LO', loaiGiaoDich: true }}>
+                                <div className='form-child'>
+                                    <Form.Item name='stk' label="Số tài khoản"
+                                        rules={[{ required: true, message: "Không được bỏ trống !" }]}>
+                                        <Select
+                                            showSearch
+                                            style={{ width: 200 }}
+                                            placeholder="Chọn số tài khoản"
+                                            optionFilterProp="children"
+                                            filterOption={(input, option) =>
+                                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }
+                                            filterSort={(optionA, optionB) =>
+                                                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                                            }
+                                            onChange={onChangeListBank}
+                                        >
+                                            {/* {listBank} */}
+                                            {displayBankList()}
+                                        </Select>
+                                    </Form.Item>
+                                    <Form.Item name="maCp" label="Mã chứng khoán"
+                                        rules={[{ required: true, message: "Không được bỏ trống !" }]}>
+                                        <Select
+                                            showSearch
+                                            style={{ width: 200 }}
+                                            placeholder="Chọn mã chứng khoán"
+                                            optionFilterProp="children"
+                                            filterOption={(input, option) =>
+                                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                            }
+                                            filterSort={(optionA, optionB) =>
+                                                optionA.children.toLowerCase().localeCompare(optionB.children.toLowerCase())
+                                            }
+                                            onChange={onChangeListStock}
+                                        >
+                                            {ListStock}
+                                        </Select>
+                                    </Form.Item>
+                                    <Form.Item name="gia" label="Giá đặt"
+                                        rules={[{ required: true, message: "Không được bỏ trống !" }]}>
+                                        <InputNumber style={{ width: '100%' }} value='100' />
+                                    </Form.Item>
+                                    <Form.Item name='loaiLenh' style={{ textAlign: 'center' }}  >
+                                        <Radio.Group defaultValue='LO'>
+                                            <Radio value='ATC' disabled>ATC</Radio>
+                                            <Radio value='ATO' disabled>ATO</Radio>
+                                            <Radio value='LO'>LO</Radio>
+                                        </Radio.Group>
+                                    </Form.Item>
+                                </div>
+                                <div className='form-child'>
+                                    <Form.Item name='priceBank' label="Số dư tài khoản">
+                                        <Input value={bank.soDu} disabled style={{ width: '100%', color: '#1890ff', fontWeight: 'bold' }} />
+                                        <span style={{ display: 'none' }}>{bank.soDu}</span>
+                                    </Form.Item>
+
+
+                                    <Form.Item name='soLuong' label="Khối lượng"
+                                        rules={[{ required: true, message: "Không được bỏ trống !" }]}>
+                                        <InputNumber min={1} max={100000} style={{ width: '100%' }} />
+                                    </Form.Item>
+                                    <Form.Item name="mkdatLenh" label="Mã pin"
+                                        rules={[{ required: true, message: "Không được bỏ trống !" }]}>
+                                        <Input.Password
+                                            placeholder="input password"
+                                            iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
+                                        />
+                                    </Form.Item>
+
+                                    <Form.Item name='loaiGiaoDich' style={{ textAlign: 'center' }}>
+                                        <Radio.Group defaultValue={true} buttonStyle="solid" onChange={handleChangeTypeTransfer}>
+                                            <Radio.Button className='radio-btn-type' value={true} >Mua</Radio.Button>
+                                            <Radio.Button value={false}>Bán</Radio.Button>
+                                        </Radio.Group>
+                                    </Form.Item>
+                                </div>
                             </Form>
                         </div>
                         <div className="modal-show-stock">
