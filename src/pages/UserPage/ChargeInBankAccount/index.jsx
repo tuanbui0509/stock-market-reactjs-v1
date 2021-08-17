@@ -1,3 +1,4 @@
+import { CloseSquareTwoTone } from '@ant-design/icons';
 import { Button, Col, DatePicker, Form, Input, Row, Select, Table } from 'antd';
 import { format } from 'date-fns';
 import moment from 'moment-timezone';
@@ -5,34 +6,27 @@ import queryString from 'query-string';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as types from '../../../constants/Report/ActionType';
-import * as type_status from '../../../constants/Common/ActionType';
+import * as type_back from '../../../constants/Common/ActionType';
 import callApi from '../../../utils/apiCaller';
 const { Option } = Select;
-function HistoryPurchasedPage() {
+function ChargeInBankAccount() {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
     const reports = useSelector(state => state.Report)
-    const status = useSelector(state => state.Status)
+    const bankList = useSelector(state => state.BankAccount)
     const dispatch = useDispatch()
     const date = new Date()
 
     function getDateCurrent() {
-        // const dateString = format(date, 'MM/dd/yyyy')
-        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-        var d = today.getDate();
-        var m = today.getMonth();
-        var y = today.getFullYear();
-        return `${m + 1}/${d}/${y}`
-    }
-    function getDateBeforeWeek() {
-        var nextweek = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 7);
-        var d = nextweek.getDate();
-        var m = nextweek.getMonth();
-        var y = nextweek.getFullYear();
-        return `${m + 1}/${d}/${y}`
+        const dateString = format(date, 'MM/dd/yyyy')
+        // var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        // var d = today.getDate();
+        // var m = today.getMonth();
+        // var y = today.getFullYear();
+        return dateString
     }
     const [pagination, setPagination] = useState({
-        from: getDateBeforeWeek(),
+        from: getDateCurrent(),
         to: getDateCurrent(),
         MaCK: '',
         MaTT: 'TC',
@@ -41,12 +35,12 @@ function HistoryPurchasedPage() {
     })
     useEffect(() => {
         fetchData();
-        fetchStatus()
+        fetchBackAccount()
     }, [])
 
     // useEffect(() => {
     //     fetch({ pagination });
-    //     fetchStatus()
+    //     fetchBackAccount()
     // }, [pagination])
 
     // const handleTableChange = (pagination) => {
@@ -55,11 +49,11 @@ function HistoryPurchasedPage() {
     //     });
     // };
 
-    const fetchStatus = async () => {
+    const fetchBackAccount = async () => {
         setLoading(true)
         try {
-            const res = await callApi('TrangThai', 'GET', null)
-            dispatch({ type: type_status.FETCH_STATUS, payload: res.data })
+            const res = await callApi('TaiKhoanNganHang', 'GET', null)
+            dispatch({ type: type_back.FETCH_BANK_ACCOUNT, payload: res.data })
         } catch (error) {
             console.log(error);
         }
@@ -72,16 +66,15 @@ function HistoryPurchasedPage() {
             const requestUrl = `LichSuLenhDat?${paramsString}`;
             const res = await callApi(requestUrl, 'GET', null)
             dispatch({ type: types.HISTORY_ORDER, payload: res.data })
+            console.log(res);
             setLoading(false)
             setData(reports.list)
             let list = reports.list.forEach((e, index) => {
                 let value = new Date(e.thoiGian)
                 const dateString = format(value, 'dd/MM/yyyy kk:mm:ss')
-                console.log(dateString);
                 e.thoiGian = dateString;
                 e.loaiGiaoDich = e.loaiGiaoDich ? 'Mua' : 'Bán'
             })
-            console.log(reports.list);
             setPagination({ ...pagination, current: reports.currentPage, total: reports.totalItem })
         } catch (error) {
             console.log(error);
@@ -106,7 +99,7 @@ function HistoryPurchasedPage() {
             title: 'Mua/Bán',
             dataIndex: 'loaiGiaoDich',
             key: 'loaiGiaoDich',
-            width: 200,
+            width: 100,
             fixed: 'center',
         },
         {
@@ -161,14 +154,26 @@ function HistoryPurchasedPage() {
             ],
         },
         {
-            title: 'Trạng thái lệnh',
+            title: 'Trạng thái',
             dataIndex: 'tenTrangThai',
             key: 'tenTrangThai',
             width: 200,
             fixed: 'center',
+        },
+        {
+            title: 'Hủy lệnh',
+            dataIndex: 'tenTrangThai',
+            key: 'tenTrangThai',
+            width: 100,
+            fixed: 'center',
+            render: () => <CloseSquareTwoTone style={{ fontSize: '1.5rem', cursor: 'pointer', textAlign: 'center' }} />,
         }
     ]
-
+    const handleTableChange = (pagination) => {
+        fetch({
+            pagination
+        });
+    };
     const onFinish = (fieldsValue) => {
         const values = {
             ...fieldsValue,
@@ -180,110 +185,49 @@ function HistoryPurchasedPage() {
         console.log(pagination);
         fetchData();
     };
-    /**
-     * 
-     *  var date = new Date();
-        date.setDate(date.getDate() - 7);
-     */
-    const worker = {
-        from: moment(new Date(date.getFullYear(), date.getMonth(), date.getDate() - 7)),
-        to: moment(new Date()),
-        MaTT: 'TC',
-    };
-    const dateFormat = "DD/MM/YYYY";
 
-    const getListStatus = status.map((sta, index) => {
+    const worker = {
+        stk: 'Chọn tài khoản',
+    };
+    console.log(bankList);
+    const getListBankAccount = bankList.map((acc, index) => {
         return (
-            <Option value={sta.maTt}>{sta.tenTrangThai}</Option>
+            <Option key={index} value={acc.stk}>{acc.stk}-{acc.nganHang.tenNganHang}</Option>
         )
     })
     return (
         <>
             <Row style={{ margin: '1rem' }}  >
-                <Col span={24}>
+                <Col span={6}>
                     <Form onFinish={onFinish} initialValues={worker} >
-                        <Row gutter={40}>
-                            <Col span={5}>
-                                <Form.Item name="from" label="Từ ngày"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Vui lòng chọn ngày',
-                                        },
-                                    ]}
-                                >
-                                    <DatePicker placeholder='Chọn ngày' format={dateFormat} />
-                                </Form.Item>
-                            </Col>
-                            <Col span={5}>
-                                <Form.Item name="to" label="Đến ngày"
-                                    rules={[
-                                        {
-                                            required: true,
-                                            message: 'Vui lòng chọn ngày',
-                                        },
-                                    ]}
-                                >
-                                    <DatePicker placeholder='Chọn ngày' format={dateFormat} />
-                                </Form.Item>
-                            </Col>
-                            <Col span={5}>
-
-                                <Form.Item
-                                    name="MaTT"
-                                    label="Trạng thái"
-                                    hasFeedback
-                                    rules={[
-                                        {
-                                            message: 'Chọn trạng thái!',
-                                        },
-                                    ]}
-                                >
-                                    <Select placeholder="Trạng thái">
-                                        {getListStatus}
-                                    </Select>
-                                </Form.Item>
-                            </Col>
-                            <Col span={4}>
-                                <Form.Item
-                                    name='MaCK'
-                                    label='MaCK'
-                                >
-                                    <Input placeholder="Nhập MaCK" />
-                                </Form.Item>
-                            </Col>
-                            <Col span={1}>
-                                <Form.Item
-                                    wrapperCol={{
-                                        xs: {
-                                            span: 24,
-                                            offset: 0,
-                                        },
-                                        sm: {
-                                            span: 16,
-                                            offset: 8,
-                                        },
-                                    }}
-                                >
-                                    <Button type="primary" htmlType="submit">
-                                        Cập nhật
-                                    </Button>
-                                </Form.Item>
-                            </Col>
-                        </Row>
+                        <Form.Item
+                            name="stk"
+                            label="Số tài khoản"
+                            hasFeedback
+                            rules={[
+                                {
+                                    message: 'Chọn trạng thái!',
+                                },
+                            ]}
+                        >
+                            <Select placeholder="Trạng thái">
+                                {getListBankAccount}
+                            </Select>
+                        </Form.Item>
                     </Form>
                 </Col>
 
             </Row>
+
             <Table
                 columns={columns}
                 dataSource={data}
                 pagination={pagination}
                 loading={loading}
-            // onChange={handleTableChange}
+                onChange={handleTableChange}
             />
         </>
     )
 }
 
-export default HistoryPurchasedPage
+export default ChargeInBankAccount

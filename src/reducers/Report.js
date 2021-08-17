@@ -1,5 +1,5 @@
 import * as types from '../constants/Report/ActionType';
-const initialState = [];
+const initialState = {};
 
 let Report = (state = initialState, action) => {
     switch (action.type) {
