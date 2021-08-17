@@ -14,21 +14,22 @@ const routers = [
     },
     {
         path: '/login',
-        exact: false,
+        exact: true,
         main: () => <LoginPage />
     },
 
     {
         path: '/register',
-        exact: false,
+        exact: true,
         main: () => <RegisterPage />
     }
-    ,
-    {
-        path: '/logout',
-        exact: false,
-        main: () => <Logout />
-    }
+    // ,
+    // {
+    //     path: '/logout',
+    //     exact: false,
+    //     main: () => <Logout />
+    // }
+    
 
 ]
 

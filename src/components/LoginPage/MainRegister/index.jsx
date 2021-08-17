@@ -1,6 +1,6 @@
 import { Button, DatePicker, Form, Input, Select, Typography } from 'antd';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import callApi from '../../../utils/apiCaller';
@@ -39,21 +39,7 @@ const tailFormItemLayout = {
     },
 };
 const MainRegister = (props) => {
-    const dispatch = useDispatch();
     const history = useHistory();
-    const { register, setRegister } = useState({
-        cmnd: "",
-        diaChi: "",
-        email: "@gmail.com",
-        ho: "",
-        ngayCapCMND: '',
-        ngaySinh: '',
-        noiCapCMMD: "",
-        noiSinh: "",
-        phai: "",
-        sdt: "",
-        ten: "",
-    })
     const onFinish = (values) => {
         console.log('Success:', values);
         callApi("dangky", 'post', values).then(res => {
@@ -64,7 +50,6 @@ const MainRegister = (props) => {
                 history.replace("/")
             }
         })
-        //dispatch(ActionLogin.UserLoginRequest(values.username, values.password, history));
     };
 
 

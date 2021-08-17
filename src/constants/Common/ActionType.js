@@ -1,0 +1,2 @@
+export const FETCH_STATUS = 'FETCH_STATUS'
+export const FETCH_BANK_ACCOUNT = 'FETCH_BANK_ACCOUNT'

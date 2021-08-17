@@ -21,13 +21,13 @@ const menus = [
     },
 
     {
-        label: 'Sao kê giao dịch tiền',
-        to: '/sao-ke-giao-dich-tien',
+        label: 'Số dư tiền ngân hàng',
+        to: '/so-du-tien-ngan-hang',
         exact: false
     },
     {
-        label: 'Sao kê giao dịch chứng khoán',
-        to: '/sao-ke-giao-dich-ck',
+        label: 'Lệnh trong ngày',
+        to: '/lenh-trong-ngay',
         exact: false
     },
     
