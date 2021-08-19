@@ -1,7 +1,7 @@
 import { Divider } from 'antd';
 import Footer from 'components/Common/Footer';
 import Header from 'components/Common/Header';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Route } from 'react-router-dom';
 import MenuUser from '../../components/Common/MenuUser';
 import HistoryOrderPage from './HistoryOrderPage';
@@ -10,8 +10,10 @@ import HistoryPurchasedPage from './HistoryPurchasedPage';
 import PurchasedOneDayPage from './PurchasedOneDayPage';
 import StockPage from './StockPage';
 import './user.css';
+import { useSelector } from 'react-redux';
 function UserPage(props) {
     let user = JSON.parse(localStorage.getItem("user"));
+
     return (
         <>
             <Header />
@@ -21,13 +23,13 @@ function UserPage(props) {
                         <div className="col col-12">
                             <Divider orientation="left">{user.ho} {user.ten} - {user.maNdt}</Divider>
                             <MenuUser path={props.history.match.path} />
-                            <div>
-                                <Route path='/khach-hang/lich-su-dat-lenh' component={HistoryPurchasedPage} />
-                                <Route path='/khach-hang/chung-khoan-hien-co' component={StockPage} />
-                                <Route path='/khach-hang/lich-su-khop-lenh' component={HistoryOrderPage} />
-                                <Route path='/khach-hang/so-du-tien-ngan-hang' component={ChargeInBankAccount} />
-                                <Route path='/khach-hang/lenh-trong-ngay' component={PurchasedOneDayPage} />
-                            </div>
+                            <>
+                                <Route exact path='/khach-hang/lich-su-dat-lenh' component={HistoryPurchasedPage} />
+                                <Route exact path='/khach-hang/chung-khoan-hien-co' component={StockPage} />
+                                {/* <Route exact path='/khach-hang/lich-su-khop-lenh' component={HistoryOrderPage} /> */}
+                                <Route exact path='/khach-hang/so-du-tien-ngan-hang' component={ChargeInBankAccount} />
+                                <Route exact path='/khach-hang/lenh-trong-ngay' component={PurchasedOneDayPage} />
+                            </>
                         </div>
                     </div>
                 </div>

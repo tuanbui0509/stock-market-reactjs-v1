@@ -24,25 +24,25 @@ function StockPage() {
     const fetchData = async () => {
         setLoading(true)
         try {
-            console.log(pagination);
+            // console.log(pagination);
             const paramsString = queryString.stringify(pagination);
             const requestUrl = `ChungKhoanHienCo?${paramsString}`;
             const res = await callApi(requestUrl, 'GET', null)
-            console.log(res);
+            console.log(res.data);
             dispatch({ type: types.STOCK_OF_USER, payload: res.data })
             setLoading(false)
-            setData(reports.list)
+            setData(res.data.list)
             setPagination({ ...pagination, current: reports.currentPage, total: reports.totalItem })
         } catch (error) {
             console.log(error);
         }
     };
-
+    console.log(data);
     const columns = [
         {
             title: 'Mã CK',
-            dataIndex: 'maCP',
-            key: 'maCP',
+            dataIndex: 'maCp',
+            key: 'maCp',
             width: 120,
             fixed: 'center',
         },
