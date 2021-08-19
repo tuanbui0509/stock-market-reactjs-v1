@@ -9,8 +9,6 @@ import { BrowserRouter as Router } from "react-router-dom";
 function App() {
   const token = useSelector(state => state.Token)
   const isAdmin = useSelector(state => state.isAdmin);
-  console.log(token);
-  console.log(isAdmin);
   return (
     <Router>
 

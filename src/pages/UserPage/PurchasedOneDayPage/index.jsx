@@ -68,8 +68,8 @@ function PurchasedOneDayPage() {
             dispatch({ type: types.HISTORY_ORDER, payload: res.data })
             console.log(res);
             setLoading(false)
-            setData(reports.list)
-            let list = reports.list.forEach((e, index) => {
+            setData(res.data.list)
+            let list = reports.list.forEach((e) => {
                 let value = new Date(e.thoiGian)
                 const dateString = format(value, 'dd/MM/yyyy kk:mm:ss')
                 e.thoiGian = dateString;

@@ -35,8 +35,8 @@ function FormOrder(props) {
     const [order, setOrder] = useState({
         stk: "",
         maCp: "",
-        gia: "",
-        soLuong: "",
+        gia: 0,
+        soLuong: 0,
         mkdatLenh: "",
         loaiGiaoDich: true,// Trạng thái mua bán mua: true, bán: false
         loaiLenh: 'ATO'// Trạng thái Loai: ATO, ATC, LO
@@ -85,8 +85,8 @@ function FormOrder(props) {
             history.replace("/login");
         else {
             callApi('TaiKhoanNganHang', 'GET', null).then(res => {
+                console.log(res);
                 setBankList(res.data);
-
             })
             setVisibleOrder(true)
         }
@@ -112,6 +112,8 @@ function FormOrder(props) {
             return;
         let res = LightningTableList[index];
         setStock(res);
+        // setOrder({...order,soLuong:})
+
         console.log(stock);
     }
     let tempValueBank = (id) => {
@@ -125,24 +127,23 @@ function FormOrder(props) {
         console.log(bank);
     }
     let stockInformation = () => {
-        return <React.Fragment><div className="modal-order-matching">
-            <p className="order-matching-title">Khớp lệnh</p>
-            <span className="order-matching-price">Giá: {stock.gia}</span>
-            <span>-</span>
-            <span className="order-matching-weight">Số lượng: {stock.kl}</span>
-        </div>
-            <div className="compare-stock">
-                <div className="info-stock info-ceil">
+        return <React.Fragment>
+            <div className="modal-order-matching" style={{ fontWeight: "500" }}>
+                <p className="order-matching-title">Khớp lệnh</p>
+                <span className="order-matching-price">Giá: {stock.gia}</span>
+                <span>-</span>
+                <span className="order-matching-weight" >Số lượng: {stock.kl}</span>
+                <div className="info-stock info-floor">
                     <label>Trần: </label>
-                    <span className="ceil">{stock.giaTran}</span>
+                    <span className="floor">{stock.giaTran}</span>
+                </div>
+                <div className="info-stock info-ceil">
+                    <label>Sàn: </label>
+                    <span className="ceil">{stock.giaSan}</span>
                 </div>
                 <div className="info-stock info-standard">
                     <label>TC: </label>
                     <span className="standard">{stock.giaTC}</span>
-                </div>
-                <div className="info-stock info-floor">
-                    <label>Sàn: </label>
-                    <span className="floor">{stock.giaSan}</span>
                 </div>
             </div></React.Fragment>
     }
@@ -176,11 +177,9 @@ function FormOrder(props) {
         try {
             if (value) {
                 let res = await callApi('CoPhieu', 'GET', null);
-                console.log(res.data);
                 setStocks(res.data)
             } else {
                 let res = await callApi('ChungKhoanHienCo?current=1&pageSize=1000', 'GET', null);
-                console.log(res.data.list);
                 setStocks(res.data.list)
             }
         } catch (error) {
@@ -214,7 +213,7 @@ function FormOrder(props) {
                                 {...formItemLayout}
                                 onFinish={onFinish}
                                 className="modal-form"
-                                initialValues={{ priceBank: bank.soDu, loaiLenh: 'LO', loaiGiaoDich: true }}>
+                                initialValues={{ priceBank: bank.soDu, loaiLenh: 'LO', loaiGiaoDich: true, soLuong: order.soLuong }}>
                                 <div className='form-child'>
                                     <Form.Item name='stk' label="Số tài khoản"
                                         rules={[{ required: true, message: "Không được bỏ trống !" }]}>
@@ -266,7 +265,7 @@ function FormOrder(props) {
                                     </Form.Item>
                                 </div>
                                 <div className='form-child'>
-                                    <Form.Item name='priceBank' label="Số dư tài khoản">
+                                    <Form.Item label="Số dư tài khoản">
                                         <Input value={bank.soDu} disabled style={{ width: '100%', color: '#1890ff', fontWeight: 'bold' }} />
                                         <span style={{ display: 'none' }}>{bank.soDu}</span>
                                     </Form.Item>
@@ -274,7 +273,7 @@ function FormOrder(props) {
 
                                     <Form.Item name='soLuong' label="Khối lượng"
                                         rules={[{ required: true, message: "Không được bỏ trống !" }]}>
-                                        <InputNumber min={1} max={100000} style={{ width: '100%' }} />
+                                        <InputNumber min={1} max={100000} style={{ width: '100%' }} value={order.soLuong} />
                                     </Form.Item>
                                     <Form.Item name="mkdatLenh" label="Mã pin"
                                         rules={[{ required: true, message: "Không được bỏ trống !" }]}>
