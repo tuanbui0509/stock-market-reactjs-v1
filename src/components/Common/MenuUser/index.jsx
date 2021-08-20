@@ -44,18 +44,7 @@ const menus = [
 
 export default function Menu(props) {
     let { path } = props
-    let isChangePage = useSelector(state => state.isChangePageUser)
-    console.log(isChangePage);
-    const dispatch = useDispatch()
-    // useEffect(() => {
-    //     console.log('change');
-    //     console.log(isChangePage);
-    // }, [isChangePage])
-    // useEffect(() => {
-    //     dispatch({ type: 'CURRENT_CHANGE_PAGE' })
-    //     console.log('okie current change');
-    //     console.log(isChangePage);
-    // }, [])
+
     const MenuLink = ({ label, to, activeOnlyWhenExact }) => {
         return (
             <Route
@@ -65,7 +54,7 @@ export default function Menu(props) {
                     let active = match ? 'title-info-active' : '';
                     return (
                         <Col className="gutter-row" span={6}>
-                            <div className={`title-info ${active}`} onClick={handleChangePage}>
+                            <div className={`title-info ${active}`}>
                                 <Link to={to} style={style} >
                                     {label}
                                 </Link>
@@ -96,9 +85,7 @@ export default function Menu(props) {
         return result;
     }
 
-    function handleChangePage() {
-        dispatch({ type: 'CHANGE_PAGE' })
-    }
+
     return (
         <>
             <Row gutter={16}>
