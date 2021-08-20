@@ -11,7 +11,6 @@ const { Option } = Select;
 function HistoryPurchasedPage() {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
-    const reports = useSelector(state => state.Report)
     const status = useSelector(state => state.Status)
     const dispatch = useDispatch()
     const date = new Date()
@@ -36,24 +35,19 @@ function HistoryPurchasedPage() {
         to: getDateCurrent(),
         MaCK: '',
         MaTT: 'TC',
+    })
+    const [page, setPage] = useState({
         current: 1,
         pageSize: 5,
     })
     useEffect(() => {
-        fetchData();
         fetchStatus()
+
     }, [])
 
-    // useEffect(() => {
-    //     fetch({ pagination });
-    //     fetchStatus()
-    // }, [pagination])
-
-    // const handleTableChange = (pagination) => {
-    //     fetch({
-    //         pagination
-    //     });
-    // };
+    useEffect(() => {
+        fetchData();
+    }, [pagination])
 
     const fetchStatus = async () => {
         setLoading(true)
@@ -64,25 +58,28 @@ function HistoryPurchasedPage() {
             console.log(error);
         }
     }
+    const handleTableChange = (page) => {
+        fetchData();
+    };
     const fetchData = async () => {
-        setLoading(true)
         try {
-            console.log(pagination);
+            setLoading(true)
             const paramsString = queryString.stringify(pagination);
             const requestUrl = `LichSuLenhDat?${paramsString}`;
             const res = await callApi(requestUrl, 'GET', null)
-            dispatch({ type: types.HISTORY_ORDER, payload: res.data })
+            console.log(res.data);
             setLoading(false)
+            if (res.data.list) {
+                res.data.list.forEach((e) => {
+                    let value = new Date(e.thoiGian)
+                    const dateString = format(value, 'dd/MM/yyyy kk:mm:ss')
+                    e.thoiGian = dateString;
+                    e.loaiGiaoDich = e.loaiGiaoDich ? 'Mua' : 'Bán'
+                })
+                setPage({ ...page, current: res.data.currentPage, total: res.data.totalItem })
+            }
+            console.log(page);
             setData(res.data.list)
-            let list = reports.list.forEach((e) => {
-                let value = new Date(e.thoiGian)
-                const dateString = format(value, 'dd/MM/yyyy kk:mm:ss')
-                console.log(dateString);
-                e.thoiGian = dateString;
-                e.loaiGiaoDich = e.loaiGiaoDich ? 'Mua' : 'Bán'
-            })
-            console.log(reports.list);
-            setPagination({ ...pagination, current: reports.currentPage, total: reports.totalItem })
         } catch (error) {
             console.log(error);
         }
@@ -175,20 +172,25 @@ function HistoryPurchasedPage() {
             'from': fieldsValue['from'].format('MM-DD-YYYY'),
             'to': fieldsValue['to'].format('MM-DD-YYYY'),
         };
-        console.log(values.MaCK);
-        setPagination({ ...pagination, current: 5, total: 100 })
+        console.log(values);
         console.log(pagination);
+        setPagination(
+            {
+                ...pagination,
+                MaTT: values.MaTT,
+                MaCK: values.MaCK,
+                from: values.from,
+                to: values.to,
+            }
+        )
         fetchData();
     };
-    /**
-     * 
-     *  var date = new Date();
-        date.setDate(date.getDate() - 7);
-     */
+
     const worker = {
         from: moment(new Date(date.getFullYear(), date.getMonth(), date.getDate() - 7)),
         to: moment(new Date()),
         MaTT: 'TC',
+        MaCK: ''
     };
     const dateFormat = "DD/MM/YYYY";
 
@@ -278,9 +280,9 @@ function HistoryPurchasedPage() {
             <Table
                 columns={columns}
                 dataSource={data}
-                pagination={pagination}
+                pagination={page}
                 loading={loading}
-            // onChange={handleTableChange}
+                onChange={handleTableChange}
             />
         </>
     )

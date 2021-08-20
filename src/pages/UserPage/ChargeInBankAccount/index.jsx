@@ -105,7 +105,7 @@ function ChargeInBankAccount() {
     return (
         <>
             <Row style={{ margin: '1rem' }}  >
-                <Col span={6}>
+                <Col span={18}>
                     <Select style={{ width: 200 }}
                         onChange={handleChangeBankAccount}
                         value={data[0]?.stk}
