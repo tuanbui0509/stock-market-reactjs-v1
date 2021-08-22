@@ -1,4 +1,4 @@
-import { Divider } from 'antd';
+import { Divider, Tag } from 'antd';
 import Footer from 'components/Common/Footer';
 import Header from 'components/Common/Header';
 import React, { useEffect } from 'react';
@@ -21,7 +21,7 @@ function UserPage(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col col-12">
-                            <Divider orientation="left">{user.ho} {user.ten} - {user.maNdt}</Divider>
+                            <Divider orientation="left"> <Tag style={{ fontSize: '1rem' }} color="red">Họ và tên: {user.ho} {user.ten} <br /> Mã NDT: {user.maNdt}</Tag> </Divider>
                             <MenuUser path={props.history.match.path} />
                             <>
                                 <Route exact path='/khach-hang/lich-su-dat-lenh' component={HistoryPurchasedPage} />

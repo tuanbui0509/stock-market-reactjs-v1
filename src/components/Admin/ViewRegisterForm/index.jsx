@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import RegisterFormList from './RegisterFormList'
 import RegisterFormItem from './RegisterFormItem'
-import * as action from '../../../actions/Admin/RegisterForm/index';
+import * as types from '../../../constants/Admin/ActionType';
 import apiCaller from '../../../utils/apiCaller'
 import callApi from '../../../utils/apiCaller';
 import { openNotificationSuccess } from 'components/Notification';
@@ -16,8 +16,7 @@ export default function ViewRegisterForm() {
         const FetchListRegisterForm = async () => {
             try {
                 const res = await apiCaller('DonDangKy', 'GET', null);
-                console.log(res.data);
-                dispatch({ type: 'FETCH_LIST_REGISTER_FORM', listFormRegister: res.data });
+                dispatch({ type: types.FETCH_LIST_REGISTER_FORM, payload: res.data });
             } catch (err) {
 
             }
@@ -28,15 +27,23 @@ export default function ViewRegisterForm() {
 
     const handleConfirmChange = async (id) => {
         try {
-            const res = await callApi(`DonDangKy/${id}`, 'PUT', null)
+            const res = await callApi(`DonDangKy/${id}`, 'PUT')
             console.log(res);
             openNotificationSuccess('Thành công', 'Xác nhận đơn thành công', 2)
+            dispatch({ type: types.CONFIRM_REGISTER_FORM, id: id });
         } catch (err) {
             openNotificationError('Thất bại', 'Lỗi dữ liệu trong máy chủ', 2);
         }
     }
-    const handleDeleteChange = (id) => {
-        console.log(id);
+    const handleDeleteChange = async (id) => {
+        try {
+            const res = await callApi(`DonDangKy/${id}`, 'PUT')
+            console.log(res);
+            openNotificationSuccess('Thành công', 'Hủy đơn thành công', 2)
+            dispatch({ type: types.DELETE_REGISTER_FORM, id: id });
+        } catch (err) {
+            openNotificationError('Thất bại', 'Lỗi dữ liệu trong máy chủ', 2);
+        }
     }
 
     const showListFormRegister = () => {

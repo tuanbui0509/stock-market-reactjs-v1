@@ -22,10 +22,6 @@ function PurchasedOneDayPage() {
         return dateString
     }
     const [pagination, setPagination] = useState({
-        from: getDateCurrent(),
-        to: getDateCurrent(),
-        MaCK: '',
-        MaTT: 'TC',
         current: 1,
         pageSize: 5,
     })
@@ -37,9 +33,8 @@ function PurchasedOneDayPage() {
     const fetchData = async (pagination) => {
         setLoading(true)
         try {
-
             const paramsString = queryString.stringify(pagination);
-            const requestUrl = `LichSuLenhDat?${paramsString}`;
+            const requestUrl = `LenhDat/trongngay?${paramsString}`;
             const res = await callApi(requestUrl, 'GET', null)
             dispatch({ type: types.HISTORY_ORDER, payload: res.data })
             console.log(res);
