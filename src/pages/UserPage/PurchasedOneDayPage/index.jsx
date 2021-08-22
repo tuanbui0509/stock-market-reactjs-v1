@@ -19,10 +19,6 @@ function PurchasedOneDayPage() {
 
     function getDateCurrent() {
         const dateString = format(date, 'MM/dd/yyyy')
-        // var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-        // var d = today.getDate();
-        // var m = today.getMonth();
-        // var y = today.getFullYear();
         return dateString
     }
     const [pagination, setPagination] = useState({
@@ -34,48 +30,30 @@ function PurchasedOneDayPage() {
         pageSize: 5,
     })
     useEffect(() => {
-        fetchData();
-        fetchStatus()
+        fetchData(pagination);
     }, [])
 
-    // useEffect(() => {
-    //     fetch({ pagination });
-    //     fetchStatus()
-    // }, [pagination])
 
-    // const handleTableChange = (pagination) => {
-    //     fetch({
-    //         pagination
-    //     });
-    // };
-
-    const fetchStatus = async () => {
+    const fetchData = async (pagination) => {
         setLoading(true)
         try {
-            const res = await callApi('TrangThai', 'GET', null)
-            dispatch({ type: type_status.FETCH_STATUS, payload: res.data })
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    const fetchData = async () => {
-        setLoading(true)
-        try {
-            console.log(pagination);
+
             const paramsString = queryString.stringify(pagination);
             const requestUrl = `LichSuLenhDat?${paramsString}`;
             const res = await callApi(requestUrl, 'GET', null)
             dispatch({ type: types.HISTORY_ORDER, payload: res.data })
             console.log(res);
-            setLoading(false)
+            setTimeout(() => {
+                setLoading(false)
+            }, 300);
             setData(res.data.list)
-            let list = reports.list.forEach((e) => {
+            res.data.list.forEach((e) => {
                 let value = new Date(e.thoiGian)
                 const dateString = format(value, 'dd/MM/yyyy kk:mm:ss')
                 e.thoiGian = dateString;
                 e.loaiGiaoDich = e.loaiGiaoDich ? 'Mua' : 'Bán'
             })
-            setPagination({ ...pagination, current: reports.currentPage, total: reports.totalItem })
+            setPagination({ ...pagination, current: res.data.currentPage, total: res.data.totalItem })
         } catch (error) {
             console.log(error);
         }
@@ -103,7 +81,7 @@ function PurchasedOneDayPage() {
             fixed: 'center',
         },
         {
-            title: 'Đặt từ',
+            title: 'Từ tài khoản',
             dataIndex: 'stk',
             key: 'stk',
             width: 200,
@@ -123,33 +101,33 @@ function PurchasedOneDayPage() {
                     title: 'Khối lượng',
                     dataIndex: 'soLuong',
                     key: 'soLuong',
-                    width: 150,
+                    width: 100,
 
                 },
                 {
                     title: 'Giá',
                     dataIndex: 'gia',
                     key: 'gia',
-                    width: 150,
+                    width: 100,
                 },
                 {
                     title: 'Khối lượng khớp',
                     dataIndex: 'slKhop',
                     key: 'slKhop',
-                    width: 150,
+                    width: 100,
                 }
                 ,
                 {
                     title: 'Giá khớp',
                     dataIndex: 'giaKhop',
                     key: 'giaKhop',
-                    width: 150,
+                    width: 100,
                 },
                 {
                     title: 'Giá trị khớp',
                     dataIndex: 'giaTriKhop',
                     key: 'giaTriKhop',
-                    width: 150,
+                    width: 100,
                 }
             ],
         },
@@ -157,7 +135,7 @@ function PurchasedOneDayPage() {
             title: 'Trạng thái',
             dataIndex: 'tenTrangThai',
             key: 'tenTrangThai',
-            width: 200,
+            width: 300,
             fixed: 'center',
         },
         {
@@ -170,14 +148,12 @@ function PurchasedOneDayPage() {
         }
     ]
     const handleTableChange = (pagination) => {
-        fetch({
-            pagination
-        });
+        setPagination({ ...pagination, current: pagination.current })
+        fetchData(pagination);
     };
 
     return (
         <>
-
             <Table
                 columns={columns}
                 dataSource={data}

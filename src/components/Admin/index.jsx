@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-
-import * as Action from '../../actions/User/index';
-import routerHome from '../../routes/routerAdmin';
 import Logout from '../../components/Logout';
-import NotFoundPage from '../../pages/NotFoundPage';
-import Header from 'components/Common/Header';
-import Footer from 'components/Common/Footer';
+import routerAdmin from '../../routes/routerAdmin';
 import LeftMenu from './LeftMenu';
+import NotFoundAdminPage from './NotFoundAdmin';
+
 const showContentPages = (routes) => {
-    if (routerHome.length > 0) {
+    if (routerAdmin.length > 0) {
         return routes.map((route, index) => {
             return <Route
                 key={index}
@@ -31,9 +27,9 @@ function Admin(props) {
                         <div className="right">
                             <div className="right__content">
                                 <Switch>
-                                    {showContentPages(routerHome)}
+                                    {showContentPages(routerAdmin)}
                                     <Route path="/logout" exact component={Logout}/>
-                                    <Route component={NotFoundPage}></Route>
+                                    <Route component={NotFoundAdminPage}></Route>
                                 </Switch>
                             </div>
                         </div>

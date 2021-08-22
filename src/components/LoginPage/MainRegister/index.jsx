@@ -1,4 +1,6 @@
 import { Button, DatePicker, Form, Input, Select, Typography } from 'antd';
+import { openNotificationError } from 'components/Notification';
+import { openNotificationSuccess } from 'components/Notification';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
@@ -40,16 +42,24 @@ const tailFormItemLayout = {
 };
 const MainRegister = (props) => {
     const history = useHistory();
-    const onFinish = (values) => {
-        console.log('Success:', values);
-        callApi("dangky", 'post', values).then(res => {
-            let rec = res.data;
-            console.log(rec);
-            alert(rec.message);
-            if (rec.status === 0) {
-                history.replace("/")
+
+    const onFinish = async (values) => {
+        try {
+            console.log(values);
+            const res = await callApi("dangky", 'post', values)
+            console.log(res);
+            if (res.data.status === 0) {
+                openNotificationSuccess('Thành công', res.data.message, 3)
+                history.replace("/login");
             }
-        })
+            else {
+                openNotificationError('Thất bại', res.data.message, 3)
+            }
+
+        } catch (err) {
+            // console.log(err);
+            openNotificationError('Thất bại', 'Thông tin bạn nhập đã bị trùng với dữ liệu trong máy chủ', 3);
+        }
     };
 
 

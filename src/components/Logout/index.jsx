@@ -11,10 +11,11 @@ function Logout() {
     const history = useHistory();
     useEffect(() => {
         Display()
-        localStorage.removeItem('token');
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
         dispatch({ type: ActionToken.REMOVE_TOKEN });
         dispatch({ type: ActionIsAdmin.IS_USER });
-        openNotificationSuccess('Thành công', 'Đăng xuất thành công ', 3);
+        openNotificationSuccess('Thành công', 'Đăng xuất thành công ', 2);
         Hidden();
         history.push("/login");
 

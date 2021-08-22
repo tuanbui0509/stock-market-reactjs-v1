@@ -4,7 +4,6 @@ import moment from 'moment-timezone';
 import queryString from 'query-string';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import * as types from '../../../constants/Report/ActionType';
 import * as type_status from '../../../constants/Common/ActionType';
 import callApi from '../../../utils/apiCaller';
 const { Option } = Select;
@@ -14,9 +13,8 @@ function HistoryPurchasedPage() {
     const status = useSelector(state => state.Status)
     const dispatch = useDispatch()
     const date = new Date()
-
+    const [toDate, setToDate] = useState(new Date());
     function getDateCurrent() {
-        // const dateString = format(date, 'MM/dd/yyyy')
         var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
         var d = today.getDate();
         var m = today.getMonth();
@@ -35,51 +33,58 @@ function HistoryPurchasedPage() {
         to: getDateCurrent(),
         MaCK: '',
         MaTT: 'TC',
-    })
-    const [page, setPage] = useState({
         current: 1,
-        pageSize: 5,
+        pageSize: 4,
     })
+
+    const [page, setPage] = useState({
+        pageSize: 4,
+        current: 1,
+        total: 5,
+    })
+
     useEffect(() => {
         fetchStatus()
-
     }, [])
 
     useEffect(() => {
-        fetchData();
+        fetchData(pagination);
     }, [pagination])
 
     const fetchStatus = async () => {
         setLoading(true)
         try {
-            const res = await callApi('TrangThai', 'GET', null)
+            const res = await callApi('TrangThai/lenhdat', 'GET', null)
             dispatch({ type: type_status.FETCH_STATUS, payload: res.data })
         } catch (error) {
             console.log(error);
         }
     }
-    const handleTableChange = (page) => {
-        fetchData();
+    const handleTableChange = (paging) => {
+        setTimeout(() => { setPagination({ ...pagination, current: paging.current }) }, 50)
+        setTimeout(() => { setPage({ ...page, current: paging.current }) }, 150)
+        fetchData(pagination);
     };
-    const fetchData = async () => {
+
+
+    const fetchData = async (pagination) => {
+        setLoading(true)
         try {
-            setLoading(true)
             const paramsString = queryString.stringify(pagination);
             const requestUrl = `LichSuLenhDat?${paramsString}`;
             const res = await callApi(requestUrl, 'GET', null)
-            console.log(res.data);
-            setLoading(false)
-            if (res.data.list) {
-                res.data.list.forEach((e) => {
-                    let value = new Date(e.thoiGian)
-                    const dateString = format(value, 'dd/MM/yyyy kk:mm:ss')
-                    e.thoiGian = dateString;
-                    e.loaiGiaoDich = e.loaiGiaoDich ? 'Mua' : 'Bán'
-                })
-                setPage({ ...page, current: res.data.currentPage, total: res.data.totalItem })
-            }
-            console.log(page);
+            setTimeout(() => {
+                setLoading(false)
+            }, 0);
+            res.data.list.forEach((e) => {
+                let value = new Date(e.thoiGian)
+                const dateString = format(value, 'dd/MM/yyyy kk:mm:ss')
+                e.thoiGian = dateString;
+                e.loaiGiaoDich = e.loaiGiaoDich ? 'Mua' : 'Bán'
+            })
             setData(res.data.list)
+            setPage({ ...page, current: res.data.currentPage, total: res.data.totalItem })
+
         } catch (error) {
             console.log(error);
         }
@@ -103,11 +108,11 @@ function HistoryPurchasedPage() {
             title: 'Mua/Bán',
             dataIndex: 'loaiGiaoDich',
             key: 'loaiGiaoDich',
-            width: 200,
+            width: 100,
             fixed: 'center',
         },
         {
-            title: 'Đặt từ',
+            title: 'Từ tài khoản',
             dataIndex: 'stk',
             key: 'stk',
             width: 200,
@@ -127,41 +132,41 @@ function HistoryPurchasedPage() {
                     title: 'Khối lượng',
                     dataIndex: 'soLuong',
                     key: 'soLuong',
-                    width: 150,
+                    width: 100,
 
                 },
                 {
                     title: 'Giá',
                     dataIndex: 'gia',
                     key: 'gia',
-                    width: 150,
+                    width: 100,
                 },
                 {
                     title: 'Khối lượng khớp',
                     dataIndex: 'slKhop',
                     key: 'slKhop',
-                    width: 150,
+                    width: 100,
                 }
                 ,
                 {
                     title: 'Giá khớp',
                     dataIndex: 'giaKhop',
                     key: 'giaKhop',
-                    width: 150,
+                    width: 100,
                 },
                 {
                     title: 'Giá trị khớp',
                     dataIndex: 'giaTriKhop',
                     key: 'giaTriKhop',
-                    width: 150,
+                    width: 100,
                 }
             ],
         },
         {
-            title: 'Trạng thái lệnh',
+            title: 'Trạng thái',
             dataIndex: 'tenTrangThai',
             key: 'tenTrangThai',
-            width: 200,
+            width: 300,
             fixed: 'center',
         }
     ]
@@ -172,8 +177,6 @@ function HistoryPurchasedPage() {
             'from': fieldsValue['from'].format('MM-DD-YYYY'),
             'to': fieldsValue['to'].format('MM-DD-YYYY'),
         };
-        console.log(values);
-        console.log(pagination);
         setPagination(
             {
                 ...pagination,
@@ -181,9 +184,10 @@ function HistoryPurchasedPage() {
                 MaCK: values.MaCK,
                 from: values.from,
                 to: values.to,
+                current: 1
             }
         )
-        fetchData();
+        setPage({ ...page, current: 1 })
     };
 
     const worker = {
@@ -199,6 +203,19 @@ function HistoryPurchasedPage() {
             <Option value={sta.maTt}>{sta.tenTrangThai}</Option>
         )
     })
+    function disabledFromDate(current) {
+        // Can not select days before today and today
+        return current && current.valueOf() > toDate;
+    }
+    function disabledToDate(current) {
+        // Can not select days before today and today
+        return current && current.valueOf() > Date.now();
+    }
+
+    function handleDateChange(e) {
+        console.log(e);
+    }
+
     return (
         <>
             <Row style={{ margin: '1rem' }}  >
@@ -214,7 +231,8 @@ function HistoryPurchasedPage() {
                                         },
                                     ]}
                                 >
-                                    <DatePicker placeholder='Chọn ngày' format={dateFormat} />
+                                    <DatePicker placeholder='Chọn ngày' format={dateFormat} disabledDate={disabledFromDate} onChange={handleDateChange} />
+                                    {/* <RangePicker /> */}
                                 </Form.Item>
                             </Col>
                             <Col span={5}>
@@ -226,11 +244,10 @@ function HistoryPurchasedPage() {
                                         },
                                     ]}
                                 >
-                                    <DatePicker placeholder='Chọn ngày' format={dateFormat} />
+                                    <DatePicker placeholder='Chọn ngày' format={dateFormat} disabledDate={disabledToDate} onChange={(date) => setToDate(date)} />
                                 </Form.Item>
                             </Col>
                             <Col span={5}>
-
                                 <Form.Item
                                     name="MaTT"
                                     label="Trạng thái"
@@ -251,7 +268,7 @@ function HistoryPurchasedPage() {
                                     name='MaCK'
                                     label='MaCK'
                                 >
-                                    <Input placeholder="Nhập MaCK" />
+                                    <Input placeholder="MACK" style={{ textTransform: 'uppercase' }} />
                                 </Form.Item>
                             </Col>
                             <Col span={1}>

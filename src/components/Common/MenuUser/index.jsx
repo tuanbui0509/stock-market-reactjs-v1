@@ -10,29 +10,29 @@ const menus = [
     {
         label: 'Chứng khoán hiện có',
         to: '/chung-khoan-hien-co',
-        exact: false
+        exact: true
     },
     {
         label: 'Số dư tiền ngân hàng',
         to: '/so-du-tien-ngan-hang',
-        exact: false
+        exact: true
     },
     {
         label: 'Lệnh trong ngày',
         to: '/lenh-trong-ngay',
-        exact: false
+        exact: true
     },
     {
         label: 'Lịch sử đặt lệnh',
         to: '/lich-su-dat-lenh',
         exact: true
     },
-    // {
-    //     label: 'Lịch sử khớp lệnh',
-    //     to: '/lich-su-khop-lenh',
-    //     exact: false
-    // }
-    // ,
+    {
+        label: 'Lịch sử khớp lệnh',
+        to: '/lich-su-khop-lenh',
+        exact: true
+    }
+    ,
 
 
 

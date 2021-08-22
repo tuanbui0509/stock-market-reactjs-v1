@@ -26,7 +26,7 @@ function UserPage(props) {
                             <>
                                 <Route exact path='/khach-hang/lich-su-dat-lenh' component={HistoryPurchasedPage} />
                                 <Route exact path='/khach-hang/chung-khoan-hien-co' component={StockPage} />
-                                {/* <Route exact path='/khach-hang/lich-su-khop-lenh' component={HistoryOrderPage} /> */}
+                                <Route exact path='/khach-hang/lich-su-khop-lenh' component={HistoryOrderPage} />
                                 <Route exact path='/khach-hang/so-du-tien-ngan-hang' component={ChargeInBankAccount} />
                                 <Route exact path='/khach-hang/lenh-trong-ngay' component={PurchasedOneDayPage} />
                             </>

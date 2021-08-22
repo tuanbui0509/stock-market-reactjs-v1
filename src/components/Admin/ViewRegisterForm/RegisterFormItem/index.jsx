@@ -13,8 +13,8 @@ export default function RegisterFormItem(props) {
             <td >{formRegister.diaChi}</td>
             <td >{formRegister.email}</td>
             <td >{formRegister.sdt}</td>
-            <td className="right__iconTable"><a><CheckCircleTwoTone style={{ fontSize: '20px' }} /></a></td>
-            <td className="right__iconTable"><a><DeleteTwoTone style={{ fontSize: '20px' }} /></a></td>
+            <td className="right__iconTable"><a onClick={(e) => props.handleConfirmChange(formRegister.maDon)}><CheckCircleTwoTone style={{ fontSize: '20px' }} /></a></td>
+            <td className="right__iconTable"><a onClick={(e) => props.handleDeleteChange(formRegister.maDon)}><DeleteTwoTone style={{ fontSize: '20px' }} /></a></td>
         </tr>
     )
 }

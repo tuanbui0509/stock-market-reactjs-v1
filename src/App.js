@@ -11,9 +11,7 @@ function App() {
   const isAdmin = useSelector(state => state.isAdmin);
   return (
     <Router>
-
-      {isAdmin ? <Admin /> : null}
-      {token && !isAdmin ? <User /> : <Home />}
+      {isAdmin ? <Admin /> : token && !isAdmin ? <User /> : <Home />}
       <Footer />
     </Router>
   );

@@ -10,7 +10,6 @@ import Token from './Token';
 import User from './User';
 import Report from './Report';
 import Status from './Status';
-import isChangePageUser from './isChangePageUser';
 import BankAccount from './BankAccount';
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -24,14 +23,13 @@ const myReducer = combineReducers({
     Report,
     BankAccount,
     Status,
-    isChangePageUser
 });
 
 
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['isAdmin', 'Token', 'User', 'isChangePageUser']
+    whitelist: ['isAdmin', 'Token']
 }
 
 const persistedReducer = persistReducer(persistConfig, myReducer)
