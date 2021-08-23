@@ -17,16 +17,18 @@ const formItemLayout = {
     }
 };
 function FormOrder(props) {
+    const { isOpenFormOrder, bank_list, setIsOpenFormOrder, macp } = props
+    console.log(macp);
     // handle event
     const user = useSelector(state => state.User)
     const dispatch = useDispatch();
-    const history = useHistory();
+    // const history = useHistory();
     const LightningTableList = useSelector(state => state.LightningTableList)
     const [bank, setBank] = useState({
         nganhang: "",
         soDu: 0
     });
-    const [bankList, setBankList] = useState(null);
+    const [bankList, setBankList] = useState(bank_list);
     const [stocks, setStocks] = useState([]);
     const [stock, setStock] = useState({ gia: null, giaTran: null, giaTC: null, giaSan: null, kl: null });
     const [visibleOrder, setVisibleOrder] = useState(false)
@@ -52,7 +54,6 @@ function FormOrder(props) {
         setVisibleConfirm(true)
     }
     const handleConfirm = () => {
-
         console.log(order)
         setConfirmLoading(true);
         callApi("lenhdat", 'post', order).then(res => {
@@ -62,10 +63,12 @@ function FormOrder(props) {
                 setVisibleOrder(false)
                 setConfirmLoading(false);
                 setVisibleConfirm(false);
+                setIsOpenFormOrder(false)
             } else {
                 alert(rec.message);
                 setConfirmLoading(false);
                 setVisibleConfirm(false);
+                setIsOpenFormOrder(false)
             }
         })
         setTimeout(() => {
@@ -79,20 +82,6 @@ function FormOrder(props) {
         //     soluongdat : parseInt(order.weight)
         // }));
     };
-
-    const checkUser = () => {
-        if (user === null)
-            history.replace("/login");
-        else {
-            callApi('TaiKhoanNganHang', 'GET', null).then(res => {
-                console.log(res);
-                setBankList(res.data);
-            })
-            setVisibleOrder(true)
-        }
-
-    }
-
     let findIndex = (id, list) => {
         for (let i = 0; i < list.length; i++)
             if (list[i].stk.trim() === id.trim())
@@ -171,6 +160,7 @@ function FormOrder(props) {
     }
     useEffect(() => {
         fetchStocks(true)
+        isOpenFormOrder ? setVisibleOrder(true) : setVisibleOrder(false)
     }, [])
 
     async function fetchStocks(value) {
@@ -186,22 +176,15 @@ function FormOrder(props) {
             console.log(error);
         }
     }
-    console.log(stocks);
-
-
     return (
         <>
-            <Button type="primary" className='btn-match' onClick={() => checkUser()}>
-                Đặt lệnh
-            </Button>
-
             {visibleOrder ?
                 <Modal
                     title="Đặt lệnh"
                     centered
                     visible={visibleOrder}
-                    onOk={() => setVisibleOrder(false)}
-                    onCancel={() => setVisibleOrder(false)}
+                    onOk={() => { setVisibleOrder(false); setIsOpenFormOrder(false) }}
+                    onCancel={() => { setVisibleOrder(false); setIsOpenFormOrder(false) }}
                     width={800}
                     footer={[
                         <Button type="primary" htmlType="submit" form="my_form">Xác nhận</Button>
@@ -213,7 +196,12 @@ function FormOrder(props) {
                                 {...formItemLayout}
                                 onFinish={onFinish}
                                 className="modal-form"
-                                initialValues={{ priceBank: bank.soDu, loaiLenh: 'LO', loaiGiaoDich: true, soLuong: order.soLuong }}>
+                                initialValues={
+                                    {
+                                        priceBank: bank.soDu, loaiLenh: 'LO',
+                                        loaiGiaoDich: true, soLuong: order.soLuong,
+                                        // maCp: { macp }
+                                    }}>
                                 <div className='form-child'>
                                     <Form.Item name='stk' label="Số tài khoản"
                                         rules={[{ required: true, message: "Không được bỏ trống !" }]}>
@@ -333,7 +321,6 @@ function FormOrder(props) {
                         </Modal> : null
                     }
                 </Modal> : null}
-
         </>
 
     )

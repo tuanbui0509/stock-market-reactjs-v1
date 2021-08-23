@@ -1,18 +1,25 @@
 import * as signalR from "@microsoft/signalr";
+import { Button } from "antd";
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from "react-router-dom";
 import * as actionList from '../../../actions/LightningTable/index';
 import * as Config from '../../../constants/Config';
-import FormOrder from '../FormItem/FormOrder/';
+import FormOrder from '../FormItem/FormOrder';
 import LightningTableItem from '../LightningTableItem';
+import callApi from 'utils/apiCaller';
 
 function LightningTable(props) {
     const LightningTableList = useSelector(state => state.LightningTableList);
     const [stocks, setStocks] = useState([]);
+    const [bankList, setBankList] = useState([]);
+    const [macp, setMacp] = useState('');
+
+    const history = useHistory();
+    const [isOpenFormOrder, setIsOpenFormOrder] = useState(false)
     const [keyWord, setKeyWord] = useState('');
-    //let dumpList = LightningTableState.List;
+    const [filteredStocks, setFilteredStocks] = useState(LightningTableList);
     const User = useSelector(state => state.User);
-    //console.log(User);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -32,7 +39,31 @@ function LightningTable(props) {
         dispatch(actionList.FetchListStocksRequest());
     }, []);
 
-    let element = LightningTableList.map((value, index) => {
+    useEffect(() => {
+        setFilteredStocks(
+            LightningTableList.filter((stock) =>
+                stock.macp.toLowerCase().includes(keyWord.toLowerCase())
+            )
+        );
+    }, [keyWord, LightningTableList, isOpenFormOrder]);
+    function Welcome(props) {
+        console.log(props);
+        return <h1>Hello, {props.name}</h1>;
+    }
+
+    const onHandleOrder = (macp) => {
+        if (User === null)
+            history.replace("/login");
+        else {
+            callApi('TaiKhoanNganHang', 'GET', null).then(res => {
+                setBankList(res.data)
+                setIsOpenFormOrder(true)
+                setMacp(macp)
+            })
+        }
+    }
+
+    let element = filteredStocks.map((value, index) => {
         return <LightningTableItem
             key={index}
             macp={value.macp}
@@ -54,22 +85,21 @@ function LightningTable(props) {
             klBan2={value.klBan2}
             giaBan3={value.giaBan3}
             klBan3={value.klBan3}
+            onHandleOrder={onHandleOrder}
         />
     })
 
-    let onSearchStock = (e) => {
-        const target = e.target;
-        const value = target.value;
-        setKeyWord(value);
-        let result = null;
-        if (LightningTableList.length > 0) {
-            result = LightningTableList.filter((stock) => {
-                console.log(stock.macp.trim().toLowerCase());
-                return stock.macp.trim().toLowerCase().indexOf(value) !== -1;
-            });
+    const checkUser = async () => {
+        if (User === null)
+            history.replace("/login");
+        else {
+            callApi('TaiKhoanNganHang', 'GET', null).then(res => {
+                setBankList(res.data)
+                setIsOpenFormOrder(true)
+            })
         }
-        setStocks(result)
     }
+
     return (
         <>
             <main class="content-wp">
@@ -81,7 +111,8 @@ function LightningTable(props) {
                             className="content__search-input"
                             name='keyWord'
                             value={keyWord}
-                            onChange={onSearchStock}
+                            onChange={(e) => setKeyWord(e.target.value)}
+                            style={{ textTransform: 'uppercase' }}
                         />
                         <i className=" content__search-icon fas fa-search" />
 
@@ -147,15 +178,21 @@ function LightningTable(props) {
                         <tbody className="line-stocks"> {/* 1 stock */}
                             {element}
                         </tbody>
-                        {/* <div className="table-light__body">
-                        </div> */}
                     </table>
                 </section>
             </main>
-            <FormOrder />
-
-            {/* <FormOrder/> */}
-
+            <Button type="primary" className='btn-match' onClick={checkUser}>
+                Đặt lệnh
+            </Button>
+            {isOpenFormOrder ?
+                <FormOrder
+                    isOpenFormOrder={isOpenFormOrder}
+                    setIsOpenFormOrder={setIsOpenFormOrder}
+                    bank_list={bankList}
+                    macp={macp}
+                />
+                : null
+            }
         </>
     );
 
