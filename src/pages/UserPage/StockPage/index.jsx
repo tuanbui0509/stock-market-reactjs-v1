@@ -10,7 +10,6 @@ function StockPage() {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
     const dispatch = useDispatch()
-    const reports = useSelector(state => state.Report)
 
     const [pagination, setPagination] = useState({
         current: 1,
@@ -18,26 +17,29 @@ function StockPage() {
     })
 
     useEffect(() => {
-        fetchData({ pagination });
+        fetchData(pagination);
     }, [])
 
-    const fetchData = async () => {
+    const fetchData = async (pagination) => {
         setLoading(true)
         try {
-            // console.log(pagination);
             const paramsString = queryString.stringify(pagination);
             const requestUrl = `ChungKhoanHienCo?${paramsString}`;
             const res = await callApi(requestUrl, 'GET', null)
             console.log(res.data);
-            dispatch({ type: types.STOCK_OF_USER, payload: res.data })
-            setLoading(false)
+            setTimeout(() => {
+                setLoading(false)
+            }, 200);
             setData(res.data.list)
-            setPagination({ ...pagination, current: reports.currentPage, total: reports.totalItem })
+            setPagination({ ...pagination, current: res.data.currentPage, total: res.data.totalItem })
         } catch (error) {
             console.log(error);
         }
     };
-    console.log(data);
+    const handleTableChange = (pagination) => {
+        setPagination({ ...pagination, current: pagination.current })
+        fetchData(pagination);
+    };
     const columns = [
         {
             title: 'Mã CK',
@@ -106,6 +108,7 @@ function StockPage() {
                 pagination={pagination}
                 loading={loading}
                 columns={columns}
+                onChange={handleTableChange}
             />
         </>
     )

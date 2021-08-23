@@ -1,11 +1,10 @@
+import * as signalR from "@microsoft/signalr";
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import * as signalR from "@microsoft/signalr";
-import * as actionList from '../../../actions/LightningTable/index'
-import * as actionState from '../../../actions/LightningTableState/index'
-import * as Config from '../../../constants/Config'
-import LightningTableItem from '../LightningTableItem'
+import * as actionList from '../../../actions/LightningTable/index';
+import * as Config from '../../../constants/Config';
 import FormOrder from '../FormItem/FormOrder/';
+import LightningTableItem from '../LightningTableItem';
 
 function LightningTable(props) {
     const LightningTableList = useSelector(state => state.LightningTableList);
@@ -145,9 +144,9 @@ function LightningTable(props) {
                         </thead>
                     </table>
                     <table className="table-light__content" id="HCM">
-                            <tbody className="line-stocks"> {/* 1 stock */}
-                                {element}
-                            </tbody>
+                        <tbody className="line-stocks"> {/* 1 stock */}
+                            {element}
+                        </tbody>
                         {/* <div className="table-light__body">
                         </div> */}
                     </table>

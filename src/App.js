@@ -1,5 +1,5 @@
 import Admin from 'components/Admin';
-import Footer from 'components/Common/Footer';
+import Footer from './components/Common/Footer';
 import Home from 'components/Home';
 import User from 'components/User';
 import React from 'react';

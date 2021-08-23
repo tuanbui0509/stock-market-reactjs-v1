@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as types from '../../../constants/Report/ActionType';
 import * as type_status from '../../../constants/Common/ActionType';
 import callApi from '../../../utils/apiCaller';
+import { openNotificationSuccess } from 'components/Notification';
+import { openNotificationError } from 'components/Notification';
 const { Option } = Select;
 function PurchasedOneDayPage() {
     const [data, setData] = useState([])
@@ -135,13 +137,31 @@ function PurchasedOneDayPage() {
         },
         {
             title: 'Hủy lệnh',
-            dataIndex: 'tenTrangThai',
-            key: 'tenTrangThai',
+            dataIndex: 'maTT',
+            key: 'maTT',
             width: 100,
             fixed: 'center',
-            render: () => <CloseSquareTwoTone style={{ fontSize: '1.5rem', cursor: 'pointer', textAlign: 'center' }} />,
+            render: (maTT, maLD) => (
+                <>
+                    {maTT.trim() === 'CK' ? <CloseSquareTwoTone onClick={() => handleCancel(maLD.maLD)}
+                        style={{ fontSize: '1.5rem', cursor: 'pointer', textAlign: 'center' }}
+                    /> : null}
+                </>
+            ),
         }
     ]
+
+    const handleCancel = async (maLD) => {
+        try {
+            console.log(maLD);
+            // const res = await callApi(`DonDangKy/${maLD}`, 'PUT')
+            // console.log(res);
+            // dispatch({ type: types.CANCEL_STOCK_TODAY, id: maLD });
+            openNotificationSuccess('Thành công', 'Hủy lệnh đặt thành công', 2)
+        } catch (err) {
+            openNotificationError('Thất bại', 'Lỗi dữ liệu trong máy chủ', 2);
+        }
+    }
     const handleTableChange = (pagination) => {
         setPagination({ ...pagination, current: pagination.current })
         fetchData(pagination);

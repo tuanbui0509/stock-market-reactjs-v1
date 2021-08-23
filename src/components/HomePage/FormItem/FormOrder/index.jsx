@@ -128,11 +128,11 @@ function FormOrder(props) {
     }
     let stockInformation = () => {
         return <React.Fragment>
-            <div className="modal-order-matching" style={{ fontWeight: "500" }}>
-                <p className="order-matching-title">Khớp lệnh</p>
-                <span className="order-matching-price">Giá: {stock.gia}</span>
+            <div className="modal-order-matching" style={{ fontWeight: "500", justifyContent: 'center' }}>
+                <p className="order-matching-title">Giá: {stock.gia}</p>
+                {/* <span className="order-matching-price">Giá: {stock.gia}</span> */}
                 <span>-</span>
-                <span className="order-matching-weight" >Số lượng: {stock.kl}</span>
+                {/* <span className="order-matching-weight" >Số lượng: {stock.kl}</span> */}
                 <div className="info-stock info-floor">
                     <label>Trần: </label>
                     <span className="floor">{stock.giaTran}</span>

@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 // import { useHistory } from 'react-router';
 // import { useDispatch , useSelector} from 'react-redux';
 import * as Action from '../../actions/User/index';
-import Footer from '../../components/Common/Footer';
-import Header from '../../components/Common/Header';
 import LightningTable from '../../components/HomePage/LightningTable';
 function HomePage(props) {
 

@@ -7,7 +7,6 @@ import routerHome from '../../routes/routerHome';
 import Logout from '../../components/Logout';
 import NotFoundPage from '../../pages/NotFoundPage';
 import Header from 'components/Common/Header';
-import Footer from 'components/Common/Footer';
 const showContentPages = (routes) => {
     if (routerHome.length > 0) {
         return routes.map((route, index) => {

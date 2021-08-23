@@ -1,8 +1,5 @@
-import { Col, Divider, Row } from 'antd';
+import { Col, Row } from 'antd';
 import React from 'react';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
 import { Link, Route } from 'react-router-dom';
 const style = { padding: '8px 0', marginBottom: '1rem', textAlign: 'center', fontWeight: 'bold', display: 'block' };
 

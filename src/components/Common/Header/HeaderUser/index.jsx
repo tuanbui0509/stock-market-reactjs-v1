@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import { UserOutlined } from '@ant-design/icons';
+import { Button, Dropdown, Menu, Popover } from 'antd';
+import Avatar from 'antd/lib/avatar/avatar';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import userlogo from '../../assets/images/user.png';
-import user2logo from '../../assets/images/user2.png';
-import * as action from '../../actions/User/index';
-import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router';
-import { Menu, Dropdown } from 'antd';
-import * as ActionIsAdmin from '../../constants/Admin/ActionType';
-import * as ActionToken from '../../constants/Token/ActionType';
+import { Link } from 'react-router-dom';
+// import userlogo from '../../assets/images/user.png';
 function HeaderUser(props) {
     //const token = JSON.parse(localStorage.getItem("token"));
     const user = useSelector(state => state.User);
@@ -34,11 +32,21 @@ function HeaderUser(props) {
 
     );
     return (
-        <Dropdown overlay={menu} placement="bottomRight" arrow>
-            <a className="ant-dropdown-link header__right-account-label" onClick={e => e.preventDefault()}>
-                <img src={userlogo} alt="" className="img-responsive" />
-            </a>
-        </Dropdown>
+        <>
+
+            <Dropdown overlay={menu} placement="bottomRight" arrow>
+                <a className="ant-dropdown-link header__right-account-label" onClick={e => e.preventDefault()}>
+                    <Avatar
+                        style={{
+                            backgroundColor: '#87d068'
+                        }}
+                        icon={<UserOutlined />}
+                    />
+                </a>
+
+            </Dropdown>
+
+        </>
     );
 }
 export default HeaderUser;
