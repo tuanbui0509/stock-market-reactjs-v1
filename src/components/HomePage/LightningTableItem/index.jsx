@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import formatNumber from '../../Common/Format'
 function LightningTableItem(props) {
     const {
         macp,
@@ -20,6 +21,7 @@ function LightningTableItem(props) {
         klBan2,
         giaBan3,
         klBan3 } = props;
+    console.log(props);
     const ClassNameRender = (giaTran, giaSan, giaTC, val) => {
         if (val === giaTran)
             return "txt-floor";
@@ -42,19 +44,19 @@ function LightningTableItem(props) {
             <td className="special txt-ceil">{giaSan}</td>
             <td className="special txt-standard">{giaTC}</td>
             <td className={ClassNameRender(giaTran, giaSan, giaTC, giaMua3)}>{giaMua3}</td>
-            <td className={ClassNameRender(giaTran, giaSan, giaTC, giaMua3)}>{klMua3}</td>
+            <td className={ClassNameRender(giaTran, giaSan, giaTC, giaMua3)}>{formatNumber(klMua3)}</td>
             <td className={ClassNameRender(giaTran, giaSan, giaTC, giaMua2)}>{giaMua2}</td>
-            <td className={ClassNameRender(giaTran, giaSan, giaTC, giaMua2)}>{klMua2}</td>
+            <td className={ClassNameRender(giaTran, giaSan, giaTC, giaMua2)}>{formatNumber(klMua2)}</td>
             <td className={ClassNameRender(giaTran, giaSan, giaTC, giaMua1)}>{giaMua1}</td>
-            <td className={ClassNameRender(giaTran, giaSan, giaTC, giaMua1)}>{klMua1}</td>
+            <td className={ClassNameRender(giaTran, giaSan, giaTC, giaMua1)}>{formatNumber(klMua1)}</td>
             <td className={ClassNameRender(giaTran, giaSan, giaTC, gia) + " special"}>{gia}</td>
             <td className={ClassNameRender(giaTran, giaSan, giaTC, gia) + " special"}>{kl}</td>
             <td className={ClassNameRender(giaTran, giaSan, giaTC, giaBan1)}>{giaBan1}</td>
-            <td className={ClassNameRender(giaTran, giaSan, giaTC, giaBan1)}>{klBan1}</td>
+            <td className={ClassNameRender(giaTran, giaSan, giaTC, giaBan1)}>{formatNumber(klBan1)}</td>
             <td className={ClassNameRender(giaTran, giaSan, giaTC, giaBan2)}>{giaBan2}</td>
-            <td className={ClassNameRender(giaTran, giaSan, giaTC, giaBan2)}>{klBan2}</td>
+            <td className={ClassNameRender(giaTran, giaSan, giaTC, giaBan2)}>{formatNumber(klBan2)}</td>
             <td className={ClassNameRender(giaTran, giaSan, giaTC, giaBan3)}>{giaBan3}</td>
-            <td className={ClassNameRender(giaTran, giaSan, giaTC, giaBan3)}>{klBan3}</td>
+            <td className={ClassNameRender(giaTran, giaSan, giaTC, giaBan3)}>{formatNumber(klBan3)}</td>
             <td className="">{ktTong}</td>
         </tr>
     );

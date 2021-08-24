@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import * as actionList from '../../../actions/LightningTable/index';
+import * as Gia from '../../../constants/LightningTable/index'
 import * as Config from '../../../constants/Config';
 import FormOrder from '../FormItem/FormOrder';
 import LightningTableItem from '../LightningTableItem';
@@ -67,23 +68,23 @@ function LightningTable(props) {
         return <LightningTableItem
             key={index}
             macp={value.macp}
-            giaTC={value.giaTC}
-            giaTran={value.giaTran}
-            giaSan={value.giaSan}
+            giaTC={value.giaTC===null?null:value.giaTC/Gia.GIA}
+            giaTran={value.giaTran===null?null:value.giaTran/Gia.GIA}
+            giaSan={value.giaSan===null?null:value.giaSan/Gia.GIA}
             ktTong={value.ktTong}
-            giaMua3={value.giaMua3}
+            giaMua3={value.giaMua3===null?null:value.giaMua3/Gia.GIA}
             klMua3={value.klMua3}
-            giaMua2={value.giaMua2}
+            giaMua2={value.giaMua2===null?null:value.giaMua2/Gia.GIA}
             klMua2={value.klMua2}
-            giaMua1={value.giaMua1}
+            giaMua1={value.giaMua1===null?null:value.giaMua1/Gia.GIA}
             klMua1={value.klMua1}
-            gia={value.gia}
+            gia={value.gia===null?null:value.gia/Gia.GIA}
             kl={value.kl}
-            giaBan1={value.giaBan1}
+            giaBan1={value.giaBan1===null?null:value.giaBan1/Gia.GIA}
             klBan1={value.klBan1}
-            giaBan2={value.giaBan2}
+            giaBan2={value.giaBan2===null?null:value.giaBan2/Gia.GIA}
             klBan2={value.klBan2}
-            giaBan3={value.giaBan3}
+            giaBan3={value.giaBan3===null?null:value.giaBan3/Gia.GIA}
             klBan3={value.klBan3}
             onHandleOrder={onHandleOrder}
         />

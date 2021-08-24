@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import * as ActionLogin from '../../../actions/Order/index';
+import * as Gia from '../../../constants/LightningTable/index'
 const ConfirmForm = (props) => {
     const {closeForm} = props;
     // let {order} = props.confirmInfoDetailOrder;
@@ -23,7 +24,7 @@ const ConfirmForm = (props) => {
             stk : idAcc,
             macp : stockId,
             loaI_GIAODICH : selectedStatus,
-            giadat : parseFloat(price),
+            giadat : parseFloat(price) * Gia.GIA,
             soluongdat : parseInt(weight)
         }));
         closeForm();
