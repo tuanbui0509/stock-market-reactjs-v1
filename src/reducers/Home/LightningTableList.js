@@ -1,4 +1,4 @@
-import * as types from '../constants/LightningTable/ActionType';
+import * as types from '../../constants/LightningTable/ActionType';
 const initialState = [];
 
 let LightningTableList = (state = initialState, action) => {

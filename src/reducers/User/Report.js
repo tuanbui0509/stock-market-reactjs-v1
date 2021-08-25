@@ -1,4 +1,4 @@
-import * as types from '../constants/Report/ActionType';
+import * as types from '../../constants/Report/ActionType';
 const initialState = {};
 
 let Report = (state = initialState, action) => {

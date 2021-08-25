@@ -32,7 +32,13 @@ export default function LeftMenu() {
                             <Link to="/admin" className="left__title"><HomeTwoTone />Dashboard</Link>
                         </li>
                         <li className="left__menuItem">
-                            <Link to="/admin/duyet-don" className="left__title"><IdcardTwoTone />Khách Hàng</Link>
+                            <Link to="/admin/don-dang-ky" className="left__title"><IdcardTwoTone />Quản lý Đơn Đăng ký</Link>
+                        </li>
+                        <li className="left__menuItem">
+                            <Link to="/admin/quan-ly-ndt" className="left__title"><IdcardTwoTone />Quản lý Nhà Đầu Tư</Link>
+                        </li>
+                        <li className="left__menuItem">
+                            <Link to="/admin/quan-ly-cp" className="left__title"><IdcardTwoTone />Quản lý cổ phiếu</Link>
                         </li>
                         <li className="left__menuItem">
                             <Link to="/login" onClick={logOut} className="left__title"><RightCircleTwoTone />Đăng Xuất</Link>

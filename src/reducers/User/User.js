@@ -1,5 +1,5 @@
-import * as types from '../constants/User/ActionType';
-import * as ordertypes from '../constants/Order/ActionType'
+import * as types from '../../constants/User/ActionType';
+import * as ordertypes from '../../constants/Order/ActionType'
 const initialState = null;
 
 let User = (state = initialState, action) => {

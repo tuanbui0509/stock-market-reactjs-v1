@@ -4,3 +4,5 @@ export const DELETE_REGISTER_FORM = 'DELETE_REGISTER_FORM';
 export const ADMIN_LOGOUT = 'ADMIN_LOGOUT';
 export const IS_ADMIN = 'IS_ADMIN';
 export const IS_USER = 'IS_USER';
+export const FETCH_LIST_USER = 'FETCH_LIST_USER';
+export const FETCH_LIST_STOCK = 'FETCH_LIST_STOCK';

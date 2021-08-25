@@ -1,6 +1,8 @@
 import React from 'react';
 import AdminPage from '../pages/AdminPage';
-import ViewRegisterForm from '../components/Admin/ViewRegisterForm'
+import RegisterForm from '../components/Admin/ManagementRegisterForm'
+import Users from '../components/Admin/ManagementUsers'
+import Stocks from '../components/Admin/ManagementStocks'
 
 const routers = [
     {
@@ -9,9 +11,19 @@ const routers = [
         main: () => <AdminPage />
     },
     {
-        path: '/admin/duyet-don',
+        path: '/admin/don-dang-ky',
         exact: true,
-        main: () => <ViewRegisterForm />
+        main: () => <RegisterForm />
+    },
+    {
+        path: '/admin/quan-ly-ndt',
+        exact: true,
+        main: () => <Users />
+    },
+    {
+        path: '/admin/quan-ly-cp',
+        exact: true,
+        main: () => <Stocks />
     }
 
 ]

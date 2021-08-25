@@ -1,4 +1,4 @@
-import * as types from '../constants/Admin/ActionType';
+import * as types from '../../constants/Admin/ActionType';
 const initialState = false;
 
 let isAdmin = (state = initialState, action) => {

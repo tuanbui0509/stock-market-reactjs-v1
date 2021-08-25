@@ -1,4 +1,4 @@
-import * as types from '../constants/Token/ActionType';
+import * as types from '../../constants/Token/ActionType';
 const initialState = false;
 
 let Token = (state = initialState, action) => {

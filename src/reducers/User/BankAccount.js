@@ -1,4 +1,4 @@
-import * as types from '../constants/Common/ActionType.js';
+import * as types from '../../constants/Common/ActionType.js';
 const initialState = [];
 
 let BankAccount = (state = initialState, action) => {

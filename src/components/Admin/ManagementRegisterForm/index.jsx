@@ -9,7 +9,7 @@ import { openNotificationSuccess } from 'components/Notification';
 import { openNotificationError } from 'components/Notification';
 
 
-export default function ViewRegisterForm() {
+export default function ManagementRegisterForm() {
     const listFormRegister = useSelector(state => state.RegisterForm);
     const dispatch = useDispatch();
     useEffect(() => {

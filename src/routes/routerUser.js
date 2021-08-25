@@ -15,12 +15,6 @@ const routers = [
         exact: false,
         main: (history, match) => <UserPage history={history} match={match} />
     }
-    // ,
-    // {
-    //     path: '',
-    //     exact: false,
-    //     main: () => <NotFoundPage />
-    // }
 ]
 
 export default routers;

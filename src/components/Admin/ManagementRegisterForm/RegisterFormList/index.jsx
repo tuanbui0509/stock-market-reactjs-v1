@@ -17,7 +17,7 @@ export default function RegisterFormList(props) {
                                 <th>Nơi sinh</th>
                                 <th>Địa chỉ</th>
                                 <th>Email</th>
-                                <th>Phone</th>
+                                <th>Số điện thoại</th>
                                 <th>Chấp nhận</th>
                                 <th>Xoá</th>
                             </tr>

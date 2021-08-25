@@ -1,4 +1,4 @@
-import * as types from '../constants/LightningTableState/ActionType';
+import * as types from '../../constants/LightningTableState/ActionType';
 const initialState = {
     List: [],
     selected: -1
