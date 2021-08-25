@@ -22,7 +22,7 @@ function HeaderUser(props) {
             </Menu.Item>
         </Menu> : <Menu>
             <Menu.Item key="0">
-                <Link to='/khach-hang/chung-khoan-hien-co' className="header__right-account-item">Thông tin tài khoản </Link>
+                <Link to='/thong-tin-khach-hang' className="header__right-account-item">Thông tin tài khoản </Link>
             </Menu.Item>
             <Menu.Item key="1">
                 <Link className="header__right-account-item" to="/logout">

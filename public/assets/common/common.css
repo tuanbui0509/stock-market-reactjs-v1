@@ -194,7 +194,7 @@ footer {
     text-align: center;
     color: var(--text-color-primary);
     font-size: 13px;
-    padding: 15px;
+    padding: 8px;
     background: var(--background-color-primary);
     position: fixed;
     bottom: 0;

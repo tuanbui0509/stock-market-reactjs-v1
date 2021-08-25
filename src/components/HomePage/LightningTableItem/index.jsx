@@ -21,7 +21,6 @@ function LightningTableItem(props) {
         klBan2,
         giaBan3,
         klBan3 } = props;
-    console.log(props);
     const ClassNameRender = (giaTran, giaSan, giaTC, val) => {
         if (val === giaTran)
             return "txt-floor";

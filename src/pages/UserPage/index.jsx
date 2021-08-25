@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import { Route } from 'react-router-dom';
 import MenuUser from '../../components/Common/MenuUser';
 import HistoryOrderPage from './HistoryOrderPage';
-import ChargeInBankAccount from './ChargeInBankAccount';
+import ChargeInBankAccount from './ChargeInBankAccountPage';
 import HistoryPurchasedPage from './HistoryPurchasedPage';
 import PurchasedOneDayPage from './PurchasedOneDayPage';
 import StockPage from './StockPage';

@@ -17,8 +17,9 @@ const formItemLayout = {
     }
 };
 function FormOrder(props) {
-    const { isOpenFormOrder, bank_list, setIsOpenFormOrder, macp } = props
+    const { isOpenFormOrder, bank_list, setIsOpenFormOrder, macp, setMacp } = props
     console.log(macp);
+
     // handle event
     const user = useSelector(state => state.User)
     const dispatch = useDispatch();
@@ -30,7 +31,7 @@ function FormOrder(props) {
     });
     const [bankList, setBankList] = useState(bank_list);
     const [stocks, setStocks] = useState([]);
-    const [stock, setStock] = useState({ gia: null, giaTran: null, giaTC: null, giaSan: null, kl: null });
+    // const [stock, setStock] = useState({ gia: null, giaTran: null, giaTC: null, giaSan: null, kl: null });
     const [visibleOrder, setVisibleOrder] = useState(false)
     const [visibleConfirm, setVisibleConfirm] = useState(false)
     const [confirmLoading, setConfirmLoading] = React.useState(false);
@@ -43,22 +44,28 @@ function FormOrder(props) {
         loaiGiaoDich: true,// Trạng thái mua bán mua: true, bán: false
         loaiLenh: 'ATO'// Trạng thái Loai: ATO, ATC, LO
     });
+    const [maCK, setMaCK] = useState();
+    useEffect(() => {
+        fetchStocks(true)
+        isOpenFormOrder ? setVisibleOrder(true) : setVisibleOrder(false)
+    }, [])
+
+    useEffect(() => {
+        setMaCK(macp)
+    }, [macp])
 
     const onFinish = (values) => {
         if (values.gia * values.soLuong > bank.soDu) {
             alert("Số tiền không đủ");
             return;
         }
-        console.log(values);
         setOrder(values)
         setVisibleConfirm(true)
     }
     const handleConfirm = () => {
-        console.log(order)
         setConfirmLoading(true);
         callApi("lenhdat", 'post', order).then(res => {
             let rec = res.data;
-            console.log(rec);
             if (rec.status === 0) {
                 setVisibleOrder(false)
                 setConfirmLoading(false);
@@ -84,13 +91,13 @@ function FormOrder(props) {
     };
     let findIndex = (id, list) => {
         for (let i = 0; i < list.length; i++)
-            if (list[i].stk.trim() === id.trim())
+            if (list[i].stk.trim() === id?.trim())
                 return i;
         return -1;
     }
     let findIndexStock = (id, list) => {
         for (let i = 0; i < list.length; i++)
-            if (list[i].macp.trim() === id.trim())
+            if (list[i].macp.trim() === id?.trim())
                 return i;
         return -1;
     }
@@ -98,43 +105,42 @@ function FormOrder(props) {
         let index = findIndexStock(id, LightningTableList)
         console.log(index);
         if (index === -1)
-            return;
+            return null;
         let res = LightningTableList[index];
-        setStock(res);
-        // setOrder({...order,soLuong:})
-
-        console.log(stock);
+        return res
     }
+
+    let infoStock = tempValueStock(maCK)
+    console.log('mack ', maCK);
     let tempValueBank = (id) => {
         let index = findIndex(id, bankList)
         if (index === -1)
             return;
         let res = bankList[index];
-        console.log(id, index);
-        console.log(res);
         setBank({ nganhang: res.nganHang.tenNganHang, soDu: res.soDu });
-        console.log(bank);
     }
+
     let stockInformation = () => {
         return <React.Fragment>
             <div className="modal-order-matching" style={{ fontWeight: "500", justifyContent: 'center' }}>
-                <p className="order-matching-title">Giá: {stock.gia}</p>
-                {/* <span className="order-matching-price">Giá: {stock.gia}</span> */}
+                <p className="order-matching-title">Giá: {infoStock?.gia}</p>
+                {/* <span className="order-matching-price">Giá: {infoStock?.gia}</span> */}
                 <span>-</span>
-                {/* <span className="order-matching-weight" >Số lượng: {stock.kl}</span> */}
+                {/* <span className="order-matching-weight" >Số lượng: {infoStock?.kl}</span> */}
                 <div className="info-stock info-floor">
                     <label>Trần: </label>
-                    <span className="floor">{stock.giaTran}</span>
+                    <span className="floor">{infoStock?.giaTran}</span>
                 </div>
                 <div className="info-stock info-ceil">
                     <label>Sàn: </label>
-                    <span className="ceil">{stock.giaSan}</span>
+                    <span className="ceil">{infoStock?.giaSan}</span>
                 </div>
                 <div className="info-stock info-standard">
                     <label>TC: </label>
-                    <span className="standard">{stock.giaTC}</span>
+                    <span className="standard">{infoStock?.giaTC}</span>
                 </div>
-            </div></React.Fragment>
+            </div>
+        </React.Fragment>
     }
     let displayBankList = () => {
         if (bankList !== null)
@@ -143,7 +149,8 @@ function FormOrder(props) {
             })
     }
     let onChangeListStock = (event) => {
-        tempValueStock(event);
+        setMaCK(event)
+        // tempValueStock(event);
     }
     let onChangeListBank = (event) => {
         tempValueBank(event);
@@ -158,19 +165,18 @@ function FormOrder(props) {
         let value = e.target.value
         fetchStocks(value)
     }
-    useEffect(() => {
-        fetchStocks(true)
-        isOpenFormOrder ? setVisibleOrder(true) : setVisibleOrder(false)
-    }, [])
+
 
     async function fetchStocks(value) {
         try {
             if (value) {
                 let res = await callApi('CoPhieu', 'GET', null);
                 setStocks(res.data)
+                tempValueStock(macp)
             } else {
                 let res = await callApi('ChungKhoanHienCo?current=1&pageSize=1000', 'GET', null);
                 setStocks(res.data.list)
+                tempValueStock(macp)
             }
         } catch (error) {
             console.log(error);
@@ -182,9 +188,9 @@ function FormOrder(props) {
                 <Modal
                     title="Đặt lệnh"
                     centered
-                    visible={visibleOrder}
-                    onOk={() => { setVisibleOrder(false); setIsOpenFormOrder(false) }}
-                    onCancel={() => { setVisibleOrder(false); setIsOpenFormOrder(false) }}
+                    visible={true}
+                    onOk={() => { setVisibleOrder(false); setIsOpenFormOrder(false); setMacp('') }}
+                    onCancel={() => { setVisibleOrder(false); setIsOpenFormOrder(false); setMacp('') }}
                     width={800}
                     footer={[
                         <Button type="primary" htmlType="submit" form="my_form">Xác nhận</Button>
@@ -200,8 +206,8 @@ function FormOrder(props) {
                                     {
                                         priceBank: bank.soDu, loaiLenh: 'LO',
                                         loaiGiaoDich: true, soLuong: order.soLuong,
-                                        // maCp: { macp }
-                                    }}>
+                                    }}
+                            >
                                 <div className='form-child'>
                                     <Form.Item name='stk' label="Số tài khoản"
                                         rules={[{ required: true, message: "Không được bỏ trống !" }]}>
@@ -218,11 +224,13 @@ function FormOrder(props) {
                                             }
                                             onChange={onChangeListBank}
                                         >
-                                            {/* {listBank} */}
                                             {displayBankList()}
                                         </Select>
                                     </Form.Item>
-                                    <Form.Item name="maCp" label="Mã chứng khoán"
+                                    <Form.Item
+                                        initialValue={macp ? macp : null}
+                                        name="maCp"
+                                        label="Mã chứng khoán"
                                         rules={[{ required: true, message: "Không được bỏ trống !" }]}>
                                         <Select
                                             showSearch
@@ -257,8 +265,6 @@ function FormOrder(props) {
                                         <Input value={bank.soDu} disabled style={{ width: '100%', color: '#1890ff', fontWeight: 'bold' }} />
                                         <span style={{ display: 'none' }}>{bank.soDu}</span>
                                     </Form.Item>
-
-
                                     <Form.Item name='soLuong' label="Khối lượng"
                                         rules={[{ required: true, message: "Không được bỏ trống !" }]}>
                                         <InputNumber min={1} max={100000} style={{ width: '100%' }} value={order.soLuong} />
@@ -284,6 +290,9 @@ function FormOrder(props) {
                             {stockInformation()}
                         </div>
                     </div>
+                    <small style={{ textAlign: 'center', display: 'block', marginTop: '1rem' }}>
+                        Giá x 1000 VNĐ. Khối lượng x 10. Giá trị x 1000000 VNĐ
+                    </small>
                     {visibleConfirm
                         ? <Modal
                             style={{ marginTop: 140, whiteSpace: 'nowrap' }}
