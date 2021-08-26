@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import Header from 'components/Common/Header';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-
-import * as Action from '../../actions/User/index';
-import routerUser from '../../routes/routerUser';
 import Logout from '../../components/Logout';
 import NotFoundPage from '../../pages/NotFoundPage';
-import Header from 'components/Common/Header';
+import routerUser from '../../routes/routerUser';
+
 const showContentPages = (routes) => {
     if (routerUser.length > 0) {
         return routes.map((route, index) => {

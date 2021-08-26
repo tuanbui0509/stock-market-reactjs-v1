@@ -33,6 +33,7 @@ function LightningTableItem(props) {
         else
             return "txt-green";
     }
+    console.log(props);
     return (
         <tr className="stock" id={macp}>
             <td

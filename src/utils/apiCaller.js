@@ -8,18 +8,17 @@ export default function callApi(endpoint, method, body = {}) {
             method: method,
             url: `${Config.API_URL}/${endpoint}`,
             data: body
-        }).catch(err => console.log(err))
+        }).catch(err => (err.response))
     else {
         token = JSON.parse(token);
         // console.log(token);
         let auToken = `Bearer ${token}`;
-        // console.log(auToken);
         return axios({
             method: method,
             url: `${Config.API_URL}/${endpoint}`,
             headers: { Authorization: auToken },
             data: body
-        }).catch(err => console.log(err))
+        }).catch(err => (err.response))
     }
 
 }

@@ -1,12 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import UserList from './UserList'
-import UserItem from './UserItem'
 import * as types from '../../../constants/Admin/ActionType';
-import apiCaller from '../../../utils/apiCaller'
-import callApi from '../../../utils/apiCaller';
-import { openNotificationSuccess } from 'components/Notification';
-import { openNotificationError } from 'components/Notification';
+import apiCaller from '../../../utils/apiCaller';
+import UserItem from './UserItem';
+import UserList from './UserList';
 
 
 export default function ManagementUsers() {

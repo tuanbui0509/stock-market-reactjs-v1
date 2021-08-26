@@ -1,5 +1,5 @@
 import { UserOutlined } from '@ant-design/icons';
-import { Button, Dropdown, Menu, Popover } from 'antd';
+import { Dropdown, Menu } from 'antd';
 import Avatar from 'antd/lib/avatar/avatar';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,6 +25,9 @@ function HeaderUser(props) {
                 <Link to='/thong-tin-khach-hang' className="header__right-account-item">Thông tin tài khoản </Link>
             </Menu.Item>
             <Menu.Item key="1">
+                <Link to='/khach-hang/chung-khoan-hien-co' className="header__right-account-item">Thông tin sao kê </Link>
+            </Menu.Item>
+            <Menu.Item key="2">
                 <Link className="header__right-account-item" to="/logout">
                     Đăng xuất </Link>
             </Menu.Item>

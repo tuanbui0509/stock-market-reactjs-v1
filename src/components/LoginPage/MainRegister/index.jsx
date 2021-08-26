@@ -1,8 +1,6 @@
 import { Button, DatePicker, Form, Input, Select, Typography } from 'antd';
-import { openNotificationError } from 'components/Notification';
-import { openNotificationSuccess } from 'components/Notification';
+import { openNotificationError, openNotificationSuccess } from 'components/Notification';
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import callApi from '../../../utils/apiCaller';
@@ -42,7 +40,7 @@ const tailFormItemLayout = {
 };
 const MainRegister = (props) => {
     const history = useHistory();
-
+    const [toDate, setToDate] = useState(new Date());
     const onFinish = async (values) => {
         try {
             console.log(values);
@@ -62,9 +60,12 @@ const MainRegister = (props) => {
         }
     };
 
-
+    const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY'];
     const [form] = Form.useForm();
-
+    function disabledToDate(current) {
+        // Can not select days before today and today
+        return current && current.valueOf() > Date.now();
+    }
     return (
         <main className="main">
             <div className="container">
@@ -121,7 +122,7 @@ const MainRegister = (props) => {
                                             },
                                         ]}
                                     >
-                                        <DatePicker label="Ngày sinh" placeholder="Chọn ngày sinh" />
+                                        <DatePicker label="Ngày sinh" placeholder="Chọn ngày sinh" disabledDate={disabledToDate} format={dateFormatList} />
                                     </Form.Item>
                                     <Form.Item
                                         name="sdt"
@@ -241,11 +242,11 @@ const MainRegister = (props) => {
                                         rules={[
                                             {
                                                 required: true,
-                                                message: 'Vui lòng nhập số ngày cấp CMND!',
+                                                message: 'Vui lòng nhập ngày cấp CMND!',
                                             },
                                         ]}
                                     >
-                                        <DatePicker placeholder="Ngày cấp CMND" />
+                                        <DatePicker placeholder="Ngày cấp CMND" disabledDate={disabledToDate} format={dateFormatList} onChange={(date) => setToDate(date)} />
                                     </Form.Item>
 
 
@@ -255,17 +256,13 @@ const MainRegister = (props) => {
                                         </Button>
                                     </Form.Item>
                                     <Link to="/login" className='title-login'>Đăng nhập?</Link>
-
                                 </div>
                             </div>
-
-
                         </Form>
                     </div>
                 </div>
             </div>
         </main>
-
     );
 }
 

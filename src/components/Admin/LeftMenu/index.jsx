@@ -1,10 +1,9 @@
-import { HomeTwoTone, IdcardTwoTone, RightCircleTwoTone } from '@ant-design/icons'
+import { IdcardTwoTone, RightCircleTwoTone } from '@ant-design/icons';
 import { openNotificationSuccess } from 'components/Notification';
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom'
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 import * as action from '../../../actions/Admin/RegisterForm/index';
-import Logout from '../../../components/Logout';
 import * as ActionIsAdmin from '../../../constants/Admin/ActionType';
 import * as ActionToken from '../../../constants/Token/ActionType';
 
@@ -28,14 +27,14 @@ export default function LeftMenu() {
                 <div className="left__content">
                     <div className="left__logo">LOGO</div>
                     <ul className="left__menu">
-                        <li className="left__menuItem">
+                        {/* <li className="left__menuItem">
                             <Link to="/admin" className="left__title"><HomeTwoTone />Dashboard</Link>
+                        </li> */}
+                        <li className="left__menuItem">
+                            <Link to="/admin/don-dang-ky" className="left__title"><IdcardTwoTone />Quản lý đơn đăng ký</Link>
                         </li>
                         <li className="left__menuItem">
-                            <Link to="/admin/don-dang-ky" className="left__title"><IdcardTwoTone />Quản lý Đơn Đăng ký</Link>
-                        </li>
-                        <li className="left__menuItem">
-                            <Link to="/admin/quan-ly-ndt" className="left__title"><IdcardTwoTone />Quản lý Nhà Đầu Tư</Link>
+                            <Link to="/admin/quan-ly-ndt" className="left__title"><IdcardTwoTone />Quản lý nhà đầu tư</Link>
                         </li>
                         <li className="left__menuItem">
                             <Link to="/admin/quan-ly-cp" className="left__title"><IdcardTwoTone />Quản lý cổ phiếu</Link>

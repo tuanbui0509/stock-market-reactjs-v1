@@ -1,21 +1,15 @@
 import { CloseSquareTwoTone } from '@ant-design/icons';
-import { Button, Col, DatePicker, Form, Input, Row, Select, Table } from 'antd';
+import { Table } from 'antd';
+import { openNotificationError, openNotificationSuccess } from 'components/Notification';
 import { format } from 'date-fns';
-import moment from 'moment-timezone';
 import queryString from 'query-string';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import * as types from '../../../constants/Report/ActionType';
-import * as type_status from '../../../constants/Common/ActionType';
 import callApi from '../../../utils/apiCaller';
-import { openNotificationSuccess } from 'components/Notification';
-import { openNotificationError } from 'components/Notification';
-const { Option } = Select;
 function PurchasedOneDayPage() {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
-    const reports = useSelector(state => state.Report)
-    const status = useSelector(state => state.Status)
     const dispatch = useDispatch()
     const date = new Date()
 

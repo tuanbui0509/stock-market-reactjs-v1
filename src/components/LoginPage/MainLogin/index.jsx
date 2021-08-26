@@ -22,7 +22,6 @@ const MainLogin = (props) => {
             Hidden();
             console.log(res.data);
             let { data } = res.data
-            console.log(data);
             if (res.data.status === 0) {
                 localStorage.setItem("user", JSON.stringify(data.user));
                 localStorage.setItem("token", JSON.stringify(data.token));

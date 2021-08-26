@@ -3,12 +3,12 @@ import { Button } from "antd";
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from "react-router-dom";
+import callApi from 'utils/apiCaller';
 import * as actionList from '../../../actions/LightningTable/index';
-import * as Gia from '../../../constants/LightningTable/index'
 import * as Config from '../../../constants/Config';
+import * as Gia from '../../../constants/LightningTable/index';
 import FormOrder from '../FormItem/FormOrder';
 import LightningTableItem from '../LightningTableItem';
-import callApi from 'utils/apiCaller';
 
 function LightningTable(props) {
     const LightningTableList = useSelector(state => state.LightningTableList);

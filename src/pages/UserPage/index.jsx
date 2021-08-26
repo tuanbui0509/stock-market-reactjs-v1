@@ -1,16 +1,15 @@
 import { Divider, Tag } from 'antd';
 import Footer from 'components/Common/Footer';
 import Header from 'components/Common/Header';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Route } from 'react-router-dom';
 import MenuUser from '../../components/Common/MenuUser';
-import HistoryOrderPage from './HistoryOrderPage';
 import ChargeInBankAccount from './ChargeInBankAccountPage';
+import HistoryOrderPage from './HistoryOrderPage';
 import HistoryPurchasedPage from './HistoryPurchasedPage';
 import PurchasedOneDayPage from './PurchasedOneDayPage';
 import StockPage from './StockPage';
 import './user.css';
-import { useSelector } from 'react-redux';
 function UserPage(props) {
     let user = JSON.parse(localStorage.getItem("user"));
 

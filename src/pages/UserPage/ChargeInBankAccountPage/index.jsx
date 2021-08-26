@@ -1,11 +1,6 @@
-import { CloseSquareTwoTone } from '@ant-design/icons';
-import { Button, Col, DatePicker, Form, Input, Row, Select, Table } from 'antd';
-import { format } from 'date-fns';
-import moment from 'moment-timezone';
-import queryString from 'query-string';
+import { Col, Row, Select, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import * as types from '../../../constants/Report/ActionType';
 import * as type_back from '../../../constants/Common/ActionType';
 import callApi from '../../../utils/apiCaller';
 const { Option } = Select;
@@ -14,7 +9,6 @@ function ChargeInBankAccount() {
     const [loading, setLoading] = useState(false)
     const bankList = useSelector(state => state.BankAccount)
     const dispatch = useDispatch()
-    const [filter, setFilter] = useState()
 
     useEffect(() => {
         fetchBackAccount()

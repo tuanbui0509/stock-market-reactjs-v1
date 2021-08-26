@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { Form, InputNumber, Modal, Button, Radio, Select, Input } from 'antd'
-import './FormOrder.css'
-import { useDispatch, useSelector } from 'react-redux'
-import { useHistory } from 'react-router';
-import * as ActionOrder from '../../../../actions/Order';
-import callApi from '../../../../utils/apiCaller';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { Button, Form, Input, InputNumber, Modal, Radio, Select } from 'antd';
+import { openNotificationError } from 'components/Notification';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import * as gia from '../../../../constants/LightningTable/index';
+import callApi from '../../../../utils/apiCaller';
+import './FormOrder.css';
 const formItemLayout = {
     labelCol: {
         xs: {
@@ -21,8 +21,8 @@ function FormOrder(props) {
     console.log(macp);
 
     // handle event
-    const user = useSelector(state => state.User)
-    const dispatch = useDispatch();
+    // const user = useSelector(state => state.User)
+    // const dispatch = useDispatch();
     // const history = useHistory();
     const LightningTableList = useSelector(state => state.LightningTableList)
     const [bank, setBank] = useState({
@@ -34,7 +34,7 @@ function FormOrder(props) {
     // const [stock, setStock] = useState({ gia: null, giaTran: null, giaTC: null, giaSan: null, kl: null });
     const [visibleOrder, setVisibleOrder] = useState(false)
     const [visibleConfirm, setVisibleConfirm] = useState(false)
-    const [confirmLoading, setConfirmLoading] = React.useState(false);
+    // const [confirmLoading, setConfirmLoading] = React.useState(false);
     const [order, setOrder] = useState({
         stk: "",
         maCp: "",
@@ -42,7 +42,7 @@ function FormOrder(props) {
         soLuong: 0,
         mkdatLenh: "",
         loaiGiaoDich: true,// Trạng thái mua bán mua: true, bán: false
-        loaiLenh: 'ATO'// Trạng thái Loai: ATO, ATC, LO
+        loaiLenh: 'LO'// Trạng thái Loai: ATO, ATC, LO
     });
     const [maCK, setMaCK] = useState();
     useEffect(() => {
@@ -56,38 +56,43 @@ function FormOrder(props) {
 
     const onFinish = (values) => {
         if (values.gia * values.soLuong > bank.soDu) {
-            alert("Số tiền không đủ");
+            openNotificationError('Thất bại', 'Số tiền trong tài khoản không đủ', 3)
             return;
         }
-        setOrder(values)
-        setVisibleConfirm(true)
+        console.log(values);
+        callApi("LenhDat/check", 'post', values).then(res => {
+            let rec = res.data;
+            console.log(rec);
+            if (rec.status === 0) {
+                setOrder(values)
+                setVisibleConfirm(true)
+            } else {
+                openNotificationError('Thất bại', rec.message, 3)
+                // setConfirmLoading(false);
+                setVisibleConfirm(false);
+                setIsOpenFormOrder(true)
+            }
+        })
+
     }
     const handleConfirm = () => {
-        setConfirmLoading(true);
+        // setConfirmLoading(true);
         callApi("lenhdat", 'post', order).then(res => {
             let rec = res.data;
             if (rec.status === 0) {
                 setVisibleOrder(false)
-                setConfirmLoading(false);
+                // setConfirmLoading(false);
                 setVisibleConfirm(false);
                 setIsOpenFormOrder(false)
             } else {
-                alert(rec.message);
-                setConfirmLoading(false);
+                openNotificationError('Thất bại', rec.message, 3)
+                // setConfirmLoading(false);
                 setVisibleConfirm(false);
-                setIsOpenFormOrder(false)
+                setIsOpenFormOrder(true)
             }
         })
         setTimeout(() => {
         }, 2000);
-        // dispatch(ActionOrder.MakeOrderRequest(order.pin,{
-        //     stk : order.idAcc,
-        //     maCp : order.stockId,
-        //     loaI_GIAODICH : order.selectedStatus,
-        //     // loaI_GIAODICH : order.selectedType,
-        //     giadat : parseFloat(order.price),
-        //     soluongdat : parseInt(order.weight)
-        // }));
     };
     let findIndex = (id, list) => {
         for (let i = 0; i < list.length; i++)
@@ -123,21 +128,21 @@ function FormOrder(props) {
     let stockInformation = () => {
         return <React.Fragment>
             <div className="modal-order-matching" style={{ fontWeight: "500", justifyContent: 'center' }}>
-                <p className="order-matching-title">Giá: {infoStock?.gia}</p>
+                <p className="order-matching-title">Giá: {infoStock?.gia / gia.GIA}</p>
                 {/* <span className="order-matching-price">Giá: {infoStock?.gia}</span> */}
                 <span>-</span>
                 {/* <span className="order-matching-weight" >Số lượng: {infoStock?.kl}</span> */}
                 <div className="info-stock info-floor">
                     <label>Trần: </label>
-                    <span className="floor">{infoStock?.giaTran}</span>
+                    <span className="floor">{infoStock?.giaTran / gia.GIA}</span>
                 </div>
                 <div className="info-stock info-ceil">
                     <label>Sàn: </label>
-                    <span className="ceil">{infoStock?.giaSan}</span>
+                    <span className="ceil">{infoStock?.giaSan / gia.GIA}</span>
                 </div>
                 <div className="info-stock info-standard">
                     <label>TC: </label>
-                    <span className="standard">{infoStock?.giaTC}</span>
+                    <span className="standard">{infoStock?.giaTC / gia.GIA}</span>
                 </div>
             </div>
         </React.Fragment>
@@ -150,7 +155,6 @@ function FormOrder(props) {
     }
     let onChangeListStock = (event) => {
         setMaCK(event)
-        // tempValueStock(event);
     }
     let onChangeListBank = (event) => {
         tempValueBank(event);
@@ -255,7 +259,7 @@ function FormOrder(props) {
                                     <Form.Item name='loaiLenh' style={{ textAlign: 'center' }}  >
                                         <Radio.Group defaultValue='LO'>
                                             <Radio value='ATC' disabled>ATC</Radio>
-                                            <Radio value='ATO' disabled>ATO</Radio>
+                                            <Radio value='ATO'>ATO</Radio>
                                             <Radio value='LO'>LO</Radio>
                                         </Radio.Group>
                                     </Form.Item>
@@ -302,7 +306,7 @@ function FormOrder(props) {
                             onCancel={() => setVisibleConfirm(false)}
                             okText="Xác nhận"
                             cancelText="Đóng"
-                            confirmLoading={confirmLoading}
+                        // confirmLoading={confirmLoading}
                         >
                             <div class="modal-info">
                                 <p class="modal-info-title">Quý khách có thật sự muốn đặt lệnh <span className={order.loaiGiaoDich ? "color-green" : "color-red"}>{order.loaiGiaoDich ? 'Mua' : 'Bán'}</span>

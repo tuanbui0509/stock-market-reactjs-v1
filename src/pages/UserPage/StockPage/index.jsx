@@ -1,16 +1,11 @@
 import { Table } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
 import queryString from 'query-string';
+import React, { useEffect, useState } from 'react';
 import callApi from '../../../utils/apiCaller';
-import * as types from '../../../constants/Report/ActionType';
 
 function StockPage() {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
-    const dispatch = useDispatch()
-
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 5,
