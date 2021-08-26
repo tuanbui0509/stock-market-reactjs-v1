@@ -8,7 +8,12 @@ export default function callApi(endpoint, method, body = {}) {
             method: method,
             url: `${Config.API_URL}/${endpoint}`,
             data: body
-        }).catch(err => (err.response))
+        }).catch(err => {
+            if (err.response.status === 401) {
+                window.location = "/login"
+            }
+            return err.response
+        })
     else {
         token = JSON.parse(token);
         // console.log(token);
@@ -18,7 +23,12 @@ export default function callApi(endpoint, method, body = {}) {
             url: `${Config.API_URL}/${endpoint}`,
             headers: { Authorization: auToken },
             data: body
-        }).catch(err => (err.response))
+        }).catch(err => {
+            if (err.response.status === 401) {
+                window.location = "/login"
+            }
+            return err.response
+        })
     }
 
 }

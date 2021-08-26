@@ -1,7 +1,7 @@
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { Button, Form, Input, InputNumber, Modal, Radio, Select } from 'antd';
 import { openNotificationError } from 'components/Notification';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as gia from '../../../../constants/LightningTable/index';
 import callApi from '../../../../utils/apiCaller';
@@ -169,9 +169,12 @@ function FormOrder(props) {
         let value = e.target.value
         fetchStocks(value)
     }
-
+    const [form] = Form.useForm();
 
     async function fetchStocks(value) {
+        form.setFieldsValue({
+            maCp: '',
+        });
         try {
             if (value) {
                 let res = await callApi('CoPhieu', 'GET', null);
@@ -180,6 +183,7 @@ function FormOrder(props) {
             } else {
                 let res = await callApi('ChungKhoanHienCo?current=1&pageSize=1000', 'GET', null);
                 setStocks(res.data.list)
+                // setOrder({ ...order, maCp: '' })
                 tempValueStock(macp)
             }
         } catch (error) {
@@ -205,6 +209,7 @@ function FormOrder(props) {
                             <Form id='my_form'
                                 {...formItemLayout}
                                 onFinish={onFinish}
+                                form={form}
                                 className="modal-form"
                                 initialValues={
                                     {
