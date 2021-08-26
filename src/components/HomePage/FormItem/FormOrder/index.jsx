@@ -281,7 +281,7 @@ function FormOrder(props) {
                                     <Form.Item name="mkdatLenh" label="Mã pin"
                                         rules={[{ required: true, message: "Không được bỏ trống !" }]}>
                                         <Input.Password
-                                            placeholder="input password"
+                                            placeholder="Nhập mã pin"
                                             iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
                                         />
                                     </Form.Item>
