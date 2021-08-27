@@ -169,7 +169,7 @@ function PurchasedOneDayPage() {
         <>
             <Table
                 columns={columns}
-                dataSource={stocks}
+                dataSource={stocks.list}
                 pagination={pagination}
                 loading={loading}
                 onChange={handleTableChange}
