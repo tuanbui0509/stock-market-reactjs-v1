@@ -4,6 +4,7 @@ import { openNotificationError, openNotificationSuccess } from 'components/Notif
 import { format } from 'date-fns';
 import queryString from 'query-string';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import * as types from '../../../constants/Report/ActionType';
 import callApi from '../../../utils/apiCaller';
@@ -12,11 +13,7 @@ function PurchasedOneDayPage() {
     const [loading, setLoading] = useState(false)
     const dispatch = useDispatch()
     const date = new Date()
-
-    function getDateCurrent() {
-        const dateString = format(date, 'MM/dd/yyyy')
-        return dateString
-    }
+    const stocks = useSelector(state => state.StockToday)
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 5,
@@ -32,12 +29,12 @@ function PurchasedOneDayPage() {
             const paramsString = queryString.stringify(pagination);
             const requestUrl = `LenhDat/trongngay?${paramsString}`;
             const res = await callApi(requestUrl, 'GET', null)
-            dispatch({ type: types.HISTORY_ORDER, payload: res.data })
+            dispatch({ type: types.STOCK_TODAY, payload: res.data })
             console.log(res);
             setTimeout(() => {
                 setLoading(false)
             }, 300);
-            setData(res.data.list)
+            // setData(res.data.list)
             res.data.list.forEach((e) => {
                 let value = new Date(e.thoiGian)
                 const dateString = format(value, 'dd/MM/yyyy kk:mm:ss')
@@ -152,6 +149,7 @@ function PurchasedOneDayPage() {
             if (res.data.status === 0) {
                 dispatch({ type: types.CANCEL_STOCK_TODAY, id: maLD });
                 openNotificationSuccess('Thành công', res.data.message, 2)
+                // setData(stocks.list)
             }
             else {
                 openNotificationError('Thất bại', res.data.message, 2);
@@ -166,7 +164,7 @@ function PurchasedOneDayPage() {
         <>
             <Table
                 columns={columns}
-                dataSource={data}
+                dataSource={stocks ? stocks.list : []}
                 pagination={pagination}
                 loading={loading}
                 onChange={handleTableChange}
