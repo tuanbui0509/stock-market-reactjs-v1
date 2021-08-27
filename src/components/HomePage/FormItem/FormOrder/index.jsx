@@ -177,7 +177,7 @@ function FormOrder(props) {
         });
         try {
             if (value) {
-                let res = await callApi('CoPhieu', 'GET', null);
+                let res = await callApi('CoPhieu?current=1&pageSize=1000', 'GET', null);
                 setStocks(res.data)
                 tempValueStock(macp)
             } else {
