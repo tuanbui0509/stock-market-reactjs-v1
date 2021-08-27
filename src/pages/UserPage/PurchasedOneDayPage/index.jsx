@@ -35,7 +35,7 @@ function PurchasedOneDayPage() {
             const requestUrl = `LenhDat/trongngay?${paramsString}`;
             const res = await callApi(requestUrl, 'GET', null)
             dispatch({ type: types.STOCK_TODAY, payload: res.data })
-            console.log(res);
+            setData(res.data.list)
             setTimeout(() => {
                 setLoading(false)
             }, 300);
@@ -83,7 +83,7 @@ function PurchasedOneDayPage() {
             title: 'Ngày',
             dataIndex: 'thoiGian',
             key: 'thoiGian',
-            width: 300,
+            width: 400,
             fixed: 'center',
         },
         {
@@ -186,7 +186,7 @@ function PurchasedOneDayPage() {
         <>
             <Table
                 columns={columns}
-                dataSource={stocks ? stocks.list : []}
+                dataSource={data}
                 pagination={pagination}
                 loading={loading}
                 onChange={handleTableChange}
