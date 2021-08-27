@@ -146,9 +146,8 @@ function PurchasedOneDayPage() {
     ]
 
     const handleCancel = async (maLD) => {
-        try {
-            console.log(maLD);
-            const res = await callApi(`DonDangKy/${maLD}`, 'PUT')
+        console.log(maLD);
+            const res = await callApi(`Lenhdat/${maLD}`, 'PUT')
             console.log(res);
             if (res.data.status === 0) {
                 dispatch({ type: types.CANCEL_STOCK_TODAY, id: maLD });
@@ -156,11 +155,7 @@ function PurchasedOneDayPage() {
             }
             else {
                 openNotificationError('Thất bại', res.data.message, 2);
-
             }
-        } catch (err) {
-            openNotificationError('Thất bại', 'Lỗi dữ liệu trong máy chủ', 2);
-        }
     }
     const handleTableChange = (pagination) => {
         setPagination({ ...pagination, current: pagination.current })

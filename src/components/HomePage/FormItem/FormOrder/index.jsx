@@ -300,7 +300,7 @@ function FormOrder(props) {
                         </div>
                     </div>
                     <small style={{ textAlign: 'center', display: 'block', marginTop: '1rem' }}>
-                        Giá x 1000 VNĐ. Khối lượng x 10. Giá trị x 1000000 VNĐ
+                        Giá x 1000 VNĐ. Bản quyền thuộc về Công ty Cổ phần Chứng khoán NTNT. © 2021.
                     </small>
                     {visibleConfirm
                         ? <Modal
