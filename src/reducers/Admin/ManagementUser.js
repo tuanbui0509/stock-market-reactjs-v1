@@ -1,5 +1,5 @@
 import * as types from '../../constants/Admin/ActionType';
-const initialState = [];
+const initialState = {};
 let ManagementUser = (state = initialState, action) => {
     let { payload, type } = action;
     switch (type) {

@@ -10,11 +10,10 @@ export default function RegisterFormList(props) {
                     <table>
                         <thead>
                             <tr>
-                                <th>STT</th>
                                 <th>Mã đơn</th>
                                 <th>Họ Tên</th>
                                 <th>Giới tính</th>
-                                <th>Nơi sinh</th>
+                                <th>CMND</th>
                                 <th>Địa chỉ</th>
                                 <th>Email</th>
                                 <th>Số điện thoại</th>

@@ -1,65 +1,68 @@
-import React, { useEffect } from 'react'
+import Pagination from 'components/Common/Pagination';
+import { openNotificationError, openNotificationSuccess } from 'components/Notification';
+import queryString from 'query-string';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import RegisterFormList from './RegisterFormList'
-import RegisterFormItem from './RegisterFormItem'
 import * as types from '../../../constants/Admin/ActionType';
-import apiCaller from '../../../utils/apiCaller'
-import callApi from '../../../utils/apiCaller';
-import { openNotificationSuccess } from 'components/Notification';
-import { openNotificationError } from 'components/Notification';
+import { default as apiCaller, default as callApi } from '../../../utils/apiCaller';
+import RegisterFormItem from './RegisterFormItem';
+import RegisterFormList from './RegisterFormList';
 
 
 export default function ManagementRegisterForm() {
     const listFormRegister = useSelector(state => state.RegisterForm);
     const dispatch = useDispatch();
-    useEffect(() => {
-        const FetchListRegisterForm = async () => {
-            try {
-                const res = await apiCaller('DonDangKy', 'GET', null);
-                dispatch({ type: types.FETCH_LIST_REGISTER_FORM, payload: res.data });
-            } catch (err) {
 
-            }
-        }
+    const [filters, setFilters] = useState({
+        current: 1,
+        pageSize: 10,
+    });
+    const [paging, setPaging] = useState({
+        current: 1,
+    })
+    useEffect(() => {
+
 
         FetchListRegisterForm()
-    }, [])
+    }, [filters])
 
+    const FetchListRegisterForm = async () => {
+        const paramsString = queryString.stringify(filters);
+        const requestUrl = `DonDangKy?${paramsString}`;
+        const res = await apiCaller(requestUrl, 'GET', null)
+        dispatch({ type: types.FETCH_LIST_REGISTER_FORM, payload: res.data });
+        setPaging({ ...paging, current: res.data.currentPage, total: res.data.totalItem })
+    }
     const handleConfirmChange = async (id) => {
-        try {
-            const res = await callApi(`DonDangKy/${id}`, 'PUT')
-            console.log(res);
-            if(res.data.status == 0){
-                openNotificationSuccess('Thành công', res.data.message, 2)
-                dispatch({ type: types.CONFIRM_REGISTER_FORM, id: id });
-            }
-            else{
-                openNotificationError('Thất bại', res.data.message, 2);
-            }
-        } catch (err) {
-            openNotificationError('Thất bại', 'Lỗi dữ liệu trong máy chủ', 2);
+        console.log('put ', id);
+        const res = await callApi(`DonDangKy/${id}`, 'PUT')
+        console.log(res);
+        if (res.data.status == 0) {
+            openNotificationSuccess('Thành công', res.data.message, 2)
+            dispatch({ type: types.CONFIRM_REGISTER_FORM, id: id });
+        }
+        else {
+            openNotificationError('Thất bại', res.data.message, 2);
         }
     }
     const handleDeleteChange = async (id) => {
-        try {
-            const res = await callApi(`DonDangKy/${id}`, 'DELETE')
-            console.log(res);
-            if(res.data.status == 0){
-                openNotificationSuccess('Thành công', res.data.message, 2)
-                dispatch({ type: types.DELETE_REGISTER_FORM, id: id });
-            }
-            else{
-                openNotificationError('Thất bại', res.data.message, 2);
-            }
-        } catch (err) {
-            openNotificationError('Thất bại', 'Lỗi dữ liệu trong máy chủ', 2);
+        console.log('delete ', id);
+        const res = await callApi(`DonDangKy/${id}`, 'DELETE')
+        console.log(res);
+        if (res.data.status == 0) {
+            openNotificationSuccess('Thành công', res.data.message, 2)
+            dispatch({ type: types.DELETE_REGISTER_FORM, id: id });
         }
+        else {
+            openNotificationError('Thất bại', res.data.message, 2);
+        }
+
     }
 
     const showListFormRegister = () => {
         let result = null
-        if (listFormRegister) {
-            result = listFormRegister.map((order, index) => {
+        if (listFormRegister.list) {
+            result = listFormRegister.list.map((order, index) => {
                 return (
                     <RegisterFormItem
                         key={index}
@@ -76,6 +79,11 @@ export default function ManagementRegisterForm() {
     return (
         <>
             <RegisterFormList >{showListFormRegister()}</RegisterFormList>
+            {paging.total > 0 ? <Pagination
+                filters={filters}
+                setFilters={setFilters}
+                paging={paging}
+            /> : null}
         </>
     )
 }
