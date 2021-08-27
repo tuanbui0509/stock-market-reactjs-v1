@@ -1,5 +1,5 @@
-import { CloseSquareTwoTone } from '@ant-design/icons';
-import { Table } from 'antd';
+import { CloseSquareTwoTone, QuestionCircleOutlined } from '@ant-design/icons';
+import { Popconfirm, Table } from 'antd';
 import { openNotificationError, openNotificationSuccess } from 'components/Notification';
 import { format } from 'date-fns';
 import queryString from 'query-string';
@@ -13,6 +13,11 @@ function PurchasedOneDayPage() {
     const [loading, setLoading] = useState(false)
     const dispatch = useDispatch()
     const date = new Date()
+    const [deleteVisible, setDeleteVisible] = React.useState(false);
+
+    const showPopDelete = () => {
+        setDeleteVisible(true)
+    };
     const stocks = useSelector(state => state.StockToday)
     const [pagination, setPagination] = useState({
         current: 1,
@@ -34,7 +39,6 @@ function PurchasedOneDayPage() {
             setTimeout(() => {
                 setLoading(false)
             }, 300);
-            // setData(res.data.list)
             res.data.list.forEach((e) => {
                 let value = new Date(e.thoiGian)
                 const dateString = format(value, 'dd/MM/yyyy kk:mm:ss')
@@ -134,26 +138,44 @@ function PurchasedOneDayPage() {
             fixed: 'center',
             render: (maTT, maLD) => (
                 <>
-                    {maTT.trim() === 'CK' ? <CloseSquareTwoTone onClick={() => handleCancel(maLD.maLD)}
-                        style={{ fontSize: '1.5rem', cursor: 'pointer', textAlign: 'center' }}
-                    /> : null}
+                    {maTT.trim() === 'CK' ?
+                        <Popconfirm
+                            title="Bạn có muốn hủy đơn đăng ký này không?"
+                            visible={deleteVisible}
+                            onConfirm={handleOkDelete(maLD.maLD)}
+                            // okButtonProps={{ loading: confirmLoading }}
+                            onCancel={handleCancel}
+                            okText='Xác nhận'
+                            cancelText='Hủy bỏ'
+                            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                        >
+                            <CloseSquareTwoTone onClick={() => showPopDelete}
+                                style={{ fontSize: '1.5rem', cursor: 'pointer', textAlign: 'center' }}
+                            />
+                        </Popconfirm>
+
+                        : null}
                 </>
             ),
         }
     ]
 
-    const handleCancel = async (maLD) => {
+    const handleCancel = () => {
+        setDeleteVisible(false);
+    };
+
+    const handleOkDelete = async (maLD) => {
         console.log(maLD);
-            const res = await callApi(`Lenhdat/${maLD}`, 'PUT')
-            console.log(res);
-            if (res.data.status === 0) {
-                dispatch({ type: types.CANCEL_STOCK_TODAY, id: maLD });
-                openNotificationSuccess('Thành công', res.data.message, 2)
-                // setData(stocks.list)
-            }
-            else {
-                openNotificationError('Thất bại', res.data.message, 2);
-            }
+        const res = await callApi(`Lenhdat/${maLD}`, 'PUT')
+        console.log(res);
+        if (res.data.status === 0) {
+            openNotificationSuccess('Thành công', res.data.message, 2)
+        }
+        else {
+            openNotificationError('Thất bại', res.data.message, 2);
+        }
+        fetchData(pagination);
+        setDeleteVisible(false);
     }
     const handleTableChange = (pagination) => {
         setPagination({ ...pagination, current: pagination.current })

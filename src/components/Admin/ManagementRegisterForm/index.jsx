@@ -21,10 +21,15 @@ export default function ManagementRegisterForm() {
         current: 1,
     })
     useEffect(() => {
-
-
         FetchListRegisterForm()
     }, [filters])
+
+    useEffect(() => {
+        if (listFormRegister.list.length === 0 && paging.current !== 1) {
+            let pos = paging.current - 1;
+            setFilters({ ...filters, current: pos })
+        }
+    }, [listFormRegister.list.length])
 
     const FetchListRegisterForm = async () => {
         const paramsString = queryString.stringify(filters);
@@ -37,9 +42,9 @@ export default function ManagementRegisterForm() {
         console.log('put ', id);
         const res = await callApi(`DonDangKy/${id}`, 'PUT')
         console.log(res);
-        if (res.data.status == 0) {
+        if (res.data.status === 0) {
             openNotificationSuccess('Thành công', res.data.message, 2)
-            dispatch({ type: types.CONFIRM_REGISTER_FORM, id: id });
+            FetchListRegisterForm()
         }
         else {
             openNotificationError('Thất bại', res.data.message, 2);
@@ -49,15 +54,19 @@ export default function ManagementRegisterForm() {
         console.log('delete ', id);
         const res = await callApi(`DonDangKy/${id}`, 'DELETE')
         console.log(res);
-        if (res.data.status == 0) {
+        if (res.data.status === 0) {
             openNotificationSuccess('Thành công', res.data.message, 2)
-            dispatch({ type: types.DELETE_REGISTER_FORM, id: id });
+            FetchListRegisterForm()
         }
         else {
             openNotificationError('Thất bại', res.data.message, 2);
         }
-
     }
+
+    // const handleOnChange = () => {
+    //     FetchListRegisterForm()
+
+    // }
 
     const showListFormRegister = () => {
         let result = null
