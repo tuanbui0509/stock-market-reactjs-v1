@@ -10,7 +10,9 @@ export default function callApi(endpoint, method, body = {}) {
             data: body
         }).catch(err => {
             if (err.response.status === 401) {
-                window.location = "/login"
+                window.location = "/logout"
+            }else if(err.response.status >= 500){
+                window.location = "/not-found"
             }
             return err.response
         })
@@ -25,7 +27,9 @@ export default function callApi(endpoint, method, body = {}) {
             data: body
         }).catch(err => {
             if (err.response.status === 401) {
-                window.location = "/login"
+                window.location = "/logout"
+            }else if(err.response.status >= 500){
+                window.location = "/not-found"
             }
             return err.response
         })

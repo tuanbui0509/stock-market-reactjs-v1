@@ -29,18 +29,28 @@ export default function ManagementRegisterForm() {
         try {
             const res = await callApi(`DonDangKy/${id}`, 'PUT')
             console.log(res);
-            openNotificationSuccess('Thành công', 'Xác nhận đơn thành công', 2)
-            dispatch({ type: types.CONFIRM_REGISTER_FORM, id: id });
+            if(res.data.status == 0){
+                openNotificationSuccess('Thành công', res.data.message, 2)
+                dispatch({ type: types.CONFIRM_REGISTER_FORM, id: id });
+            }
+            else{
+                openNotificationError('Thất bại', res.data.message, 2);
+            }
         } catch (err) {
             openNotificationError('Thất bại', 'Lỗi dữ liệu trong máy chủ', 2);
         }
     }
     const handleDeleteChange = async (id) => {
         try {
-            const res = await callApi(`DonDangKy/${id}`, 'PUT')
+            const res = await callApi(`DonDangKy/${id}`, 'DELETE')
             console.log(res);
-            openNotificationSuccess('Thành công', 'Hủy đơn thành công', 2)
-            dispatch({ type: types.DELETE_REGISTER_FORM, id: id });
+            if(res.data.status == 0){
+                openNotificationSuccess('Thành công', res.data.message, 2)
+                dispatch({ type: types.DELETE_REGISTER_FORM, id: id });
+            }
+            else{
+                openNotificationError('Thất bại', res.data.message, 2);
+            }
         } catch (err) {
             openNotificationError('Thất bại', 'Lỗi dữ liệu trong máy chủ', 2);
         }
