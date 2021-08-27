@@ -140,16 +140,16 @@ function PurchasedOneDayPage() {
                 <>
                     {maTT.trim() === 'CK' ?
                         <Popconfirm
-                            title="Bạn có muốn hủy đơn đăng ký này không?"
+                            title="Bạn có muốn hủy lệnh này không?"
                             visible={deleteVisible}
-                            onConfirm={handleOkDelete(maLD.maLD)}
+                            onConfirm={() => handleOkDelete(maLD.maLD)}
                             // okButtonProps={{ loading: confirmLoading }}
                             onCancel={handleCancel}
                             okText='Xác nhận'
                             cancelText='Hủy bỏ'
                             icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
                         >
-                            <CloseSquareTwoTone onClick={() => showPopDelete}
+                            <CloseSquareTwoTone onClick={showPopDelete}
                                 style={{ fontSize: '1.5rem', cursor: 'pointer', textAlign: 'center' }}
                             />
                         </Popconfirm>
