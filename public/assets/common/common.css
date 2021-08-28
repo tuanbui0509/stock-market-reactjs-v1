@@ -154,7 +154,7 @@ header {
 
 .header__right-account-item {
     padding: 10px;
-    border-bottom: 1px solid var(--text-color-primary);
+    /* border-bottom: 1px solid var(--text-color-primary); */
     cursor: pointer;
     font-weight: 500;
     color: var(--color-white-active);

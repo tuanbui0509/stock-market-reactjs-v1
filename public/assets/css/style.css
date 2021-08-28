@@ -722,3 +722,16 @@ label.totalPrice strong {
     color: white;
     background-color: #079ad9;
 }
+
+button.ant-btn.ant-dropdown-link.header__right-account-label {
+    outline: none;
+    background: none;
+    border: none;
+    display: block;
+    padding:0;
+    border-radius: 50%;
+}
+
+input[type="button"]:focus{
+    outline: none;
+}
