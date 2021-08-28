@@ -18,182 +18,183 @@ function PurchasedOneDayPage() {
     const showPopDelete = (maLD) => {
         console.log(maLD);
         setDeleteVisible(true)
-        const stocks = useSelector(state => state.StockToday)
-        const [pagination, setPagination] = useState({
-            current: 1,
-            pageSize: 5,
-        })
-        useEffect(() => {
-            fetchData(pagination);
-        }, [])
+    };
+    const stocks = useSelector(state => state.StockToday)
+    const [pagination, setPagination] = useState({
+        current: 1,
+        pageSize: 5,
+    })
+    useEffect(() => {
+        fetchData(pagination);
+    }, [])
 
 
-        const fetchData = async (pagination) => {
-            setLoading(true)
-            try {
-                const paramsString = queryString.stringify(pagination);
-                const requestUrl = `LenhDat/trongngay?${paramsString}`;
-                const res = await callApi(requestUrl, 'GET', null)
-                dispatch({ type: types.STOCK_TODAY, payload: res.data })
-                setData(res.data.list)
-                setTimeout(() => {
-                    setLoading(false)
-                }, 300);
-                res.data.list.forEach((e) => {
-                    let value = new Date(e.thoiGian)
-                    const dateString = format(value, 'dd/MM/yyyy kk:mm:ss')
-                    e.thoiGian = dateString;
-                    e.loaiGiaoDich = e.loaiGiaoDich ? 'Mua' : 'Bán'
-                })
-                setPagination({ ...pagination, current: res.data.currentPage, total: res.data.totalItem })
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        const columns = [
-            {
-                title: 'Mã lệnh',
-                dataIndex: 'maLD',
-                key: 'maLD',
-                width: 120,
-                fixed: 'center',
-            },
-            {
-                title: 'Mã CK',
-                dataIndex: 'maCP',
-                key: 'maCP',
-                width: 200,
-                fixed: 'center',
-            },
-            {
-                title: 'Mua/Bán',
-                dataIndex: 'loaiGiaoDich',
-                key: 'loaiGiaoDich',
-                width: 100,
-                fixed: 'center',
-            },
-            {
-                title: 'Từ tài khoản',
-                dataIndex: 'stk',
-                key: 'stk',
-                width: 200,
-                fixed: 'center',
-            },
-            {
-                title: 'Ngày',
-                dataIndex: 'thoiGian',
-                key: 'thoiGian',
-                width: 400,
-                fixed: 'center',
-            },
-            {
-                title: 'Thông tin cổ phiếu',
-                children: [
-                    {
-                        title: 'Khối lượng',
-                        dataIndex: 'soLuong',
-                        key: 'soLuong',
-                        width: 100,
-
-                    },
-                    {
-                        title: 'Giá',
-                        dataIndex: 'gia',
-                        key: 'gia',
-                        width: 100,
-                    },
-                    {
-                        title: 'Khối lượng khớp',
-                        dataIndex: 'slKhop',
-                        key: 'slKhop',
-                        width: 100,
-                    }
-                    ,
-                    {
-                        title: 'Giá khớp',
-                        dataIndex: 'giaKhop',
-                        key: 'giaKhop',
-                        width: 100,
-                    },
-                    {
-                        title: 'Giá trị khớp',
-                        dataIndex: 'giaTriKhop',
-                        key: 'giaTriKhop',
-                        width: 100,
-                    }
-                ],
-            },
-            {
-                title: 'Trạng thái',
-                dataIndex: 'tenTrangThai',
-                key: 'tenTrangThai',
-                width: 300,
-                fixed: 'center',
-            },
-            {
-                title: 'Hủy lệnh',
-                dataIndex: 'maTT',
-                key: 'maTT',
-                width: 100,
-                fixed: 'center',
-                render: (maTT, maLD) => (
-                    <>
-                        {maTT.trim() === 'CK' ?
-                            <Popconfirm
-                                title="Bạn có muốn hủy lệnh này không?"
-                                // visible={deleteVisible}
-                                onConfirm={() => handleOkDelete(maLD.maLD)}
-                                // okButtonProps={{ loading: confirmLoading }}
-                                onCancel={handleCancel}
-                                okText='Xác nhận'
-                                cancelText='Hủy bỏ'
-                                icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-                            >
-                                <CloseSquareTwoTone
-                                    onClick={() => showPopDelete(maLD.maLD)}
-                                    style={{ fontSize: '1.5rem', cursor: 'pointer', textAlign: 'center' }}
-                                />
-                            </Popconfirm>
-
-                            : null}
-                    </>
-                ),
-            }
-        ]
-
-        const handleCancel = () => {
-            setDeleteVisible(false);
-        };
-
-        const handleOkDelete = async (maLD) => {
-            console.log(maLD);
-            const res = await callApi(`Lenhdat/${maLD}`, 'PUT')
-            console.log(res);
-            if (res.data.status === 0) {
-                openNotificationSuccess('Thành công', res.data.message, 2)
-            }
-            else {
-                openNotificationError('Thất bại', res.data.message, 2);
-            }
-            fetchData(pagination);
-            setDeleteVisible(false);
+    const fetchData = async (pagination) => {
+        setLoading(true)
+        try {
+            const paramsString = queryString.stringify(pagination);
+            const requestUrl = `LenhDat/trongngay?${paramsString}`;
+            const res = await callApi(requestUrl, 'GET', null)
+            dispatch({ type: types.STOCK_TODAY, payload: res.data })
+            setData(res.data.list)
+            setTimeout(() => {
+                setLoading(false)
+            }, 300);
+            res.data.list.forEach((e) => {
+                let value = new Date(e.thoiGian)
+                const dateString = format(value, 'dd/MM/yyyy kk:mm:ss')
+                e.thoiGian = dateString;
+                e.loaiGiaoDich = e.loaiGiaoDich ? 'Mua' : 'Bán'
+            })
+            setPagination({ ...pagination, current: res.data.currentPage, total: res.data.totalItem })
+        } catch (error) {
+            console.log(error);
         }
-        const handleTableChange = (pagination) => {
-            setPagination({ ...pagination, current: pagination.current })
-            fetchData(pagination);
-        };
+    };
+    const columns = [
+        {
+            title: 'Mã lệnh',
+            dataIndex: 'maLD',
+            key: 'maLD',
+            width: 120,
+            fixed: 'center',
+        },
+        {
+            title: 'Mã CK',
+            dataIndex: 'maCP',
+            key: 'maCP',
+            width: 200,
+            fixed: 'center',
+        },
+        {
+            title: 'Mua/Bán',
+            dataIndex: 'loaiGiaoDich',
+            key: 'loaiGiaoDich',
+            width: 100,
+            fixed: 'center',
+        },
+        {
+            title: 'Từ tài khoản',
+            dataIndex: 'stk',
+            key: 'stk',
+            width: 200,
+            fixed: 'center',
+        },
+        {
+            title: 'Ngày',
+            dataIndex: 'thoiGian',
+            key: 'thoiGian',
+            width: 400,
+            fixed: 'center',
+        },
+        {
+            title: 'Thông tin cổ phiếu',
+            children: [
+                {
+                    title: 'Khối lượng',
+                    dataIndex: 'soLuong',
+                    key: 'soLuong',
+                    width: 100,
 
-        return (
-            <>
-                <Table
-                    columns={columns}
-                    dataSource={data}
-                    pagination={pagination}
-                    loading={loading}
-                    onChange={handleTableChange}
-                />
-            </>
-        )
+                },
+                {
+                    title: 'Giá',
+                    dataIndex: 'gia',
+                    key: 'gia',
+                    width: 100,
+                },
+                {
+                    title: 'Khối lượng khớp',
+                    dataIndex: 'slKhop',
+                    key: 'slKhop',
+                    width: 100,
+                }
+                ,
+                {
+                    title: 'Giá khớp',
+                    dataIndex: 'giaKhop',
+                    key: 'giaKhop',
+                    width: 100,
+                },
+                {
+                    title: 'Giá trị khớp',
+                    dataIndex: 'giaTriKhop',
+                    key: 'giaTriKhop',
+                    width: 100,
+                }
+            ],
+        },
+        {
+            title: 'Trạng thái',
+            dataIndex: 'tenTrangThai',
+            key: 'tenTrangThai',
+            width: 300,
+            fixed: 'center',
+        },
+        {
+            title: 'Hủy lệnh',
+            dataIndex: 'maTT',
+            key: 'maTT',
+            width: 100,
+            fixed: 'center',
+            render: (maTT, maLD) => (
+                <>
+                    {maTT.trim() === 'CK' ?
+                        <Popconfirm
+                            title="Bạn có muốn hủy lệnh này không?"
+                            // visible={deleteVisible}
+                            onConfirm={() => handleOkDelete(maLD.maLD)}
+                            // okButtonProps={{ loading: confirmLoading }}
+                            onCancel={handleCancel}
+                            okText='Xác nhận'
+                            cancelText='Hủy bỏ'
+                            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                        >
+                            <CloseSquareTwoTone
+                                onClick={() => showPopDelete(maLD.maLD)}
+                                style={{ fontSize: '1.5rem', cursor: 'pointer', textAlign: 'center' }}
+                            />
+                        </Popconfirm>
+
+                        : null}
+                </>
+            ),
+        }
+    ]
+
+    const handleCancel = () => {
+        setDeleteVisible(false);
+    };
+
+    const handleOkDelete = async (maLD) => {
+        console.log(maLD);
+        const res = await callApi(`Lenhdat/${maLD}`, 'PUT')
+        console.log(res);
+        if (res.data.status === 0) {
+            openNotificationSuccess('Thành công', res.data.message, 2)
+        }
+        else {
+            openNotificationError('Thất bại', res.data.message, 2);
+        }
+        fetchData(pagination);
+        setDeleteVisible(false);
     }
+    const handleTableChange = (pagination) => {
+        setPagination({ ...pagination, current: pagination.current })
+        fetchData(pagination);
+    };
 
-    export default PurchasedOneDayPage
+    return (
+        <>
+            <Table
+                columns={columns}
+                dataSource={data}
+                pagination={pagination}
+                loading={loading}
+                onChange={handleTableChange}
+            />
+        </>
+    )
+}
+
+export default PurchasedOneDayPage
