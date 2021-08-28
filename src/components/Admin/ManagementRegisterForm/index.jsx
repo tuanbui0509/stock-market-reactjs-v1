@@ -25,11 +25,11 @@ export default function ManagementRegisterForm() {
     }, [filters])
 
     useEffect(() => {
-        if (listFormRegister.list.length === 0 && paging.current !== 1) {
+        if (listFormRegister.list!== null && Array.isArray(listFormRegister.list) && listFormRegister.list.length === 0 && paging.current !== 1) {
             let pos = paging.current - 1;
             setFilters({ ...filters, current: pos })
         }
-    }, [listFormRegister.list.length])
+    }, [listFormRegister.list])
 
     const FetchListRegisterForm = async () => {
         const paramsString = queryString.stringify(filters);

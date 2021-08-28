@@ -139,21 +139,21 @@ function PurchasedOneDayPage() {
             render: (maTT, maLD) => (
                 <>
                     {maTT.trim() === 'CK' ?
-                        <Popconfirm
-                            title="Bạn có muốn hủy lệnh này không?"
-                            visible={deleteVisible}
-                            onConfirm={() => handleOkDelete(maLD.maLD)}
-                            // okButtonProps={{ loading: confirmLoading }}
-                            onCancel={handleCancel}
-                            okText='Xác nhận'
-                            cancelText='Hủy bỏ'
-                            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-                        >
-                            <CloseSquareTwoTone onClick={showPopDelete}
-                                style={{ fontSize: '1.5rem', cursor: 'pointer', textAlign: 'center' }}
-                            />
-                        </Popconfirm>
-
+                        // <Popconfirm
+                        //     title="Bạn có muốn hủy lệnh này không?"
+                        //     visible={deleteVisible}
+                        //     onConfirm={() => handleOkDelete(maLD.maLD)}
+                        //     // okButtonProps={{ loading: confirmLoading }}
+                        //     onCancel={handleCancel}
+                        //     okText='Xác nhận'
+                        //     cancelText='Hủy bỏ'
+                        //     icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                        // >
+                            
+                        // </Popconfirm>
+                        <CloseSquareTwoTone onClick={() => handleOkDelete(maLD.maLD)}
+                        style={{ fontSize: '1.5rem', cursor: 'pointer', textAlign: 'center' }}
+                    />
                         : null}
                 </>
             ),
