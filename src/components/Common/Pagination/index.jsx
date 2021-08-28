@@ -18,7 +18,7 @@ export default function Pagination(props) {
             previousLabel={'Trước'}
             nextLabel={'Kế tiếp'}
             pageCount={total}
-            disabledClassName
+            disabledClassName="disabled-btn"
             marginPagesDisplayed={0}
             pageRangeDisplayed={2}
             containerClassName="pagination"

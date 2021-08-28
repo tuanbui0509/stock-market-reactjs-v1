@@ -11,10 +11,17 @@
   font-style: normal;
   font-weight: normal;
   font-size: 1rem;
+  margin-right: 5px;
 }
 
 .pagination .previous a {
-  color: rgba(108, 117, 125, 1);
+  color: rgb(105, 156, 252);
+  
+}
+
+.disabled-btn a{
+  cursor: not-allowed;
+  color: rgba(108, 117, 125, 1)!important;
 }
 
 .pagination .next {
@@ -24,6 +31,8 @@
   font-style: normal;
   font-weight: normal;
   font-size: 1rem;
+  margin-left: 5px;
+
 }
 
 .pagination .next a {
@@ -48,6 +57,7 @@ ul.pagination li {
   justify-content: center;
   padding: 4px;
   background-color: white;
+  cursor: pointer;
 }
 
 .numberPage {
