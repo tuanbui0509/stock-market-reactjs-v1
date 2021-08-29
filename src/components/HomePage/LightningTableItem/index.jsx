@@ -37,7 +37,7 @@ function LightningTableItem(props) {
     return (
         <tr className="stock" id={macp}>
             <td
-                className={ClassNameRender(giaTran, giaSan, giaTC, gia) + " stockID"}
+                className={gia===null?'txt-standard':ClassNameRender(giaTran, giaSan, giaTC, gia) + " stockID"}
                 //data-tooltip="Công ty công nghệ VJC"
                 onClick={() => props.onHandleOrder(macp)}>{macp}</td>
             <td className="special txt-floor">{giaTran}</td>

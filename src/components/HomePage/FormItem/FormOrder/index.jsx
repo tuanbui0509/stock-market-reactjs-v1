@@ -3,6 +3,7 @@ import { Button, Form, Input, InputNumber, Modal, Radio, Select } from 'antd';
 import { openNotificationError } from 'components/Notification';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Formater from '../../../Common/Format'
 import * as gia from '../../../../constants/LightningTable/index';
 import callApi from '../../../../utils/apiCaller';
 import './FormOrder.css';
@@ -122,7 +123,7 @@ function FormOrder(props) {
         if (index === -1)
             return;
         let res = bankList[index];
-        setBank({ nganhang: res.nganHang.tenNganHang, soDu: res.soDu });
+        setBank({ nganhang: res.nganHang.tenNganHang, soDu: Formater(res.soDu) });
     }
 
     let stockInformation = () => {
@@ -264,7 +265,7 @@ function FormOrder(props) {
                                     <Form.Item name='loaiLenh' style={{ textAlign: 'center' }}  >
                                         <Radio.Group defaultValue='LO'>
                                             <Radio value='ATC' disabled>ATC</Radio>
-                                            <Radio value='ATO'>ATO</Radio>
+                                            <Radio value='ATO' disabled>ATO</Radio>
                                             <Radio value='LO'>LO</Radio>
                                         </Radio.Group>
                                     </Form.Item>

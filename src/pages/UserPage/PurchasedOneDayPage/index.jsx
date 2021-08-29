@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import * as types from '../../../constants/Report/ActionType';
 import callApi from '../../../utils/apiCaller';
+import Formater from '../../../components/Common/Format'
 function PurchasedOneDayPage() {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
@@ -41,10 +42,17 @@ function PurchasedOneDayPage() {
                 setLoading(false)
             }, 300);
             res.data.list.forEach((e) => {
+                
                 let value = new Date(e.thoiGian)
                 const dateString = format(value, 'dd/MM/yyyy kk:mm:ss')
                 e.thoiGian = dateString;
-                e.loaiGiaoDich = e.loaiGiaoDich ? 'Mua' : 'Bán'
+                e.loaiGiaoDich = e.loaiGiaoDich ? 'Mua' : 'Bán';
+                
+                e.soLuong = Formater(e.soLuong);
+                e.gia = Formater(e.gia);
+                e.slKhop = Formater(e.slKhop);
+                e.giaKhop = Formater(e.giaKhop);
+                e.giaTriKhop = Formater(e.giaTriKhop);
             })
             setPagination({ ...pagination, current: res.data.currentPage, total: res.data.totalItem })
         } catch (error) {
