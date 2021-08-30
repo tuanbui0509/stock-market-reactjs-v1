@@ -6,6 +6,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as type_status from '../../../constants/Common/ActionType';
 import callApi from '../../../utils/apiCaller';
+import Formater from '../../../components/Common/Format'
+
 const { Option } = Select;
 function HistoryOrderPage() {
     const [data, setData] = useState([])
@@ -81,6 +83,11 @@ function HistoryOrderPage() {
                 const dateString = format(value, 'dd/MM/yyyy kk:mm:ss')
                 e.thoiGian = dateString;
                 e.loaiGiaoDich = e.loaiGiaoDich ? 'Mua' : 'Bán'
+                e.soLuong = Formater(e.soLuong);
+                e.gia = Formater(e.gia);
+                e.slKhop = Formater(e.slKhop);
+                e.giaKhop = Formater(e.giaKhop);
+                e.giaTriKhop = Formater(e.giaTriKhop);
             })
             setData(res.data.list)
             setPage({ ...page, current: res.data.currentPage, total: res.data.totalItem })

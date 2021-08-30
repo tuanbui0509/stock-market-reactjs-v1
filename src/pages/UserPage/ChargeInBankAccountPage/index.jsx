@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import * as type_back from '../../../constants/Common/ActionType';
 import callApi from '../../../utils/apiCaller';
+import Formater from '../../../components/Common/Format'
+
 const { Option } = Select;
 function ChargeInBankAccount() {
     const [data, setData] = useState([])
@@ -19,6 +21,14 @@ function ChargeInBankAccount() {
         try {
             const res = await callApi('TaiKhoanNganHang', 'GET', null)
             dispatch({ type: type_back.FETCH_BANK_ACCOUNT, payload: res.data })
+            res.data.forEach((e) => {
+                
+                e.tongSoTien = Formater(e.tongSoTien);
+                e.choThanhToan = Formater(e.choThanhToan);
+                e.soDuT0 = Formater(e.soDuT0);
+                e.soDuT1 = Formater(e.soDuT1);
+                e.soDuT2 = Formater(e.soDuT2);
+            })
             let temp = []
             temp.push(res.data[0])
             setData(temp)
@@ -100,7 +110,7 @@ function ChargeInBankAccount() {
         <>
             <Row style={{ margin: '1rem' }}  >
                 <Col span={18}>
-                    <Select style={{ width: 200 }}
+                    <Select style={{ width: 250 }}
                         onChange={handleChangeBankAccount}
                         value={data[0]?.stk}
                     >

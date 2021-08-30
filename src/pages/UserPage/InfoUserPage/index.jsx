@@ -76,7 +76,7 @@ export default function InfoUserPage() {
                         setVisiblePin(false);
                         setVisiblePassword(false);
                         form.resetFields();
-                    }, 1000);
+                    }, 3000);
                 }
                 setConfirmLoading(false);
             } else {
@@ -92,7 +92,7 @@ export default function InfoUserPage() {
                         setVisiblePin(false);
                         setVisiblePassword(false);
                         form.resetFields();
-                    }, 1000);
+                    }, 3000);
                 }
                 setConfirmLoading(false);
             }
@@ -124,16 +124,16 @@ export default function InfoUserPage() {
                         </Form.Item>
                         <Form.Item
                             className='label-info-user'
-                            label="Họ"
+                            label="Họ và tên"
                         >
-                            <label className='info-user'>{user.ho}</label>
+                            <label className='info-user'>{user.ho} {user.ten}</label>
                         </Form.Item>
-                        <Form.Item
+                        {/* <Form.Item
                             className='label-info-user'
                             label="Tên"
                         >
                             <label className='info-user'>{user.ten}</label>
-                        </Form.Item>
+                        </Form.Item> */}
                         <Form.Item
                             className='label-info-user'
                             label="Nơi sinh">
@@ -149,13 +149,14 @@ export default function InfoUserPage() {
                             label="Ngày sinh">
                             <label className='info-user'>{ngaySinh}</label>
                         </Form.Item>
-                    </Col>
-                    <Col span={6} offset={4}>
                         <Form.Item
                             className='label-info-user'
                             label="Giới tính">
                             <label className='info-user'>{user.phai ? 'Nam' : 'Nữ'}</label>
                         </Form.Item>
+                    </Col>
+                    <Col span={6} offset={4}>
+
                         <Form.Item
                             className='label-info-user'
                             label="Email"

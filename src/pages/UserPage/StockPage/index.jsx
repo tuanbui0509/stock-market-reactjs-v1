@@ -2,6 +2,7 @@ import { Table } from 'antd';
 import queryString from 'query-string';
 import React, { useEffect, useState } from 'react';
 import callApi from '../../../utils/apiCaller';
+import Formater from '../../../components/Common/Format'
 
 function StockPage() {
     const [data, setData] = useState([])
@@ -25,6 +26,9 @@ function StockPage() {
             setTimeout(() => {
                 setLoading(false)
             }, 200);
+            res.data.list.forEach((e) => {
+                e.giaTriTT = Formater(e.giaTriTT);
+            })
             setData(res.data.list)
             setPagination({ ...pagination, current: res.data.currentPage, total: res.data.totalItem })
         } catch (error) {
