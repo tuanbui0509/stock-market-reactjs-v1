@@ -196,7 +196,7 @@ footer {
     font-size: 13px;
     padding: 8px;
     background: var(--background-color-primary);
-    position: fixed;
+    /* position: fixed; */
     bottom: 0;
     width: 100%;
     z-index: 99;

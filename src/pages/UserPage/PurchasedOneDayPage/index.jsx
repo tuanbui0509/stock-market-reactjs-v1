@@ -23,7 +23,7 @@ function PurchasedOneDayPage() {
     const stocks = useSelector(state => state.StockToday)
     const [pagination, setPagination] = useState({
         current: 1,
-        pageSize: 5,
+        pageSize: 10,
     })
     useEffect(() => {
         fetchData(pagination);
@@ -42,12 +42,12 @@ function PurchasedOneDayPage() {
                 setLoading(false)
             }, 300);
             res.data.list.forEach((e) => {
-                
+
                 let value = new Date(e.thoiGian)
                 const dateString = format(value, 'dd/MM/yyyy kk:mm:ss')
                 e.thoiGian = dateString;
                 e.loaiGiaoDich = e.loaiGiaoDich ? 'Mua' : 'Bán';
-                
+
                 e.soLuong = Formater(e.soLuong);
                 e.gia = Formater(e.gia);
                 e.slKhop = Formater(e.slKhop);
@@ -147,7 +147,7 @@ function PurchasedOneDayPage() {
             fixed: 'center',
             render: (maTT, maLD) => (
                 <>
-                    {maTT.trim() === 'CK' ?
+                    {maTT.trim() === 'CK' || maTT.trim() === 'KP' ?
                         <Popconfirm
                             title="Bạn có muốn hủy lệnh này không?"
                             // visible={deleteVisible}

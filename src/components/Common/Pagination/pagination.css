@@ -21,11 +21,11 @@
 
 .disabled-btn a{
   cursor: not-allowed;
-  color: rgba(108, 117, 125, 1)!important;
+  color: rgb(209, 209, 209)!important;
 }
 
 .pagination .next {
-  width: 50px;
+  width: 70px;
   white-space: nowrap;
   font-family: Helvetica Neue, Arial;
   font-style: normal;

@@ -111,7 +111,7 @@ export default function InfoUserPage() {
 
     };
     return (
-        <div className='container' style={{ position: 'relative' }}>
+        <div className='container content-wp' style={{ position: 'relative' }}>
             <Content style={{ backgroundColor: '#e6f7ff', margin: '100px auto', position: 'absolute' }}>
                 <Title level={2} style={{ textAlign: 'center' }} type="danger">Thông tin nhà đầu tư</Title>
                 <Row>
@@ -186,7 +186,7 @@ export default function InfoUserPage() {
                             <label className='info-user'>{user.noiCapCmmd}</label>
                         </Form.Item>
                     </Col>
-                    <Col span={24} offset={4}>
+                    <Col span={20} offset={5}>
                         <Row>
                             <Col span={2} offset={4}>
                                 <Form.Item

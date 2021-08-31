@@ -36,11 +36,11 @@ function HistoryPurchasedPage() {
         MaCK: '',
         MaTT: 'TC',
         current: 1,
-        pageSize: 4,
+        pageSize: 10,
     })
 
     const [page, setPage] = useState({
-        pageSize: 4,
+        pageSize: 10,
         current: 1,
         total: 5,
     })
@@ -225,7 +225,7 @@ function HistoryPurchasedPage() {
 
     return (
         <>
-            <Row style={{ margin: '1rem' }}  >
+            <Row>
                 <Col span={24}>
                     <Form onFinish={onFinish} initialValues={worker} >
                         <Row gutter={40}>

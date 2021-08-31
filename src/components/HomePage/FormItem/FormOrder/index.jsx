@@ -168,14 +168,15 @@ function FormOrder(props) {
     }
     let handleChangeTypeTransfer = async (e) => {
         let value = e.target.value
+        form.setFieldsValue({
+            maCp: null,
+        });
         fetchStocks(value)
     }
     const [form] = Form.useForm();
 
     async function fetchStocks(value) {
-        form.setFieldsValue({
-            maCp: '',
-        });
+
         try {
             if (value) {
                 let res = await callApi('CoPhieu?current=1&pageSize=1000', 'GET', null);

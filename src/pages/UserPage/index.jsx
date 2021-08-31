@@ -15,9 +15,9 @@ function UserPage(props) {
 
     return (
         <>
-            <Header />
+            {/* <Header /> */}
             <main className="main-user">
-                <div className="container">
+                <div className="container content-wp">
                     <div className="row">
                         <div className="col col-12">
                             <Divider orientation="left"> <Tag style={{ fontSize: '1rem' }} color="volcano">Họ và tên: {user.ho} {user.ten} <br /> Mã NDT: {user.maNdt}</Tag> </Divider>
@@ -33,7 +33,7 @@ function UserPage(props) {
                     </div>
                 </div>
             </main>
-            <Footer />
+            {/* <Footer /> */}
         </>
     )
 }
