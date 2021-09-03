@@ -22,7 +22,7 @@ main {
     height: 100vh;
 }
 
-.content{
+.content {
     display: flex;
     background-color: var(--background-color-primary);
 }
@@ -80,12 +80,13 @@ table, th, td {
 .table-light__header, .table-light__content {
     width: 100%;
 }
-#HCM.table-light__content{
-   /* visibility: visible; */
-   /* display: inline-block; */
+
+#HCM.table-light__content {
+    /* visibility: visible; */
+    /* display: inline-block; */
 }
 
-#HNX.table-light__content{
+#HNX.table-light__content {
     /* visibility: hidden;
     opacity: 0; */
     display: none;
@@ -302,7 +303,7 @@ table.table-price tr .symbol:hover {
     justify-content: space-between;
 }
 
-.form-item:last-child{
+.form-item:last-child {
     margin: 0 auto;
 }
 
@@ -461,7 +462,8 @@ table.table-price tr .symbol:hover {
 .color-green {
     color: green;
 }
-.color-red{
+
+.color-red {
     color: red;
 }
 
@@ -513,23 +515,22 @@ table.table-price tr .symbol:hover {
     color: #fff;
 }
 
-
 /* =============================== end style confirm modal =========================== */
-
 
 /* =============================== begin style tab pill =========================== */
 
-.content__tab-pill{
+.content__tab-pill {
     padding: 0 10px;
     background-color: var(--background-color-primary);
     display: flex;
     align-items: center;
     cursor: pointer;
     color: #fff;
-    
 }
-.content__tab-pill--active,.content__tab-pill:hover{
+
+.content__tab-pill--active, .content__tab-pill:hover {
     background-color: var(--background-color-active);
     border-top: 2px solid #fff;
 }
+
 /* =============================== End style tab pill =========================== */

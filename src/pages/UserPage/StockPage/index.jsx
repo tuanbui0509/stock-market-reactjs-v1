@@ -28,6 +28,7 @@ function StockPage() {
             }, 200);
             res.data.list.forEach((e) => {
                 e.giaTriTT = Formater(e.giaTriTT);
+                e.giaTT = Formater(e.giaTT);
             })
             setData(res.data.list)
             setPagination({ ...pagination, current: res.data.currentPage, total: res.data.totalItem })
@@ -48,7 +49,7 @@ function StockPage() {
             fixed: 'center',
         },
         {
-            title: 'Tổng',
+            title: 'Tổng số lượng',
             dataIndex: 'tongSo',
             key: 'tongSo',
             width: 200,
@@ -86,17 +87,17 @@ function StockPage() {
             ],
         },
         {
-            title: 'Giá TT',
+            title: 'Giá thị trường',
             dataIndex: 'giaTT',
             key: 'giaTT',
-            width: 200,
+            width: 150,
             fixed: 'center',
         },
         {
-            title: 'Giá trị TT',
+            title: 'Giá trị thị trường',
             dataIndex: 'giaTriTT',
             key: 'giaTriTT',
-            width: 100,
+            width: 200,
             fixed: 'center',
         }
     ]

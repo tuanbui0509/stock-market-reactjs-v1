@@ -147,7 +147,7 @@ function PurchasedOneDayPage() {
             fixed: 'center',
             render: (maTT, maLD) => (
                 <>
-                    {maTT.trim() === 'CK' || maTT.trim() === 'KP' ?
+                    {maTT.trim() === 'CK' ?
                         <Popconfirm
                             title="Bạn có muốn hủy lệnh này không?"
                             // visible={deleteVisible}

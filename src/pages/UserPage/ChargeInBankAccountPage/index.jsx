@@ -23,6 +23,7 @@ function ChargeInBankAccount() {
             dispatch({ type: type_back.FETCH_BANK_ACCOUNT, payload: res.data })
             res.data.forEach((e) => {
                 
+                e.soDu = Formater(e.soDu);
                 e.tongSoTien = Formater(e.tongSoTien);
                 e.choThanhToan = Formater(e.choThanhToan);
                 e.soDuT0 = Formater(e.soDuT0);
