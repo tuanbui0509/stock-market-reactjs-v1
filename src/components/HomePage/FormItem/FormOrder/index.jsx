@@ -56,10 +56,10 @@ function FormOrder(props) {
     }, [macp])
 
     const onFinish = (values) => {
-        if (values.gia * values.soLuong > bank.soDu) {
-            openNotificationError('Thất bại', 'Số tiền trong tài khoản không đủ', 3)
-            return;
-        }
+        // if (values.gia * values.soLuong > bank.soDu) {
+        //     openNotificationError('Thất bại', 'Số tiền trong tài khoản không đủ', 3)
+        //     return;
+        // }
         console.log(values);
         callApi("LenhDat/check", 'post', values).then(res => {
             let rec = res.data;
@@ -174,6 +174,12 @@ function FormOrder(props) {
         fetchStocks(value)
     }
     const [form] = Form.useForm();
+    let onChangeaOrderType = (event)=>{
+        //console.log(event);
+        let type = event.target.value;
+        
+    }
+    
 
     async function fetchStocks(value) {
 
@@ -264,9 +270,9 @@ function FormOrder(props) {
                                         <InputNumber style={{ width: '100%' }} value='100' />
                                     </Form.Item>
                                     <Form.Item name='loaiLenh' style={{ textAlign: 'center' }}  >
-                                        <Radio.Group defaultValue='LO'>
+                                        <Radio.Group defaultValue='LO' onChange={onChangeaOrderType}>
                                             <Radio value='ATC' disabled>ATC</Radio>
-                                            <Radio value='ATO' disabled>ATO</Radio>
+                                            <Radio value='ATO'>ATO</Radio>
                                             <Radio value='LO'>LO</Radio>
                                         </Radio.Group>
                                     </Form.Item>
@@ -342,8 +348,6 @@ function FormOrder(props) {
                     }
                 </Modal> : null}
         </>
-
     )
 }
-
 export default FormOrder

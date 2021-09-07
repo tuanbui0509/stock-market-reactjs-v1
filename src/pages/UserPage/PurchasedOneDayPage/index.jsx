@@ -15,7 +15,6 @@ function PurchasedOneDayPage() {
     const dispatch = useDispatch()
     const date = new Date()
     const [deleteVisible, setDeleteVisible] = React.useState(false);
-
     const showPopDelete = (maLD) => {
         console.log(maLD);
         setDeleteVisible(true)
@@ -28,8 +27,6 @@ function PurchasedOneDayPage() {
     useEffect(() => {
         fetchData(pagination);
     }, [])
-
-
     const fetchData = async (pagination) => {
         setLoading(true)
         try {
