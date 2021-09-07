@@ -35,6 +35,7 @@ function FormOrder(props) {
     // const [stock, setStock] = useState({ gia: null, giaTran: null, giaTC: null, giaSan: null, kl: null });
     const [visibleOrder, setVisibleOrder] = useState(false)
     const [visibleConfirm, setVisibleConfirm] = useState(false)
+    const [visibleATC, setVisibleATC] = useState(false)
     // const [confirmLoading, setConfirmLoading] = React.useState(false);
     const [order, setOrder] = useState({
         stk: "",
@@ -174,12 +175,18 @@ function FormOrder(props) {
         fetchStocks(value)
     }
     const [form] = Form.useForm();
-    let onChangeaOrderType = (event)=>{
+    let onChangeaOrderType = (event) => {
         //console.log(event);
         let type = event.target.value;
-        
+        if (type === 'ATO') {
+            setVisibleATC(true)
+        }
+        if (type === 'LO') {
+            setVisibleATC(false)
+        }
+
     }
-    
+
 
     async function fetchStocks(value) {
 
@@ -267,7 +274,7 @@ function FormOrder(props) {
                                     </Form.Item>
                                     <Form.Item name="gia" label="Giá đặt"
                                         rules={[{ required: true, message: "Không được bỏ trống !" }]}>
-                                        <InputNumber style={{ width: '100%' }} value='100' />
+                                        <InputNumber style={{ width: '100%' }} disabled={visibleATC} />
                                     </Form.Item>
                                     <Form.Item name='loaiLenh' style={{ textAlign: 'center' }}  >
                                         <Radio.Group defaultValue='LO' onChange={onChangeaOrderType}>
