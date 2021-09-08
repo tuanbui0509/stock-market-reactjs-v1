@@ -180,9 +180,15 @@ function FormOrder(props) {
         let type = event.target.value;
         if (type === 'ATO') {
             setVisibleATC(true)
+            form.setFieldsValue({
+                gia: 0,
+            });
         }
         if (type === 'LO') {
             setVisibleATC(false)
+            form.setFieldsValue({
+                gia: null,
+            });
         }
 
     }
