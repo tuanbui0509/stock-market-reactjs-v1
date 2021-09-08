@@ -27,6 +27,11 @@ function StockPage() {
                 setLoading(false)
             }, 200);
             res.data.list.forEach((e) => {
+                e.soLuongT0 = Formater(e.soLuongT0);
+                e.soLuongT1 = Formater(e.soLuongT1);
+                e.soLuongT2 = Formater(e.soLuongT2);
+                e.tongSo = Formater(e.tongSo);
+                e.soLuong = Formater(e.soLuong);
                 e.giaTriTT = Formater(e.giaTriTT);
                 e.giaTT = Formater(e.giaTT);
             })
