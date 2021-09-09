@@ -16,6 +16,7 @@ function HeaderUser(props) {
 
             </div>
             : <div>
+                <Link to=''> </Link>
                 <Link to='/thong-tin-khach-hang' className="header__right-account-item">Thông tin tài khoản </Link>
                 <Link to='/khach-hang/chung-khoan-hien-co' className="header__right-account-item">Thông tin sao kê </Link>
                 <Link className="header__right-account-item" to="/logout">

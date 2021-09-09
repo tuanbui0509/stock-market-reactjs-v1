@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as type_status from '../../../constants/Common/ActionType';
 import callApi from '../../../utils/apiCaller';
 import Formater from '../../../components/Common/Format'
+import *as Lable from '../../../constants/Label/Label'
 
 const { Option } = Select;
 function HistoryOrderPage() {
@@ -126,7 +127,7 @@ function HistoryOrderPage() {
             fixed: 'center',
         },
         {
-            title: 'Ngày',
+            title: 'Ngày giao dịch',
             dataIndex: 'thoiGian',
             key: 'thoiGian',
             width: 300,
@@ -234,7 +235,7 @@ function HistoryOrderPage() {
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Vui lòng chọn ngày',
+                                            message: Lable.ChonNgay,
                                         },
                                     ]}
                                 >
@@ -247,7 +248,7 @@ function HistoryOrderPage() {
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Vui lòng chọn ngày',
+                                            message: Lable.ChonNgay,
                                         },
                                     ]}
                                 >

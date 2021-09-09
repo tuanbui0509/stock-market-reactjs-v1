@@ -68,7 +68,7 @@ function StockPage() {
             fixed: 'center',
         },
         {
-            title: 'Chờ về',
+            title: 'Giao dịch chờ cổ phiếu',
             children: [
                 {
                     title: 'T0',

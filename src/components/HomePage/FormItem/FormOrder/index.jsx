@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Formater from '../../../Common/Format'
 import * as gia from '../../../../constants/LightningTable/index';
 import callApi from '../../../../utils/apiCaller';
+import *as Lable from '../../../../constants/Label/Label'
 import './FormOrder.css';
 const formItemLayout = {
     labelCol: {
@@ -240,7 +241,7 @@ function FormOrder(props) {
                             >
                                 <div className='form-child'>
                                     <Form.Item name='stk' label="Số tài khoản"
-                                        rules={[{ required: true, message: "Không được bỏ trống !" }]}>
+                                        rules={[{ required: true, message: Lable.KhongBoTrong }]}>
                                         <Select
                                             showSearch
                                             style={{ width: 200 }}
@@ -261,7 +262,7 @@ function FormOrder(props) {
                                         initialValue={macp ? macp : null}
                                         name="maCp"
                                         label="Mã chứng khoán"
-                                        rules={[{ required: true, message: "Không được bỏ trống !" }]}>
+                                        rules={[{ required: true, message: Lable.KhongBoTrong }]}>
                                         <Select
                                             showSearch
                                             style={{ width: 200 }}
@@ -279,7 +280,7 @@ function FormOrder(props) {
                                         </Select>
                                     </Form.Item>
                                     <Form.Item name="gia" label="Giá đặt"
-                                        rules={[{ required: true, message: "Không được bỏ trống !" }]}>
+                                        rules={[{ required: true, message: Lable.KhongBoTrong }]}>
                                         <InputNumber style={{ width: '100%' }} disabled={visibleATC} />
                                     </Form.Item>
                                     <Form.Item name='loaiLenh' style={{ textAlign: 'center' }}  >
@@ -296,11 +297,11 @@ function FormOrder(props) {
                                         <span style={{ display: 'none' }}>{bank.soDu}</span>
                                     </Form.Item>
                                     <Form.Item name='soLuong' label="Khối lượng"
-                                        rules={[{ required: true, message: "Không được bỏ trống !" }]}>
+                                        rules={[{ required: true, message: Lable.KhongBoTrong }]}>
                                         <InputNumber min={1} max={100000} style={{ width: '100%' }} value={order.soLuong} />
                                     </Form.Item>
                                     <Form.Item name="mkdatLenh" label="Mã pin"
-                                        rules={[{ required: true, message: "Không được bỏ trống !" }]}>
+                                        rules={[{ required: true, message: Lable.KhongBoTrong }]}>
                                         <Input.Password
                                             placeholder="Nhập mã pin"
                                             iconRender={visible => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}

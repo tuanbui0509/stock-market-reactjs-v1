@@ -126,7 +126,7 @@ function HistoryPurchasedPage() {
             fixed: 'center',
         },
         {
-            title: 'Ngày',
+            title: 'Ngày giao dịch',
             dataIndex: 'thoiGian',
             key: 'thoiGian',
             width: 300,

@@ -61,14 +61,14 @@ function PurchasedOneDayPage() {
             title: 'Mã lệnh',
             dataIndex: 'maLD',
             key: 'maLD',
-            width: 120,
+            width: 150,
             fixed: 'center',
         },
         {
             title: 'Mã CK',
             dataIndex: 'maCP',
             key: 'maCP',
-            width: 200,
+            width: 120,
             fixed: 'center',
         },
         {
@@ -86,7 +86,7 @@ function PurchasedOneDayPage() {
             fixed: 'center',
         },
         {
-            title: 'Ngày',
+            title: 'Ngày giao dịch',
             dataIndex: 'thoiGian',
             key: 'thoiGian',
             width: 400,

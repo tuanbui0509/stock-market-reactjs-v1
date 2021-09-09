@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import callApi from '../../../utils/apiCaller';
+import *as Lable from '../../../constants/Label/Label'
+
 import '../style.css';
 // import './MainRegister.css';
 const { Option } = Select;
@@ -56,7 +58,7 @@ const MainRegister = (props) => {
 
         } catch (err) {
             // console.log(err);
-            openNotificationError('Thất bại', 'Thông tin bạn nhập đã bị trùng với dữ liệu trong máy chủ', 3);
+            openNotificationError('Thất bại', Lable.ThongBaoThatBai, 3);
         }
     };
 
@@ -91,7 +93,7 @@ const MainRegister = (props) => {
                                         rules={[
                                             {
                                                 required: true,
-                                                message: 'Vui lòng nhập Họ!',
+                                                message: 'Vui lòng nhập họ!',
                                                 whitespace: true,
                                             },
                                         ]}
@@ -104,7 +106,7 @@ const MainRegister = (props) => {
                                         rules={[
                                             {
                                                 required: true,
-                                                message: 'Vui lòng nhập Tên!',
+                                                message: 'Vui lòng nhập tên!',
                                                 whitespace: true,
                                             },
                                         ]}
@@ -118,7 +120,7 @@ const MainRegister = (props) => {
                                         rules={[
                                             {
                                                 required: true,
-                                                message: 'Vui lòng nhập số gày sinh!',
+                                                message: 'Vui lòng nhập số ngày sinh!',
                                             },
                                         ]}
                                     >
@@ -147,7 +149,7 @@ const MainRegister = (props) => {
                                         rules={[
                                             {
                                                 type: 'email',
-                                                message: 'dữ liệu không phải E-mail!',
+                                                message: 'Dữ liệu không phải E-mail!',
                                             },
                                             {
                                                 required: true,

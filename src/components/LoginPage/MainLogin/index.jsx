@@ -69,12 +69,12 @@ const MainLogin = (props) => {
                             onFinishFailed={onFinishFailed}
                         >
                             <Form.Item
-                                label="Username"
+                                label="Tài khoản"
                                 name="username"
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Vui lòng nhập username!',
+                                        message: 'Vui lòng nhập tài khoản!',
                                     },
                                 ]}
                             >
@@ -82,28 +82,18 @@ const MainLogin = (props) => {
                             </Form.Item>
 
                             <Form.Item
-                                label="Password"
+                                label="Mật khẩu"
                                 name="password"
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Vui lòng nhập password!',
+                                        message: 'Vui lòng nhập mật khẩu!',
                                     },
                                 ]}
                             >
                                 <Input.Password />
                             </Form.Item>
 
-                            <Form.Item
-                                name="remember"
-                                valuePropName="checked"
-                                wrapperCol={{
-                                    offset: 8,
-                                    span: 16,
-                                }}
-                            >
-                                <Checkbox>Remember me</Checkbox>
-                            </Form.Item>
                             <Link to="/register" className='title-login'>Đăng ký tài khoản ?</Link>
 
                             <Form.Item
